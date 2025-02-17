@@ -115,7 +115,7 @@ const Index = () => {
                   className="w-full h-full rounded-full overflow-hidden border-4 border-accent/20"
                 >
                   <img 
-                    src="https://images.unsplash.com/photo-1570172619644-dfd03ed5d881" 
+                    src="https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80" 
                     alt="Beauty Center" 
                     className="w-full h-full object-cover"
                   />
