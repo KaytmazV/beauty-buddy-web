@@ -54,7 +54,7 @@ const Index = () => {
             </div>
             <div className="relative h-full p-6 flex flex-col justify-end text-white">
               <h3 className="text-2xl font-semibold mb-2">{title}</h3>
-              <p className="text-sm bg-black/70 p-3 rounded-lg">{description}</p>
+              <p className="text-sm">{description}</p>
             </div>
           </CardContent>
         </Card>
