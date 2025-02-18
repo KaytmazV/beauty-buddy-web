@@ -1,3 +1,4 @@
+
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Check, Calendar } from "lucide-react";
@@ -65,6 +66,49 @@ const LazerEpilasyon = () => {
           </motion.div>
         </div>
       </div>
+
+      {/* Eskişehir Section */}
+      <section className="py-24 bg-white">
+        <div className="container mx-auto px-6">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <motion.div 
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.5 }}
+              className="space-y-6"
+            >
+              <h2 className="text-4xl font-light text-gray-800">
+                ESKİŞEHİR LAZER EPİLASYON
+              </h2>
+              <p className="text-lg text-muted-foreground leading-relaxed">
+                Eskişehir'in kalbinde, modern teknoloji ve uzman kadromuzla lazer epilasyon hizmetleri sunuyoruz. Her cilt tipine uygun, FDA onaylı son teknoloji cihazlarımızla güvenli ve etkili sonuçlar elde ediyoruz. Deneyimli ekibimiz, kişiselleştirilmiş tedavi planları ile sizin için en uygun çözümü sunarak, istenmeyen tüylerden kalıcı olarak kurtulmanızı sağlıyor. Hijyenik ortamımız, profesyonel yaklaşımımız ve uygun fiyat politikamızla Eskişehir'de lazer epilasyon denince akla gelen ilk adres olmaktan gurur duyuyoruz.
+              </p>
+              <div className="pt-4">
+                <Link to="/appointment">
+                  <Button className="bg-accent hover:bg-accent/90 text-white gap-2">
+                    <Calendar className="w-4 h-4" />
+                    Ücretsiz Danışmanlık
+                  </Button>
+                </Link>
+              </div>
+            </motion.div>
+            
+            <motion.div
+              initial={{ opacity: 0, x: 20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.5 }}
+              className="relative h-[500px] rounded-2xl overflow-hidden shadow-2xl"
+            >
+              <img 
+                src="https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?ixlib=rb-4.0.3" 
+                alt="Eskişehir Lazer Epilasyon" 
+                className="w-full h-full object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
+            </motion.div>
+          </div>
+        </div>
+      </section>
 
       {/* Content Section */}
       <section className="container mx-auto px-6 py-16">
