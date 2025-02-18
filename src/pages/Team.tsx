@@ -11,7 +11,6 @@ const Team = () => {
       name: "Dr. Ayşe Yılmaz",
       role: "Medikal Estetik Uzmanı",
       image: "/lovable-uploads/64a521e6-1a33-4880-aa73-c55de1019236.png",
-      education: ["İstanbul Üniversitesi Tıp Fakültesi", "Estetik Tıp Uzmanlığı"],
       experience: "15 yıl",
       expertise: ["Lazer Epilasyon", "Cilt Gençleştirme", "Medikal Cilt Bakımı"],
       description: "Medikal estetik alanında 15 yıllık deneyime sahip olan Dr. Ayşe Yılmaz, özellikle lazer epilasyon ve cilt gençleştirme tedavilerinde uzmanlaşmıştır.",
@@ -27,7 +26,6 @@ const Team = () => {
       name: "Zeynep Demir",
       role: "Saç ve Güzellik Uzmanı",
       image: "/lovable-uploads/693c8ffe-710b-40f8-9218-b562b9b63f05.png",
-      education: ["Güzellik ve Saç Bakımı Yüksek Lisansı"],
       experience: "8 yıl",
       expertise: ["Saç Bakımı", "Keratin Tedavisi", "Saç Boyama"],
       description: "Saç bakımı ve güzellik konusunda uzman olan Zeynep Demir, en son trendleri ve teknikleri yakından takip ederek müşterilerine en iyi hizmeti sunmaktadır.",
@@ -43,7 +41,6 @@ const Team = () => {
       name: "Elif Kaya",
       role: "Tırnak Bakım Uzmanı",
       image: "/lovable-uploads/daed8c08-150b-4242-8b90-e0a06e01df8e.png",
-      education: ["Güzellik ve Bakım Uzmanlığı"],
       experience: "6 yıl",
       expertise: ["Manikür", "Pedikür", "Protez Tırnak"],
       description: "Tırnak bakımı ve tasarımı konusunda uzmanlaşmış olan Elif Kaya, hijyenik ve profesyonel hizmet anlayışıyla çalışmaktadır.",
@@ -101,15 +98,6 @@ const Team = () => {
                 </div>
                 <CardContent className="p-6">
                   <div className="space-y-4">
-                    <div>
-                      <h4 className="text-lg font-medium mb-2">Eğitim</h4>
-                      <ul className="list-disc list-inside text-muted-foreground">
-                        {member.education.map((edu, i) => (
-                          <li key={i}>{edu}</li>
-                        ))}
-                      </ul>
-                    </div>
-                    
                     <div>
                       <h4 className="text-lg font-medium mb-2">Uzmanlık Alanları</h4>
                       <div className="flex flex-wrap gap-2">
