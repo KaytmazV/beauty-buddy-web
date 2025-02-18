@@ -1,8 +1,14 @@
 
 import { Link } from "react-router-dom";
 import { Button } from "./button";
-import { Calendar } from "lucide-react";
+import { Calendar, ChevronDown } from "lucide-react";
 import { motion } from "framer-motion";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 const Navbar = () => {
   return (
@@ -28,9 +34,36 @@ const Navbar = () => {
             <Link to="/" className="text-gray-700 hover:text-accent transition-colors">
               Anasayfa
             </Link>
-            <Link to="/services" className="text-gray-700 hover:text-accent transition-colors">
-              Hizmetlerimiz
-            </Link>
+            
+            <DropdownMenu>
+              <DropdownMenuTrigger className="flex items-center gap-1 text-gray-700 hover:text-accent transition-colors">
+                Hizmetlerimiz
+                <ChevronDown className="w-4 h-4" />
+              </DropdownMenuTrigger>
+              <DropdownMenuContent>
+                <DropdownMenuItem>
+                  <Link to="/services/lazer-epilasyon" className="w-full">
+                    Lazer Epilasyon
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem>
+                  <Link to="/services/sac-bakim" className="w-full">
+                    Saç Bakım
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem>
+                  <Link to="/services/tirnak-bakim" className="w-full">
+                    Tırnak Bakımı
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem>
+                  <Link to="/services/sac-boyama" className="w-full">
+                    Saç Boyama
+                  </Link>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+
             <Link to="/about" className="text-gray-700 hover:text-accent transition-colors">
               Hakkında
             </Link>
