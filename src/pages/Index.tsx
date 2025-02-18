@@ -288,14 +288,14 @@ const Index = () => {
                 </motion.p>
               </div>
 
-              <div className="grid grid-cols-3 gap-8 mt-12">
+              <div className="grid grid-cols-2 gap-8 mt-12">
                 <motion.div
                   initial={{ opacity: 0, scale: 0.5 }}
                   whileInView={{ opacity: 1, scale: 1 }}
                   transition={{ duration: 0.5 }}
                   className="text-center"
                 >
-                  <h4 className="text-5xl font-light text-pink-400 mb-2">15</h4>
+                  <h4 className="text-5xl font-light text-pink-400 mb-2">5</h4>
                   <p className="text-gray-600">Years of Experience</p>
                 </motion.div>
 
@@ -305,18 +305,8 @@ const Index = () => {
                   transition={{ duration: 0.5, delay: 0.2 }}
                   className="text-center"
                 >
-                  <h4 className="text-5xl font-light text-pink-400 mb-2">20</h4>
+                  <h4 className="text-5xl font-light text-pink-400 mb-2">400+</h4>
                   <p className="text-gray-600">Happy Customers</p>
-                </motion.div>
-
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.5 }}
-                  whileInView={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 0.5, delay: 0.4 }}
-                  className="text-center"
-                >
-                  <h4 className="text-5xl font-light text-pink-400 mb-2">60</h4>
-                  <p className="text-gray-600">Satisfaction Guranteed</p>
                 </motion.div>
               </div>
             </div>
