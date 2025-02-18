@@ -13,8 +13,15 @@ const Navbar = () => {
     >
       <div className="container mx-auto px-6">
         <div className="flex items-center justify-between h-16">
-          <Link to="/" className="text-2xl font-light text-accent">
-            Atasoy Beauty
+          <Link to="/" className="flex items-center gap-2">
+            <img 
+              src="/lovable-uploads/2e54b248-c48c-4bdf-9e70-3f7000d0a4a4.png" 
+              alt="Atasoy Beauty Center Logo" 
+              className="h-12"
+            />
+            <span className="text-2xl font-light text-accent">
+              Atasoy Beauty Center
+            </span>
           </Link>
           
           <div className="hidden md:flex items-center gap-8">
