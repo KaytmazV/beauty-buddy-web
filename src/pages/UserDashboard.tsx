@@ -3,9 +3,10 @@ import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
-import { Calendar, Phone, Search, Minus, Eye, Clock, CheckCircle2 } from "lucide-react";
+import { Calendar, Phone, Search, Minus, Eye, Clock, CheckCircle2, FileEdit } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Textarea } from "@/components/ui/textarea";
 import WhatsAppSupport from "@/components/WhatsAppSupport";
 import { useToast } from "@/hooks/use-toast";
 
@@ -16,6 +17,7 @@ interface Customer {
   appointmentDate: string;
   service: string;
   status: "pending" | "completed";
+  notes?: string;
 }
 
 const UserDashboard = () => {
@@ -27,7 +29,8 @@ const UserDashboard = () => {
       phone: "+90 555 111 2233",
       appointmentDate: "2024-03-20",
       service: "Lazer Epilasyon",
-      status: "pending"
+      status: "pending",
+      notes: "Hassas cilt, düşük güç kullanılacak"
     },
     {
       id: "2",
@@ -35,7 +38,8 @@ const UserDashboard = () => {
       phone: "+90 555 444 5566",
       appointmentDate: "2024-03-15",
       service: "Saç Bakımı",
-      status: "completed"
+      status: "completed",
+      notes: "Saç boyası alerjisi var"
     },
     {
       id: "3",
@@ -50,6 +54,7 @@ const UserDashboard = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState<"all" | "pending" | "completed">("all");
   const [newCustomer, setNewCustomer] = useState({ name: "", phone: "", appointmentDate: "", service: "" });
+  const [editingNotes, setEditingNotes] = useState<{ id: string; notes: string } | null>(null);
 
   const filteredCustomers = customers.filter(customer => {
     const matchesSearch = customer.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -72,6 +77,17 @@ const UserDashboard = () => {
         description: "Yeni müşteri başarıyla eklendi."
       });
     }
+  };
+
+  const updateCustomerNotes = (customerId: string, notes: string) => {
+    setCustomers(customers.map(customer => 
+      customer.id === customerId ? { ...customer, notes } : customer
+    ));
+    setEditingNotes(null);
+    toast({
+      title: "Not güncellendi",
+      description: "Müşteri notu başarıyla güncellendi."
+    });
   };
 
   return (
@@ -198,6 +214,12 @@ const UserDashboard = () => {
                               Tamamlandı
                             </span>
                           )}
+                          {customer.notes && (
+                            <span className="flex items-center text-blue-500">
+                              <FileEdit className="mr-1 h-3 w-3" />
+                              Not var
+                            </span>
+                          )}
                         </div>
                       </div>
                     </div>
@@ -226,6 +248,47 @@ const UserDashboard = () => {
                             <p className="text-sm text-muted-foreground">
                               Durum: {customer.status === "pending" ? "Bekliyor" : "Tamamlandı"}
                             </p>
+                          </div>
+                          <div>
+                            <h4 className="text-sm font-medium mb-2">Müşteri Notu</h4>
+                            {editingNotes?.id === customer.id ? (
+                              <div className="space-y-2">
+                                <Textarea
+                                  value={editingNotes.notes}
+                                  onChange={(e) => setEditingNotes({ ...editingNotes, notes: e.target.value })}
+                                  placeholder="Müşteri için not ekleyin..."
+                                  className="min-h-[100px]"
+                                />
+                                <div className="flex gap-2">
+                                  <Button 
+                                    onClick={() => updateCustomerNotes(customer.id, editingNotes.notes)}
+                                    size="sm"
+                                  >
+                                    Kaydet
+                                  </Button>
+                                  <Button 
+                                    variant="outline" 
+                                    size="sm"
+                                    onClick={() => setEditingNotes(null)}
+                                  >
+                                    İptal
+                                  </Button>
+                                </div>
+                              </div>
+                            ) : (
+                              <div className="space-y-2">
+                                <p className="text-sm text-muted-foreground">
+                                  {customer.notes || "Not eklenmemiş"}
+                                </p>
+                                <Button 
+                                  variant="outline" 
+                                  size="sm"
+                                  onClick={() => setEditingNotes({ id: customer.id, notes: customer.notes || "" })}
+                                >
+                                  {customer.notes ? "Notu Düzenle" : "Not Ekle"}
+                                </Button>
+                              </div>
+                            )}
                           </div>
                         </div>
                       </DialogContent>
