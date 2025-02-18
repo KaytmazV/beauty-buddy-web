@@ -210,7 +210,9 @@ const LazerEpilasyon = () => {
                 transition={{ delay: index * 0.1 }}
                 className="space-y-4 bg-white rounded-xl p-6 shadow-lg"
               >
-                <h3 className="text-xl font-medium text-center mb-4 text-gray-800">{image.title}</h3>
+                <div className="bg-accent/10 rounded-lg py-3">
+                  <h3 className="text-xl font-medium text-center mb-0 text-gray-800">{image.title}</h3>
+                </div>
                 <ReactBeforeAfterSlider
                   firstImage={{ imageUrl: image.before }}
                   secondImage={{ imageUrl: image.after }}
