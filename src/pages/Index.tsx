@@ -269,6 +269,108 @@ const Index = () => {
         </div>
       </section>
 
+      {/* Appointment Section */}
+      <section className="py-20 bg-secondary">
+        <div className="container mx-auto px-6">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-light text-gray-800 mb-4">Randevu</h2>
+            <p className="text-muted-foreground">Size en uygun zamanda hizmet vermekten mutluluk duyarız</p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 max-w-5xl mx-auto">
+            {/* Left Side - Working Hours */}
+            <motion.div 
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.5 }}
+              className="bg-white rounded-xl p-8 shadow-lg"
+            >
+              <h3 className="text-2xl font-light mb-6">Çalışma Saatleri</h3>
+              <div className="space-y-4">
+                <div className="flex justify-between items-center">
+                  <span className="text-muted-foreground">Pazartesi - Cuma</span>
+                  <span className="font-medium">09:00 - 20:00</span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-muted-foreground">Cumartesi</span>
+                  <span className="font-medium">10:00 - 18:00</span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-muted-foreground">Pazar</span>
+                  <span className="font-medium">Kapalı</span>
+                </div>
+                <div className="pt-6">
+                  <p className="text-muted-foreground text-sm">
+                    * Özel günlerde çalışma saatlerimiz değişiklik gösterebilir
+                  </p>
+                </div>
+              </div>
+            </motion.div>
+
+            {/* Right Side - Appointment Form */}
+            <motion.div 
+              initial={{ opacity: 0, x: 20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.5 }}
+              className="bg-white rounded-xl p-8 shadow-lg"
+            >
+              <h3 className="text-2xl font-light mb-6">Randevu Al</h3>
+              <form className="space-y-6">
+                <div>
+                  <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
+                    Ad Soyad
+                  </label>
+                  <input
+                    type="text"
+                    id="name"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-accent focus:border-accent"
+                    placeholder="Adınız ve soyadınız"
+                  />
+                </div>
+                <div>
+                  <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-1">
+                    Telefon
+                  </label>
+                  <input
+                    type="tel"
+                    id="phone"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-accent focus:border-accent"
+                    placeholder="05XX XXX XX XX"
+                  />
+                </div>
+                <div>
+                  <label htmlFor="service" className="block text-sm font-medium text-gray-700 mb-1">
+                    Hizmet
+                  </label>
+                  <select
+                    id="service"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-accent focus:border-accent"
+                  >
+                    <option value="">Hizmet seçiniz</option>
+                    <option value="sac">Saç Bakımı</option>
+                    <option value="cilt">Cilt Bakımı</option>
+                    <option value="makyaj">Makyaj</option>
+                  </select>
+                </div>
+                <div>
+                  <label htmlFor="date" className="block text-sm font-medium text-gray-700 mb-1">
+                    Tarih
+                  </label>
+                  <input
+                    type="date"
+                    id="date"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-accent focus:border-accent"
+                  />
+                </div>
+                <Button className="w-full bg-accent hover:bg-accent/90 text-white">
+                  Randevu Oluştur
+                </Button>
+              </form>
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
       {/* Contact Section */}
       <section className="py-20 bg-white">
         <div className="container mx-auto px-6">
