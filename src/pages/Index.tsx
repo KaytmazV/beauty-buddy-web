@@ -523,7 +523,30 @@ const Index = () => {
           <div className="max-w-4xl mx-auto">
             <h2 className="text-4xl font-light text-center mb-12">İletişim</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              <div className="bg-secondary rounded-xl p-8">
+              {/* Left Side - Contact Image */}
+              <motion.div 
+                initial={{ opacity: 0, x: -20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.5 }}
+                className="relative h-[400px] rounded-xl overflow-hidden"
+              >
+                <img 
+                  src="/lovable-uploads/64a521e6-1a33-4880-aa73-c55de1019236.png"
+                  alt="Beauty Salon Storefront"
+                  className="w-full h-full object-cover"
+                />
+              </motion.div>
+
+              {/* Right Side - Map */}
+              <div className="rounded-xl overflow-hidden h-[400px] bg-muted">
+                {/* Placeholder for Google Maps */}
+                <div className="w-full h-full bg-accent/10 flex items-center justify-center">
+                  <MapPin className="w-12 h-12 text-accent" />
+                </div>
+              </div>
+
+              {/* Contact Information Below */}
+              <div className="bg-secondary rounded-xl p-8 md:col-span-2">
                 <div className="space-y-8">
                   <div className="flex items-center gap-4">
                     <div className="w-12 h-12 bg-accent/10 rounded-full flex items-center justify-center">
@@ -552,12 +575,6 @@ const Index = () => {
                       <p className="text-muted-foreground">Her gün 09:00 - 20:00</p>
                     </div>
                   </div>
-                </div>
-              </div>
-              <div className="rounded-xl overflow-hidden h-[400px] bg-muted">
-                {/* Placeholder for Google Maps */}
-                <div className="w-full h-full bg-accent/10 flex items-center justify-center">
-                  <MapPin className="w-12 h-12 text-accent" />
                 </div>
               </div>
             </div>
