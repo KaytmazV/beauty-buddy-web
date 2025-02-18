@@ -1,15 +1,49 @@
-
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Check, Calendar } from "lucide-react";
 import { Link } from "react-router-dom";
+import ReactBeforeAfterSlider from "react-before-after-slider-component";
+import "react-before-after-slider-component/dist/build.css";
 
 const LazerEpilasyon = () => {
+  const beforeAfterImages = [
+    {
+      before: "https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?ixlib=rb-4.0.3",
+      after: "https://images.unsplash.com/photo-1612872087720-bb876e2e67d1?ixlib=rb-4.0.3",
+      title: "Bacak Bölgesi"
+    },
+    {
+      before: "https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?ixlib=rb-4.0.3",
+      after: "https://images.unsplash.com/photo-1612872087720-bb876e2e67d1?ixlib=rb-4.0.3",
+      title: "Kol Bölgesi"
+    },
+    {
+      before: "https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?ixlib=rb-4.0.3",
+      after: "https://images.unsplash.com/photo-1612872087720-bb876e2e67d1?ixlib=rb-4.0.3",
+      title: "Yüz Bölgesi"
+    },
+    {
+      before: "https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?ixlib=rb-4.0.3",
+      after: "https://images.unsplash.com/photo-1612872087720-bb876e2e67d1?ixlib=rb-4.0.3",
+      title: "Koltukaltı"
+    },
+    {
+      before: "https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?ixlib=rb-4.0.3",
+      after: "https://images.unsplash.com/photo-1612872087720-bb876e2e67d1?ixlib=rb-4.0.3",
+      title: "Bikini Bölgesi"
+    },
+    {
+      before: "https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?ixlib=rb-4.0.3",
+      after: "https://images.unsplash.com/photo-1612872087720-bb876e2e67d1?ixlib=rb-4.0.3",
+      title: "Tüm Vücut"
+    }
+  ];
+
   return (
     <div className="min-h-screen bg-secondary">
       {/* Video Hero Section */}
       <div className="relative h-screen">
-        <div className="absolute inset-0 bg-black/50 z-10" /> {/* Overlay */}
+        <div className="absolute inset-0 bg-black/50 z-10" />
         <iframe
           src="https://www.youtube.com/embed/lxiO5mXOcR0?autoplay=1&mute=1&loop=1&playlist=lxiO5mXOcR0&controls=0"
           className="absolute inset-0 w-full h-full object-cover"
@@ -115,29 +149,34 @@ const LazerEpilasyon = () => {
           </motion.div>
         </div>
 
-        {/* Images Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
-          <motion.img
-            initial={{ opacity: 0, scale: 0.9 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            className="w-full h-64 object-cover rounded-xl shadow-lg"
-            src="https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?ixlib=rb-4.0.3"
-            alt="Lazer Epilasyon"
-          />
-          <motion.img
-            initial={{ opacity: 0, scale: 0.9 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            className="w-full h-64 object-cover rounded-xl shadow-lg"
-            src="https://images.unsplash.com/photo-1612872087720-bb876e2e67d1?ixlib=rb-4.0.3"
-            alt="Lazer Epilasyon Teknolojisi"
-          />
-          <motion.img
-            initial={{ opacity: 0, scale: 0.9 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            className="w-full h-64 object-cover rounded-xl shadow-lg"
-            src="https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?ixlib=rb-4.0.3"
-            alt="Modern Klinik"
-          />
+        {/* Before/After Section */}
+        <div className="mb-16">
+          <motion.h2 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            className="text-3xl font-light text-center mb-12"
+          >
+            Hizmetlerimiz ve Sonuçlarımız
+          </motion.h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {beforeAfterImages.map((image, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, scale: 0.9 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                transition={{ delay: index * 0.1 }}
+                className="space-y-4"
+              >
+                <h3 className="text-xl font-medium text-center mb-4">{image.title}</h3>
+                <ReactBeforeAfterSlider
+                  firstImage={{ imageUrl: image.before }}
+                  secondImage={{ imageUrl: image.after }}
+                  currentPercentPosition={50}
+                  delimiterColor="#9B6B7D"
+                />
+              </motion.div>
+            ))}
+          </div>
         </div>
 
         {/* CTA Section */}
