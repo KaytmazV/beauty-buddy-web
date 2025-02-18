@@ -10,6 +10,7 @@ import NotFound from "./pages/NotFound";
 import Navbar from "./components/ui/navbar";
 import LazerEpilasyon from "./pages/services/LazerEpilasyon";
 import SacBakim from "./pages/services/SacBakim";
+import Team from "./pages/Team";
 
 const queryClient = new QueryClient();
 
@@ -25,6 +26,7 @@ const App = () => (
           <Route path="/appointment" element={<AppointmentForm />} />
           <Route path="/services/lazer-epilasyon" element={<LazerEpilasyon />} />
           <Route path="/services/sac-bakim" element={<SacBakim />} />
+          <Route path="/team" element={<Team />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
