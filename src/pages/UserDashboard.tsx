@@ -87,13 +87,13 @@ const UserDashboard = () => {
                 {filteredCustomers.map((customer) => (
                   <div
                     key={customer.id}
-                    className="flex items-center justify-between p-3 border rounded-lg hover:bg-secondary/10 transition-colors"
+                    className="flex items-center justify-between p-2 border rounded-lg hover:bg-secondary/10 transition-colors"
                   >
-                    <div className="flex items-center gap-3">
-                      <Minus className="h-4 w-4 text-muted-foreground" />
+                    <div className="flex items-center gap-2">
+                      <Minus className="h-3 w-3 text-muted-foreground" />
                       <div>
-                        <h3 className="font-medium">{customer.name}</h3>
-                        <div className="flex items-center gap-4 text-sm text-muted-foreground">
+                        <h3 className="text-sm font-medium">{customer.name}</h3>
+                        <div className="flex items-center gap-3 text-xs text-muted-foreground">
                           <span className="flex items-center">
                             <Phone className="mr-1 h-3 w-3" />
                             {customer.phone}
@@ -106,8 +106,8 @@ const UserDashboard = () => {
                       </div>
                     </div>
                     
-                    <Button variant="ghost" size="sm" className="gap-1">
-                      <Eye className="h-4 w-4" />
+                    <Button variant="ghost" size="sm" className="h-7 px-2 text-xs">
+                      <Eye className="h-3 w-3 mr-1" />
                       Detay
                     </Button>
                   </div>
