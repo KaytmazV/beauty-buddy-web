@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -9,6 +8,8 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Textarea } from "@/components/ui/textarea";
 import WhatsAppSupport from "@/components/WhatsAppSupport";
 import { useToast } from "@/hooks/use-toast";
+import { format, addMonths } from "date-fns";
+import { tr } from "date-fns/locale";
 
 interface Customer {
   id: string;
@@ -18,6 +19,7 @@ interface Customer {
   service: string;
   status: "pending" | "completed";
   notes?: string;
+  nextAppointmentDate?: string;
 }
 
 const UserDashboard = () => {
@@ -30,7 +32,8 @@ const UserDashboard = () => {
       appointmentDate: "2024-03-20",
       service: "Lazer Epilasyon",
       status: "pending",
-      notes: "Hassas cilt, düşük güç kullanılacak"
+      notes: "Hassas cilt, düşük güç kullanılacak",
+      nextAppointmentDate: "2024-05-20"
     },
     {
       id: "2",
@@ -39,7 +42,8 @@ const UserDashboard = () => {
       appointmentDate: "2024-03-15",
       service: "Saç Bakımı",
       status: "completed",
-      notes: "Saç boyası alerjisi var"
+      notes: "Saç boyası alerjisi var",
+      nextAppointmentDate: "2024-04-15"
     },
     {
       id: "3",
@@ -47,7 +51,8 @@ const UserDashboard = () => {
       phone: "+90 555 777 8899",
       appointmentDate: "2024-03-25",
       service: "Cilt Bakımı",
-      status: "pending"
+      status: "pending",
+      nextAppointmentDate: "2024-04-25"
     }
   ]);
 
@@ -65,10 +70,14 @@ const UserDashboard = () => {
 
   const handleAddCustomer = () => {
     if (newCustomer.name && newCustomer.phone && newCustomer.appointmentDate && newCustomer.service) {
+      const appointmentDate = new Date(newCustomer.appointmentDate);
+      const nextAppointmentDate = format(addMonths(appointmentDate, 1), "yyyy-MM-dd");
+      
       const customer: Customer = {
         id: (customers.length + 1).toString(),
         ...newCustomer,
-        status: "pending"
+        status: "pending",
+        nextAppointmentDate
       };
       setCustomers([...customers, customer]);
       setNewCustomer({ name: "", phone: "", appointmentDate: "", service: "" });
@@ -88,6 +97,10 @@ const UserDashboard = () => {
       title: "Not güncellendi",
       description: "Müşteri notu başarıyla güncellendi."
     });
+  };
+
+  const formatDate = (dateString: string) => {
+    return format(new Date(dateString), "d MMMM yyyy, EEEE", { locale: tr });
   };
 
   return (
@@ -201,7 +214,7 @@ const UserDashboard = () => {
                           </span>
                           <span className="flex items-center">
                             <Calendar className="mr-1 h-3 w-3" />
-                            {customer.appointmentDate}
+                            {formatDate(customer.appointmentDate)}
                           </span>
                           {customer.status === "pending" ? (
                             <span className="flex items-center text-primary">
@@ -243,11 +256,18 @@ const UserDashboard = () => {
                           </div>
                           <div>
                             <h4 className="text-sm font-medium">Randevu Bilgileri</h4>
-                            <p className="text-sm text-muted-foreground">Tarih: {customer.appointmentDate}</p>
+                            <p className="text-sm text-muted-foreground">
+                              Randevu: {formatDate(customer.appointmentDate)}
+                            </p>
                             <p className="text-sm text-muted-foreground">İşlem: {customer.service}</p>
                             <p className="text-sm text-muted-foreground">
                               Durum: {customer.status === "pending" ? "Bekliyor" : "Tamamlandı"}
                             </p>
+                            {customer.nextAppointmentDate && (
+                              <p className="text-sm font-medium text-primary mt-2">
+                                Sonraki Randevu: {formatDate(customer.nextAppointmentDate)}
+                              </p>
+                            )}
                           </div>
                           <div>
                             <h4 className="text-sm font-medium mb-2">Müşteri Notu</h4>
