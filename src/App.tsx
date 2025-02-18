@@ -11,6 +11,7 @@ import Navbar from "./components/ui/navbar";
 import LazerEpilasyon from "./pages/services/LazerEpilasyon";
 import SacBakim from "./pages/services/SacBakim";
 import Team from "./pages/Team";
+import UserDashboard from "./pages/UserDashboard";
 
 const queryClient = new QueryClient();
 
@@ -27,6 +28,7 @@ const App = () => (
           <Route path="/services/lazer-epilasyon" element={<LazerEpilasyon />} />
           <Route path="/services/sac-bakim" element={<SacBakim />} />
           <Route path="/team" element={<Team />} />
+          <Route path="/dashboard" element={<UserDashboard />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
