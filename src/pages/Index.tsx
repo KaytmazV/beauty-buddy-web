@@ -41,17 +41,17 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-secondary">
       {/* Hero Section */}
-      <section className="relative h-screen flex items-center justify-center overflow-hidden">
+      <section className="relative h-[90vh] md:h-screen flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1560066984-138dadb4c035?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80')] bg-cover bg-center">
           <div className="absolute inset-0 bg-black/40 backdrop-blur-sm"></div>
         </div>
         
-        <div className="relative container mx-auto px-6 text-center text-white z-10">
+        <div className="relative container mx-auto px-4 md:px-6 text-center text-white z-10">
           <motion.h1 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
-            className="text-5xl md:text-7xl font-light mb-6"
+            className="text-3xl md:text-5xl lg:text-7xl font-light mb-4 md:mb-6"
           >
             Güzellik ve Zarafet
           </motion.h1>
@@ -59,7 +59,7 @@ const Index = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
-            className="text-xl md:text-2xl mb-8 max-w-2xl mx-auto"
+            className="text-lg md:text-xl lg:text-2xl mb-6 md:mb-8 max-w-2xl mx-auto px-4 md:px-0"
           >
             Size özel profesyonel bakım hizmetleriyle doğal güzelliğinizi ortaya çıkarıyoruz
           </motion.p>
@@ -67,12 +67,12 @@ const Index = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.4 }}
-            className="space-x-4"
+            className="space-y-4 md:space-y-0 md:space-x-4"
           >
-            <Button size="lg" className="bg-accent hover:bg-accent/90 text-white">
+            <Button size="lg" className="w-full md:w-auto bg-accent hover:bg-accent/90 text-white mb-4 md:mb-0">
               Randevu Al
             </Button>
-            <Button size="lg" variant="outline" className="bg-white/10 hover:bg-white/20 text-white border-white">
+            <Button size="lg" variant="outline" className="w-full md:w-auto bg-white/10 hover:bg-white/20 text-white border-white">
               Hizmetlerimiz
             </Button>
           </motion.div>
@@ -80,19 +80,19 @@ const Index = () => {
       </section>
 
       {/* Why Us Section */}
-      <section className="py-20 bg-white">
-        <div className="container mx-auto px-6">
-          <div className="text-center mb-16">
+      <section className="py-12 md:py-20 bg-white">
+        <div className="container mx-auto px-4 md:px-6">
+          <div className="text-center mb-10 md:mb-16">
             <p className="text-accent mb-2">En İyisi Olmak</p>
-            <h2 className="text-4xl font-light text-gray-800 mb-4">Neden Biz?</h2>
-            <p className="text-muted-foreground max-w-2xl mx-auto">
+            <h2 className="text-3xl md:text-4xl font-light text-gray-800 mb-4">Neden Biz?</h2>
+            <p className="text-muted-foreground max-w-2xl mx-auto px-4 md:px-0">
               20 yıllık tecrübemiz ve uzman kadromuzla size en kaliteli hizmeti sunuyoruz
             </p>
           </div>
 
-          <div className="relative max-w-6xl mx-auto">
+          <div className="relative max-w-6xl mx-auto px-4 md:px-0">
             {/* Center Image */}
-            <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 md:w-80 md:h-80">
+            <div className="hidden md:block absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 md:w-64 md:h-64 lg:w-80 lg:h-80">
               <motion.div 
                 initial={{ opacity: 0, scale: 0.8 }}
                 whileInView={{ opacity: 1, scale: 1 }}
@@ -107,7 +107,7 @@ const Index = () => {
               </motion.div>
             </div>
 
-            <div className="grid grid-cols-2 gap-x-[30rem] gap-y-16 py-20">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-x-[30rem] md:gap-y-16 py-8 md:py-20">
               {/* Left Side Items */}
               <motion.div 
                 initial={{ opacity: 0, x: -20 }}
@@ -216,34 +216,34 @@ const Index = () => {
       </section>
 
       {/* Services Section */}
-      <section className="py-20 bg-secondary">
-        <div className="container mx-auto px-6">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-light text-gray-800 mb-4">Hizmetlerimiz</h2>
+      <section className="py-12 md:py-20 bg-secondary">
+        <div className="container mx-auto px-4 md:px-6">
+          <div className="text-center mb-10 md:mb-16">
+            <h2 className="text-3xl md:text-4xl font-light text-gray-800 mb-4">Hizmetlerimiz</h2>
             <p className="text-muted-foreground">Size özel profesyonel bakım hizmetleri</p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
             {services.map((service, index) => (
               <motion.div
                 key={service.title}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="group relative overflow-hidden rounded-lg"
+                className="group relative overflow-hidden rounded-lg h-64 md:h-80"
               >
                 <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity z-10" />
                 <img 
                   src={service.image} 
                   alt={service.title}
-                  className="w-full h-80 object-cover transition-transform group-hover:scale-110"
+                  className="w-full h-full object-cover transition-transform group-hover:scale-110"
                 />
-                <div className="absolute inset-0 flex flex-col items-center justify-center z-20 opacity-0 group-hover:opacity-100 transition-opacity">
+                <div className="absolute inset-0 flex flex-col items-center justify-center z-20 opacity-0 group-hover:opacity-100 transition-opacity p-4">
                   <div className="w-12 h-12 bg-accent/10 rounded-full flex items-center justify-center mb-4">
                     {service.icon}
                   </div>
                   <h3 className="text-xl font-medium mb-2 text-white">{service.title}</h3>
-                  <p className="text-white/80 text-center max-w-xs px-4">{service.description}</p>
+                  <p className="text-white/80 text-center max-w-xs">{service.description}</p>
                   <Button variant="outline" className="mt-4 text-white border-white hover:bg-white/20">
                     Detaylı Bilgi
                   </Button>
@@ -255,16 +255,16 @@ const Index = () => {
       </section>
 
       {/* Who We Are Section */}
-      <section className="py-20 bg-pink-50">
-        <div className="container mx-auto px-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-            <div className="space-y-8">
+      <section className="py-12 md:py-20 bg-pink-50">
+        <div className="container mx-auto px-4 md:px-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-center">
+            <div className="space-y-6 md:space-y-8">
               <div>
                 <motion.h3 
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5 }}
-                  className="text-pink-400 text-xl mb-2"
+                  className="text-pink-400 text-lg md:text-xl mb-2"
                 >
                   Who We Are
                 </motion.h3>
@@ -272,7 +272,7 @@ const Index = () => {
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: 0.2 }}
-                  className="text-4xl font-medium text-gray-800 mb-6"
+                  className="text-3xl md:text-4xl font-medium text-gray-800 mb-4 md:mb-6"
                 >
                   Our History
                 </motion.h2>
@@ -288,14 +288,14 @@ const Index = () => {
                 </motion.p>
               </div>
 
-              <div className="grid grid-cols-2 gap-8 mt-12">
+              <div className="grid grid-cols-2 gap-4 md:gap-8 mt-8 md:mt-12">
                 <motion.div
                   initial={{ opacity: 0, scale: 0.5 }}
                   whileInView={{ opacity: 1, scale: 1 }}
                   transition={{ duration: 0.5 }}
                   className="text-center"
                 >
-                  <h4 className="text-5xl font-light text-pink-400 mb-2">5</h4>
+                  <h4 className="text-4xl md:text-5xl font-light text-pink-400 mb-2">5</h4>
                   <p className="text-gray-600">Years of Experience</p>
                 </motion.div>
 
@@ -305,7 +305,7 @@ const Index = () => {
                   transition={{ duration: 0.5, delay: 0.2 }}
                   className="text-center"
                 >
-                  <h4 className="text-5xl font-light text-pink-400 mb-2">400+</h4>
+                  <h4 className="text-4xl md:text-5xl font-light text-pink-400 mb-2">400+</h4>
                   <p className="text-gray-600">Happy Customers</p>
                 </motion.div>
               </div>
@@ -315,7 +315,7 @@ const Index = () => {
               initial={{ opacity: 0, x: 50 }}
               whileInView={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.5 }}
-              className="relative h-[600px] rounded-2xl overflow-hidden"
+              className="relative h-[300px] md:h-[600px] rounded-2xl overflow-hidden mt-8 md:mt-0"
             >
               <img
                 src="/lovable-uploads/daed8c08-150b-4242-8b90-e0a06e01df8e.png"
@@ -328,14 +328,14 @@ const Index = () => {
       </section>
 
       {/* Team Section */}
-      <section className="py-20 bg-white">
-        <div className="container mx-auto px-6">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-light text-gray-800 mb-4">Ekibimiz</h2>
+      <section className="py-12 md:py-20 bg-white">
+        <div className="container mx-auto px-4 md:px-6">
+          <div className="text-center mb-10 md:mb-16">
+            <h2 className="text-3xl md:text-4xl font-light text-gray-800 mb-4">Ekibimiz</h2>
             <p className="text-muted-foreground">Profesyonel ve deneyimli ekibimizle tanışın</p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 max-w-5xl mx-auto">
             {teamMembers.map((member, index) => (
               <motion.div
                 key={member.name}
@@ -344,15 +344,15 @@ const Index = () => {
                 transition={{ duration: 0.5, delay: index * 0.2 }}
                 className="group relative overflow-hidden rounded-xl"
               >
-                <div className="relative h-[400px] overflow-hidden rounded-xl">
+                <div className="relative h-[350px] md:h-[400px] overflow-hidden rounded-xl">
                   <img 
                     src={member.image} 
                     alt={member.name}
                     className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                    <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
-                      <h3 className="text-xl font-medium mb-2">{member.name}</h3>
+                    <div className="absolute bottom-0 left-0 right-0 p-4 md:p-6 text-white">
+                      <h3 className="text-lg md:text-xl font-medium mb-2">{member.name}</h3>
                       <p className="text-white/80 mb-4">{member.role}</p>
                       <motion.div 
                         initial={{ opacity: 0, y: 20 }}
@@ -508,17 +508,17 @@ const Index = () => {
       </section>
 
       {/* Contact Section */}
-      <section className="py-20 bg-white">
-        <div className="container mx-auto px-6">
+      <section className="py-12 md:py-20 bg-white">
+        <div className="container mx-auto px-4 md:px-6">
           <div className="max-w-4xl mx-auto">
-            <h2 className="text-4xl font-light text-center mb-12">İletişim</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <h2 className="text-3xl md:text-4xl font-light text-center mb-8 md:mb-12">İletişim</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
               {/* Left Side - Contact Image */}
               <motion.div 
                 initial={{ opacity: 0, x: -20 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.5 }}
-                className="relative h-[400px] rounded-xl overflow-hidden"
+                className="relative h-[300px] md:h-[400px] rounded-xl overflow-hidden"
               >
                 <img 
                   src="/lovable-uploads/64a521e6-1a33-4880-aa73-c55de1019236.png"
@@ -528,7 +528,7 @@ const Index = () => {
               </motion.div>
 
               {/* Right Side - Map */}
-              <div className="rounded-xl overflow-hidden h-[400px] bg-muted">
+              <div className="rounded-xl overflow-hidden h-[300px] md:h-[400px] bg-muted">
                 {/* Placeholder for Google Maps */}
                 <div className="w-full h-full bg-accent/10 flex items-center justify-center">
                   <MapPin className="w-12 h-12 text-accent" />
@@ -536,10 +536,10 @@ const Index = () => {
               </div>
 
               {/* Contact Information Below */}
-              <div className="bg-secondary rounded-xl p-8 md:col-span-2">
-                <div className="space-y-8">
+              <div className="bg-secondary rounded-xl p-6 md:p-8 md:col-span-2">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
                   <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 bg-accent/10 rounded-full flex items-center justify-center">
+                    <div className="w-12 h-12 bg-accent/10 rounded-full flex items-center justify-center flex-shrink-0">
                       <Phone className="w-6 h-6 text-accent" />
                     </div>
                     <div>
@@ -548,7 +548,7 @@ const Index = () => {
                     </div>
                   </div>
                   <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 bg-accent/10 rounded-full flex items-center justify-center">
+                    <div className="w-12 h-12 bg-accent/10 rounded-full flex items-center justify-center flex-shrink-0">
                       <MapPin className="w-6 h-6 text-accent" />
                     </div>
                     <div>
@@ -557,7 +557,7 @@ const Index = () => {
                     </div>
                   </div>
                   <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 bg-accent/10 rounded-full flex items-center justify-center">
+                    <div className="w-12 h-12 bg-accent/10 rounded-full flex items-center justify-center flex-shrink-0">
                       <Calendar className="w-6 h-6 text-accent" />
                     </div>
                     <div>
