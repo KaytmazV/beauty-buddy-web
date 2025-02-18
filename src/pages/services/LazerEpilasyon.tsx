@@ -1,29 +1,39 @@
 
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
 import { Check, Calendar } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const LazerEpilasyon = () => {
   return (
-    <div className="min-h-screen pt-24 bg-secondary">
-      {/* Hero Section */}
-      <section className="container mx-auto px-6">
-        <motion.div 
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="text-center mb-16"
-        >
-          <h1 className="text-4xl md:text-5xl font-light text-gray-800 mb-6">
-            Lazer Epilasyon
-          </h1>
-          <p className="text-muted-foreground max-w-2xl mx-auto">
-            En son teknoloji lazer epilasyon cihazlarımız ve uzman kadromuzla, 
-            istenmeyen tüylerden kalıcı olarak kurtulmanızı sağlıyoruz.
-          </p>
-        </motion.div>
+    <div className="min-h-screen bg-secondary">
+      {/* Video Hero Section */}
+      <div className="relative h-screen">
+        <div className="absolute inset-0 bg-black/50 z-10" /> {/* Overlay */}
+        <iframe
+          src="https://www.youtube.com/embed/lxiO5mXOcR0?autoplay=1&mute=1&loop=1&playlist=lxiO5mXOcR0&controls=0"
+          className="absolute inset-0 w-full h-full object-cover"
+          allow="autoplay; encrypted-media"
+          allowFullScreen
+        />
+        <div className="relative z-20 h-full flex items-center justify-center">
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="text-center text-white"
+          >
+            <h1 className="text-5xl md:text-7xl font-light mb-6">
+              Lazer Epilasyon
+            </h1>
+            <p className="text-xl md:text-2xl font-light max-w-2xl mx-auto px-6">
+              En son teknoloji ile kalıcı çözümler sunuyoruz
+            </p>
+          </motion.div>
+        </div>
+      </div>
 
+      {/* Content Section */}
+      <section className="container mx-auto px-6 py-16">
         {/* Features Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
           <motion.div 
@@ -105,70 +115,33 @@ const LazerEpilasyon = () => {
           </motion.div>
         </div>
 
-        {/* Pricing Section */}
-        <div className="max-w-5xl mx-auto mb-16">
-          <h2 className="text-3xl font-light text-center mb-12">Bölgesel Fiyatlandırma</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <Card>
-              <CardContent className="p-6">
-                <h3 className="text-xl font-medium mb-4">Yüz Bölgesi</h3>
-                <ul className="space-y-2 mb-6">
-                  <li className="flex justify-between">
-                    <span>Bıyık</span>
-                    <span className="font-medium">₺200</span>
-                  </li>
-                  <li className="flex justify-between">
-                    <span>Çene</span>
-                    <span className="font-medium">₺250</span>
-                  </li>
-                  <li className="flex justify-between">
-                    <span>Komple Yüz</span>
-                    <span className="font-medium">₺500</span>
-                  </li>
-                </ul>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardContent className="p-6">
-                <h3 className="text-xl font-medium mb-4">Vücut Bölgesi</h3>
-                <ul className="space-y-2 mb-6">
-                  <li className="flex justify-between">
-                    <span>Koltukaltı</span>
-                    <span className="font-medium">₺300</span>
-                  </li>
-                  <li className="flex justify-between">
-                    <span>Bacak</span>
-                    <span className="font-medium">₺800</span>
-                  </li>
-                  <li className="flex justify-between">
-                    <span>Kol</span>
-                    <span className="font-medium">₺600</span>
-                  </li>
-                </ul>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardContent className="p-6">
-                <h3 className="text-xl font-medium mb-4">Özel Paketler</h3>
-                <ul className="space-y-2 mb-6">
-                  <li className="flex justify-between">
-                    <span>Tüm Vücut</span>
-                    <span className="font-medium">₺2000</span>
-                  </li>
-                  <li className="flex justify-between">
-                    <span>Yarım Vücut</span>
-                    <span className="font-medium">₺1200</span>
-                  </li>
-                </ul>
-              </CardContent>
-            </Card>
-          </div>
+        {/* Images Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
+          <motion.img
+            initial={{ opacity: 0, scale: 0.9 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            className="w-full h-64 object-cover rounded-xl shadow-lg"
+            src="https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?ixlib=rb-4.0.3"
+            alt="Lazer Epilasyon"
+          />
+          <motion.img
+            initial={{ opacity: 0, scale: 0.9 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            className="w-full h-64 object-cover rounded-xl shadow-lg"
+            src="https://images.unsplash.com/photo-1612872087720-bb876e2e67d1?ixlib=rb-4.0.3"
+            alt="Lazer Epilasyon Teknolojisi"
+          />
+          <motion.img
+            initial={{ opacity: 0, scale: 0.9 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            className="w-full h-64 object-cover rounded-xl shadow-lg"
+            src="https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?ixlib=rb-4.0.3"
+            alt="Modern Klinik"
+          />
         </div>
 
         {/* CTA Section */}
-        <div className="text-center mb-16">
+        <div className="text-center">
           <Link to="/appointment">
             <Button className="bg-accent hover:bg-accent/90 text-white gap-2">
               <Calendar className="w-4 h-4" />
