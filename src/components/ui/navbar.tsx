@@ -1,8 +1,9 @@
 
 import { Link } from "react-router-dom";
 import { Button } from "./button";
-import { Calendar, ChevronDown, Menu } from "lucide-react";
+import { Calendar, ChevronDown, Menu, X } from "lucide-react";
 import { motion } from "framer-motion";
+import { useState } from "react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -11,6 +12,12 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 const Navbar = () => {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
+  };
+
   return (
     <motion.nav 
       initial={{ y: -100 }}
@@ -31,9 +38,79 @@ const Navbar = () => {
           </Link>
           
           {/* Mobile Menu Button */}
-          <button className="md:hidden text-gray-700 hover:text-accent transition-colors">
-            <Menu className="w-6 h-6" />
+          <button 
+            onClick={toggleMenu}
+            className="md:hidden text-gray-700 hover:text-accent transition-colors"
+          >
+            {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
           </button>
+
+          {/* Mobile Menu */}
+          {isMenuOpen && (
+            <div className="absolute top-16 left-0 right-0 bg-white shadow-lg md:hidden">
+              <div className="flex flex-col p-4 space-y-4">
+                <Link 
+                  to="/" 
+                  className="text-gray-700 hover:text-accent transition-colors"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  Anasayfa
+                </Link>
+                <Link 
+                  to="/services/lazer-epilasyon" 
+                  className="text-gray-700 hover:text-accent transition-colors"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  Lazer Epilasyon
+                </Link>
+                <Link 
+                  to="/services/sac-bakim" 
+                  className="text-gray-700 hover:text-accent transition-colors"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  Saç Bakım
+                </Link>
+                <Link 
+                  to="/services/tirnak-bakim" 
+                  className="text-gray-700 hover:text-accent transition-colors"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  Tırnak Bakımı
+                </Link>
+                <Link 
+                  to="/about" 
+                  className="text-gray-700 hover:text-accent transition-colors"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  Hakkında
+                </Link>
+                <Link 
+                  to="/team" 
+                  className="text-gray-700 hover:text-accent transition-colors"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  Çalışanlarımız
+                </Link>
+                <Link 
+                  to="/blog" 
+                  className="text-gray-700 hover:text-accent transition-colors"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  Blog
+                </Link>
+                <Link 
+                  to="/appointment" 
+                  className="w-full"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  <Button className="w-full bg-accent hover:bg-accent/90 text-white gap-2">
+                    <Calendar className="w-4 h-4" />
+                    Randevu Al
+                  </Button>
+                </Link>
+              </div>
+            </div>
+          )}
 
           <div className="hidden md:flex items-center gap-8">
             <Link to="/" className="text-gray-700 hover:text-accent transition-colors">
