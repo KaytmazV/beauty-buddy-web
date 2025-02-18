@@ -353,14 +353,29 @@ const Index = () => {
                   </select>
                 </div>
                 <div>
-                  <label htmlFor="date" className="block text-sm font-medium text-gray-700 mb-1">
-                    Tarih
+                  <label className="block text-sm font-medium text-gray-700 mb-3">
+                    Randevu Saati - {new Date().toLocaleDateString('tr-TR')}
                   </label>
-                  <input
-                    type="date"
-                    id="date"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-accent focus:border-accent"
-                  />
+                  <div className="grid grid-cols-3 gap-2">
+                    {[
+                      "10:00", "10:30", "11:00", 
+                      "11:30", "12:00", "12:30",
+                      "13:00", "13:30", "14:00",
+                      "14:30", "15:00", "15:30",
+                      "16:00", "16:30", "17:00",
+                      "17:30", "18:00", "18:30"
+                    ].map((time) => (
+                      <Button
+                        key={time}
+                        type="button"
+                        variant="outline"
+                        className="hover:bg-accent hover:text-white transition-colors"
+                        onClick={() => console.log(`Selected time: ${time}`)}
+                      >
+                        {time}
+                      </Button>
+                    ))}
+                  </div>
                 </div>
                 <Button className="w-full bg-accent hover:bg-accent/90 text-white">
                   Randevu Oluştur
