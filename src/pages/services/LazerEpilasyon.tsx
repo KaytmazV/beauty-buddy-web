@@ -1,4 +1,3 @@
-
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Check, Calendar } from "lucide-react";
@@ -84,10 +83,9 @@ const LazerEpilasyon = () => {
                 Eskişehir'in kalbinde, modern teknoloji ve uzman kadromuzla lazer epilasyon hizmetleri sunuyoruz. Her cilt tipine uygun, FDA onaylı son teknoloji cihazlarımızla güvenli ve etkili sonuçlar elde ediyoruz. Deneyimli ekibimiz, kişiselleştirilmiş tedavi planları ile sizin için en uygun çözümü sunarak, istenmeyen tüylerden kalıcı olarak kurtulmanızı sağlıyor. Hijyenik ortamımız, profesyonel yaklaşımımız ve uygun fiyat politikamızla Eskişehir'de lazer epilasyon denince akla gelen ilk adres olmaktan gurur duyuyoruz.
               </p>
               <div className="pt-4">
-                <Link to="/appointment">
-                  <Button className="bg-accent hover:bg-accent/90 text-white gap-2">
-                    <Calendar className="w-4 h-4" />
-                    Ücretsiz Danışmanlık
+                <Link to="/blog">
+                  <Button className="bg-accent hover:bg-accent/90 text-white">
+                    Daha Fazla Bilgi
                   </Button>
                 </Link>
               </div>
@@ -227,7 +225,6 @@ const LazerEpilasyon = () => {
         <div className="text-center">
           <Link to="/appointment">
             <Button className="bg-accent hover:bg-accent/90 text-white gap-2">
-              <Calendar className="w-4 h-4" />
               Hemen Randevu Al
             </Button>
           </Link>
