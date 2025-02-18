@@ -20,7 +20,18 @@ const Team = () => {
         instagram: "drayse",
         email: "ayse@example.com",
         phone: "+90 555 555 55 55"
-      }
+      },
+      workImages: [
+        { title: "Lazer Epilasyon - 1", image: "/lovable-uploads/57c192c4-a8eb-4747-8a7d-e90308a924db.png" },
+        { title: "Lazer Epilasyon - 2", image: "/lovable-uploads/645106e4-0ba1-406c-81b7-809eefae0292.png" },
+        { title: "Lazer Epilasyon - 3", image: "/lovable-uploads/2e116253-a86d-444d-ac71-a4192e8bd3ca.png" },
+        { title: "Cilt Bakımı - 1", image: "/lovable-uploads/db42afb7-b175-4b3d-a2cf-713523bc80ea.png" },
+        { title: "Cilt Bakımı - 2", image: "/lovable-uploads/2e54b248-c48c-4bdf-9e70-3f7000d0a4a4.png" },
+        { title: "Cilt Bakımı - 3", image: "/lovable-uploads/57c192c4-a8eb-4747-8a7d-e90308a924db.png" },
+        { title: "Anti-Aging - 1", image: "/lovable-uploads/645106e4-0ba1-406c-81b7-809eefae0292.png" },
+        { title: "Anti-Aging - 2", image: "/lovable-uploads/2e116253-a86d-444d-ac71-a4192e8bd3ca.png" },
+        { title: "Anti-Aging - 3", image: "/lovable-uploads/db42afb7-b175-4b3d-a2cf-713523bc80ea.png" }
+      ]
     },
     {
       id: 2,
@@ -34,7 +45,18 @@ const Team = () => {
         instagram: "zeynepbeauty",
         email: "zeynep@example.com",
         phone: "+90 555 555 55 56"
-      }
+      },
+      workImages: [
+        { title: "Saç Bakımı - 1", image: "/lovable-uploads/2e54b248-c48c-4bdf-9e70-3f7000d0a4a4.png" },
+        { title: "Saç Bakımı - 2", image: "/lovable-uploads/57c192c4-a8eb-4747-8a7d-e90308a924db.png" },
+        { title: "Saç Bakımı - 3", image: "/lovable-uploads/645106e4-0ba1-406c-81b7-809eefae0292.png" },
+        { title: "Keratin - 1", image: "/lovable-uploads/2e116253-a86d-444d-ac71-a4192e8bd3ca.png" },
+        { title: "Keratin - 2", image: "/lovable-uploads/db42afb7-b175-4b3d-a2cf-713523bc80ea.png" },
+        { title: "Keratin - 3", image: "/lovable-uploads/2e54b248-c48c-4bdf-9e70-3f7000d0a4a4.png" },
+        { title: "Saç Boyama - 1", image: "/lovable-uploads/57c192c4-a8eb-4747-8a7d-e90308a924db.png" },
+        { title: "Saç Boyama - 2", image: "/lovable-uploads/645106e4-0ba1-406c-81b7-809eefae0292.png" },
+        { title: "Saç Boyama - 3", image: "/lovable-uploads/2e116253-a86d-444d-ac71-a4192e8bd3ca.png" }
+      ]
     },
     {
       id: 3,
@@ -48,7 +70,18 @@ const Team = () => {
         instagram: "elifnails",
         email: "elif@example.com",
         phone: "+90 555 555 55 57"
-      }
+      },
+      workImages: [
+        { title: "Manikür - 1", image: "/lovable-uploads/2e54b248-c48c-4bdf-9e70-3f7000d0a4a4.png" },
+        { title: "Manikür - 2", image: "/lovable-uploads/57c192c4-a8eb-4747-8a7d-e90308a924db.png" },
+        { title: "Manikür - 3", image: "/lovable-uploads/645106e4-0ba1-406c-81b7-809eefae0292.png" },
+        { title: "Pedikür - 1", image: "/lovable-uploads/2e116253-a86d-444d-ac71-a4192e8bd3ca.png" },
+        { title: "Pedikür - 2", image: "/lovable-uploads/db42afb7-b175-4b3d-a2cf-713523bc80ea.png" },
+        { title: "Pedikür - 3", image: "/lovable-uploads/2e54b248-c48c-4bdf-9e70-3f7000d0a4a4.png" },
+        { title: "Protez Tırnak - 1", image: "/lovable-uploads/57c192c4-a8eb-4747-8a7d-e90308a924db.png" },
+        { title: "Protez Tırnak - 2", image: "/lovable-uploads/645106e4-0ba1-406c-81b7-809eefae0292.png" },
+        { title: "Protez Tırnak - 3", image: "/lovable-uploads/2e116253-a86d-444d-ac71-a4192e8bd3ca.png" }
+      ]
     }
   ];
 
@@ -99,7 +132,7 @@ const Team = () => {
           className="container mx-auto px-6 mb-20"
         >
           <div className="max-w-6xl mx-auto">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start mb-20">
               <div className="relative h-[600px] rounded-2xl overflow-hidden group">
                 <img
                   src={activeMember.image}
@@ -161,6 +194,31 @@ const Team = () => {
                     <Phone size={24} />
                   </a>
                 </div>
+              </div>
+            </div>
+
+            {/* Çalışma Örnekleri */}
+            <div>
+              <h3 className="text-3xl font-light text-center mb-12">Çalışma Örnekleri</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {activeMember.workImages.map((work, index) => (
+                  <motion.div
+                    key={index}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ delay: index * 0.1 }}
+                    className="group"
+                  >
+                    <div className="relative h-64 rounded-xl overflow-hidden mb-4">
+                      <img
+                        src={work.image}
+                        alt={work.title}
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      />
+                    </div>
+                    <h4 className="text-lg font-medium text-center text-gray-700">{work.title}</h4>
+                  </motion.div>
+                ))}
               </div>
             </div>
           </div>
