@@ -104,64 +104,76 @@ const UserDashboard = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-secondary/20 to-background pt-24">
+    <div className="min-h-screen bg-gradient-to-br from-primary/5 via-secondary/10 to-accent/5 pt-24">
       <WhatsAppSupport />
       
       <div className="container mx-auto px-4">
-        <h1 className="text-4xl font-light text-center mb-12">Müşteri Listesi</h1>
+        <h1 className="text-4xl font-light text-center mb-4">Müşteri Listesi</h1>
+        <p className="text-muted-foreground text-center mb-12">Müşterilerinizi ve randevularınızı kolayca yönetin</p>
         
-        <Card>
+        <Card className="border-none shadow-lg bg-card/50 backdrop-blur-sm">
           <CardHeader>
             <div className="flex items-center justify-between">
               <div>
-                <CardTitle>Müşteriler</CardTitle>
+                <CardTitle className="text-2xl bg-gradient-to-r from-primary/80 to-accent bg-clip-text text-transparent">
+                  Müşteriler
+                </CardTitle>
                 <CardDescription>
                   Tüm müşterileriniz ve işlem bilgileri
                 </CardDescription>
               </div>
               <Dialog>
                 <DialogTrigger asChild>
-                  <Button>Yeni Müşteri</Button>
+                  <Button className="bg-accent hover:bg-accent/90">
+                    <Calendar className="mr-2 h-4 w-4" />
+                    Yeni Müşteri
+                  </Button>
                 </DialogTrigger>
-                <DialogContent>
+                <DialogContent className="sm:max-w-[425px]">
                   <DialogHeader>
-                    <DialogTitle>Yeni Müşteri Ekle</DialogTitle>
+                    <DialogTitle className="text-xl font-semibold">Yeni Müşteri Ekle</DialogTitle>
                   </DialogHeader>
                   <div className="space-y-4 mt-4">
                     <Input
                       placeholder="Müşteri Adı"
                       value={newCustomer.name}
                       onChange={(e) => setNewCustomer({ ...newCustomer, name: e.target.value })}
+                      className="bg-background/50"
                     />
                     <Input
                       placeholder="Telefon Numarası"
                       value={newCustomer.phone}
                       onChange={(e) => setNewCustomer({ ...newCustomer, phone: e.target.value })}
+                      className="bg-background/50"
                     />
                     <Input
                       type="date"
                       value={newCustomer.appointmentDate}
                       onChange={(e) => setNewCustomer({ ...newCustomer, appointmentDate: e.target.value })}
+                      className="bg-background/50"
                     />
                     <Input
                       placeholder="Hizmet"
                       value={newCustomer.service}
                       onChange={(e) => setNewCustomer({ ...newCustomer, service: e.target.value })}
+                      className="bg-background/50"
                     />
-                    <Button onClick={handleAddCustomer} className="w-full">Ekle</Button>
+                    <Button onClick={handleAddCustomer} className="w-full bg-accent hover:bg-accent/90">
+                      Ekle
+                    </Button>
                   </div>
                 </DialogContent>
               </Dialog>
             </div>
             
-            <div className="mt-4 space-y-4">
+            <div className="mt-6 space-y-4">
               <div className="relative">
                 <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
                 <Input
                   placeholder="Müşteri adı veya telefon numarası ile ara..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="pl-8"
+                  className="pl-8 bg-background/50"
                 />
               </div>
               
@@ -170,6 +182,7 @@ const UserDashboard = () => {
                   variant={statusFilter === "all" ? "default" : "outline"}
                   onClick={() => setStatusFilter("all")}
                   size="sm"
+                  className={statusFilter === "all" ? "bg-accent hover:bg-accent/90" : ""}
                 >
                   Tümü
                 </Button>
@@ -177,7 +190,7 @@ const UserDashboard = () => {
                   variant={statusFilter === "pending" ? "default" : "outline"}
                   onClick={() => setStatusFilter("pending")}
                   size="sm"
-                  className="gap-1"
+                  className={`gap-1 ${statusFilter === "pending" ? "bg-primary hover:bg-primary/90" : ""}`}
                 >
                   <Clock className="h-3 w-3" />
                   Bekleyen
@@ -186,7 +199,7 @@ const UserDashboard = () => {
                   variant={statusFilter === "completed" ? "default" : "outline"}
                   onClick={() => setStatusFilter("completed")}
                   size="sm"
-                  className="gap-1"
+                  className={`gap-1 ${statusFilter === "completed" ? "bg-green-600 hover:bg-green-600/90" : ""}`}
                 >
                   <CheckCircle2 className="h-3 w-3" />
                   Tamamlanan
@@ -197,17 +210,19 @@ const UserDashboard = () => {
           
           <CardContent>
             <ScrollArea className="h-[400px] w-full">
-              <div className="space-y-2">
+              <div className="space-y-3">
                 {filteredCustomers.map((customer) => (
                   <div
                     key={customer.id}
-                    className="flex items-center justify-between p-2 border rounded-lg hover:bg-secondary/10 transition-colors"
+                    className="flex items-center justify-between p-3 rounded-lg transition-all hover:scale-[1.01] border border-border/50 hover:border-accent/30 hover:bg-accent/5 bg-card/50 backdrop-blur-sm"
                   >
-                    <div className="flex items-center gap-2">
-                      <Minus className="h-3 w-3 text-muted-foreground" />
+                    <div className="flex items-center gap-3">
+                      <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary/10">
+                        {customer.name.charAt(0)}
+                      </div>
                       <div>
                         <h3 className="text-sm font-medium">{customer.name}</h3>
-                        <div className="flex items-center gap-3 text-xs text-muted-foreground">
+                        <div className="flex items-center gap-4 text-xs text-muted-foreground mt-1">
                           <span className="flex items-center">
                             <Phone className="mr-1 h-3 w-3" />
                             {customer.phone}
@@ -239,50 +254,75 @@ const UserDashboard = () => {
                     
                     <Dialog>
                       <DialogTrigger asChild>
-                        <Button variant="ghost" size="sm" className="h-7 px-2 text-xs">
+                        <Button variant="ghost" size="sm" className="h-7 px-3 text-xs hover:bg-accent/10">
                           <Eye className="h-3 w-3 mr-1" />
                           Detay
                         </Button>
                       </DialogTrigger>
-                      <DialogContent>
+                      <DialogContent className="sm:max-w-[425px]">
                         <DialogHeader>
-                          <DialogTitle>Müşteri Detayı</DialogTitle>
+                          <DialogTitle className="text-xl font-semibold flex items-center gap-2">
+                            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary/10">
+                              {customer.name.charAt(0)}
+                            </div>
+                            {customer.name}
+                          </DialogTitle>
                         </DialogHeader>
-                        <div className="space-y-4 mt-4">
-                          <div>
-                            <h4 className="text-sm font-medium">Müşteri Bilgileri</h4>
-                            <p className="text-sm text-muted-foreground">Ad Soyad: {customer.name}</p>
-                            <p className="text-sm text-muted-foreground">Telefon: {customer.phone}</p>
+                        <div className="space-y-6 mt-4">
+                          <div className="space-y-2">
+                            <h4 className="text-sm font-medium text-accent">Müşteri Bilgileri</h4>
+                            <div className="grid gap-1 text-sm">
+                              <div className="flex items-center">
+                                <Phone className="w-4 h-4 mr-2 text-muted-foreground" />
+                                <span>{customer.phone}</span>
+                              </div>
+                            </div>
                           </div>
-                          <div>
-                            <h4 className="text-sm font-medium">Randevu Bilgileri</h4>
-                            <p className="text-sm text-muted-foreground">
-                              Randevu: {formatDate(customer.appointmentDate)}
-                            </p>
-                            <p className="text-sm text-muted-foreground">İşlem: {customer.service}</p>
-                            <p className="text-sm text-muted-foreground">
-                              Durum: {customer.status === "pending" ? "Bekliyor" : "Tamamlandı"}
-                            </p>
+                          <div className="space-y-2">
+                            <h4 className="text-sm font-medium text-accent">Randevu Bilgileri</h4>
+                            <div className="grid gap-2 text-sm">
+                              <div className="flex items-center">
+                                <Calendar className="w-4 h-4 mr-2 text-muted-foreground" />
+                                <span>{formatDate(customer.appointmentDate)}</span>
+                              </div>
+                              <div className="flex items-center">
+                                <Clock className="w-4 h-4 mr-2 text-muted-foreground" />
+                                <span>{customer.service}</span>
+                              </div>
+                              <div className="flex items-center">
+                                {customer.status === "pending" ? (
+                                  <Clock className="w-4 h-4 mr-2 text-primary" />
+                                ) : (
+                                  <CheckCircle2 className="w-4 h-4 mr-2 text-green-600" />
+                                )}
+                                <span>{customer.status === "pending" ? "Bekliyor" : "Tamamlandı"}</span>
+                              </div>
+                            </div>
                             {customer.nextAppointmentDate && (
-                              <p className="text-sm font-medium text-primary mt-2">
-                                Sonraki Randevu: {formatDate(customer.nextAppointmentDate)}
-                              </p>
+                              <div className="mt-4 p-3 rounded-lg bg-accent/10 border border-accent/20">
+                                <p className="text-sm font-medium text-accent flex items-center">
+                                  <Calendar className="w-4 h-4 mr-2" />
+                                  Sonraki Randevu
+                                </p>
+                                <p className="text-sm mt-1">{formatDate(customer.nextAppointmentDate)}</p>
+                              </div>
                             )}
                           </div>
-                          <div>
-                            <h4 className="text-sm font-medium mb-2">Müşteri Notu</h4>
+                          <div className="space-y-2">
+                            <h4 className="text-sm font-medium text-accent mb-2">Müşteri Notu</h4>
                             {editingNotes?.id === customer.id ? (
                               <div className="space-y-2">
                                 <Textarea
                                   value={editingNotes.notes}
                                   onChange={(e) => setEditingNotes({ ...editingNotes, notes: e.target.value })}
                                   placeholder="Müşteri için not ekleyin..."
-                                  className="min-h-[100px]"
+                                  className="min-h-[100px] bg-background/50"
                                 />
                                 <div className="flex gap-2">
                                   <Button 
                                     onClick={() => updateCustomerNotes(customer.id, editingNotes.notes)}
                                     size="sm"
+                                    className="bg-accent hover:bg-accent/90"
                                   >
                                     Kaydet
                                   </Button>
@@ -304,6 +344,7 @@ const UserDashboard = () => {
                                   variant="outline" 
                                   size="sm"
                                   onClick={() => setEditingNotes({ id: customer.id, notes: customer.notes || "" })}
+                                  className="hover:bg-accent/10 hover:text-accent"
                                 >
                                   {customer.notes ? "Notu Düzenle" : "Not Ekle"}
                                 </Button>
