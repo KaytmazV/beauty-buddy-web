@@ -209,7 +209,7 @@ const Team = () => {
                     transition={{ delay: index * 0.1 }}
                     className="group"
                   >
-                    <div className="relative h-64 rounded-xl overflow-hidden mb-4">
+                    <div className="relative h-96 rounded-xl overflow-hidden mb-4">
                       <img
                         src={work.image}
                         alt={work.title}
