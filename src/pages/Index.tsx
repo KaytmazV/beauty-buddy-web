@@ -1,7 +1,8 @@
 import { motion } from "framer-motion";
-import { Calendar, MapPin, Phone, Scissors, Star, Users, Heart, Instagram } from "lucide-react";
+import { Calendar, MapPin, Phone, Scissors, Star, Users, Heart, Instagram, MessageSquare } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
+import WhatsAppSupport from "@/components/WhatsAppSupport";
 
 const Index = () => {
   const [selectedTime, setSelectedTime] = useState<string | null>(null);
@@ -40,6 +41,7 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-secondary">
+      <WhatsAppSupport />
       {/* Hero Section */}
       <section className="relative h-[90vh] md:h-screen flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1560066984-138dadb4c035?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80')] bg-cover bg-center">
