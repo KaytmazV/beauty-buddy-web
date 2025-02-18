@@ -1,6 +1,5 @@
 
 import { motion } from "framer-motion";
-import { Card, CardContent } from "@/components/ui/card";
 import { Instagram, Mail, Phone } from "lucide-react";
 import WhatsAppSupport from "@/components/WhatsAppSupport";
 
@@ -14,7 +13,6 @@ const Team = () => {
       experience: "15 yıl",
       expertise: ["Lazer Epilasyon", "Cilt Gençleştirme", "Medikal Cilt Bakımı"],
       description: "Medikal estetik alanında 15 yıllık deneyime sahip olan Dr. Ayşe Yılmaz, özellikle lazer epilasyon ve cilt gençleştirme tedavilerinde uzmanlaşmıştır.",
-      certifications: ["Amerikan Estetik Tıp Derneği Sertifikası", "Avrupa Lazer Derneği Üyeliği"],
       social: {
         instagram: "drayse",
         email: "ayse@example.com",
@@ -29,7 +27,6 @@ const Team = () => {
       experience: "8 yıl",
       expertise: ["Saç Bakımı", "Keratin Tedavisi", "Saç Boyama"],
       description: "Saç bakımı ve güzellik konusunda uzman olan Zeynep Demir, en son trendleri ve teknikleri yakından takip ederek müşterilerine en iyi hizmeti sunmaktadır.",
-      certifications: ["L'Oréal Profesyonel Saç Bakımı Sertifikası", "Wella Colorist Sertifikası"],
       social: {
         instagram: "zeynepbeauty",
         email: "zeynep@example.com",
@@ -44,7 +41,6 @@ const Team = () => {
       experience: "6 yıl",
       expertise: ["Manikür", "Pedikür", "Protez Tırnak"],
       description: "Tırnak bakımı ve tasarımı konusunda uzmanlaşmış olan Elif Kaya, hijyenik ve profesyonel hizmet anlayışıyla çalışmaktadır.",
-      certifications: ["Profesyonel Tırnak Bakımı Sertifikası", "Nail Art Uzmanlık Sertifikası"],
       social: {
         instagram: "elifnails",
         email: "elif@example.com",
@@ -57,7 +53,7 @@ const Team = () => {
     <div className="min-h-screen bg-gradient-to-b from-secondary to-white pt-24">
       <WhatsAppSupport />
       
-      {/* Hero Section */}
+      {/* Main Heading */}
       <section className="container mx-auto px-6 mb-20">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -65,7 +61,7 @@ const Team = () => {
           className="text-center max-w-3xl mx-auto"
         >
           <h1 className="text-4xl md:text-5xl font-light text-gray-800 mb-6">
-            Profesyonel Ekibimiz
+            Çalışanlarımız
           </h1>
           <p className="text-lg text-muted-foreground">
             Deneyimli ve uzman kadromuzla size en iyi hizmeti sunmak için buradayız
@@ -75,89 +71,80 @@ const Team = () => {
 
       {/* Team Members */}
       <section className="container mx-auto px-6 mb-20">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
-          {team.map((member, index) => (
-            <motion.div
-              key={member.id}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.2 }}
-            >
-              <Card className="overflow-hidden group">
-                <div className="relative h-[400px] overflow-hidden">
+        {team.map((member, index) => (
+          <motion.div
+            key={member.id}
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ delay: index * 0.2 }}
+            className="mb-32 last:mb-0"
+          >
+            <div className="max-w-6xl mx-auto">
+              <h2 className="text-3xl font-light text-gray-800 mb-12 text-center">
+                {member.name}
+                <span className="block text-xl text-muted-foreground mt-2">{member.role}</span>
+              </h2>
+              
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <div className="relative h-[600px] rounded-2xl overflow-hidden group">
                   <img
                     src={member.image}
                     alt={member.name}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
-                  <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
-                    <h3 className="text-2xl font-light mb-2">{member.name}</h3>
-                    <p className="text-white/90">{member.role}</p>
+                </div>
+                
+                <div className="space-y-6">
+                  <div>
+                    <h3 className="text-xl font-medium mb-4">Uzmanlık Alanları</h3>
+                    <div className="flex flex-wrap gap-2">
+                      {member.expertise.map((exp, i) => (
+                        <span
+                          key={i}
+                          className="bg-accent/10 text-accent px-4 py-2 rounded-full"
+                        >
+                          {exp}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div>
+                    <h3 className="text-xl font-medium mb-4">Deneyim</h3>
+                    <p className="text-lg text-muted-foreground">{member.experience}</p>
+                  </div>
+
+                  <p className="text-lg text-muted-foreground">
+                    {member.description}
+                  </p>
+
+                  <div className="flex items-center gap-6 pt-4">
+                    <a
+                      href={`https://instagram.com/${member.social.instagram}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-muted-foreground hover:text-accent transition-colors"
+                    >
+                      <Instagram size={24} />
+                    </a>
+                    <a
+                      href={`mailto:${member.social.email}`}
+                      className="text-muted-foreground hover:text-accent transition-colors"
+                    >
+                      <Mail size={24} />
+                    </a>
+                    <a
+                      href={`tel:${member.social.phone}`}
+                      className="text-muted-foreground hover:text-accent transition-colors"
+                    >
+                      <Phone size={24} />
+                    </a>
                   </div>
                 </div>
-                <CardContent className="p-6">
-                  <div className="space-y-4">
-                    <div>
-                      <h4 className="text-lg font-medium mb-2">Uzmanlık Alanları</h4>
-                      <div className="flex flex-wrap gap-2">
-                        {member.expertise.map((exp, i) => (
-                          <span
-                            key={i}
-                            className="bg-accent/10 text-accent px-3 py-1 rounded-full text-sm"
-                          >
-                            {exp}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-
-                    <div>
-                      <h4 className="text-lg font-medium mb-2">Deneyim</h4>
-                      <p className="text-muted-foreground">{member.experience}</p>
-                    </div>
-
-                    <div>
-                      <h4 className="text-lg font-medium mb-2">Sertifikalar</h4>
-                      <ul className="list-disc list-inside text-muted-foreground">
-                        {member.certifications.map((cert, i) => (
-                          <li key={i}>{cert}</li>
-                        ))}
-                      </ul>
-                    </div>
-
-                    <p className="text-muted-foreground pt-2">
-                      {member.description}
-                    </p>
-
-                    <div className="flex items-center gap-4 pt-4">
-                      <a
-                        href={`https://instagram.com/${member.social.instagram}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-muted-foreground hover:text-accent transition-colors"
-                      >
-                        <Instagram size={20} />
-                      </a>
-                      <a
-                        href={`mailto:${member.social.email}`}
-                        className="text-muted-foreground hover:text-accent transition-colors"
-                      >
-                        <Mail size={20} />
-                      </a>
-                      <a
-                        href={`tel:${member.social.phone}`}
-                        className="text-muted-foreground hover:text-accent transition-colors"
-                      >
-                        <Phone size={20} />
-                      </a>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            </motion.div>
-          ))}
-        </div>
+              </div>
+            </div>
+          </motion.div>
+        ))}
       </section>
 
       {/* Testimonials Section */}
