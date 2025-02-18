@@ -255,45 +255,48 @@ const Index = () => {
       </section>
 
       {/* Who We Are Section */}
-      <section className="py-20 bg-white">
+      <section className="py-20 bg-pink-50">
         <div className="container mx-auto px-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-            <div className="space-y-6">
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5 }}
-              >
-                <h2 className="text-4xl font-light text-gray-800 mb-4">Who We Are</h2>
-                <p className="text-muted-foreground">
-                  Güzelliğinizi ön plana çıkarmak için buradayız. Profesyonel ekibimiz ve en son teknolojilerle
-                  size özel bakım hizmetleri sunuyoruz. Amacımız, kendinizi en iyi hissettiğiniz halinize ulaşmanızı sağlamak.
-                </p>
-              </motion.div>
-
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.2 }}
-                className="mt-8"
-              >
-                <h3 className="text-2xl font-light text-gray-800 mb-4">Our History</h3>
-                <p className="text-muted-foreground">
+            <div className="space-y-8">
+              <div>
+                <motion.h3 
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5 }}
+                  className="text-pink-400 text-xl mb-2"
+                >
+                  Who We Are
+                </motion.h3>
+                <motion.h2 
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: 0.2 }}
+                  className="text-4xl font-medium text-gray-800 mb-6"
+                >
+                  Our History
+                </motion.h2>
+                <motion.p 
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: 0.3 }}
+                  className="text-gray-600 leading-relaxed"
+                >
                   2019 yılında başlayan yolculuğumuzda, müşterilerimize en kaliteli hizmeti sunma vizyonuyla
                   çalışmalarımızı sürdürüyoruz. Yılların deneyimi ve sürekli gelişen teknolojilerle
                   sektörde öncü konumumuzu koruyoruz.
-                </p>
-              </motion.div>
+                </motion.p>
+              </div>
 
-              <div className="grid grid-cols-2 gap-8 mt-12">
+              <div className="grid grid-cols-3 gap-8 mt-12">
                 <motion.div
                   initial={{ opacity: 0, scale: 0.5 }}
                   whileInView={{ opacity: 1, scale: 1 }}
                   transition={{ duration: 0.5 }}
                   className="text-center"
                 >
-                  <h4 className="text-5xl font-light text-accent mb-2">5</h4>
-                  <p className="text-muted-foreground">Years of Experience</p>
+                  <h4 className="text-5xl font-light text-pink-400 mb-2">15</h4>
+                  <p className="text-gray-600">Years of Experience</p>
                 </motion.div>
 
                 <motion.div
@@ -302,8 +305,18 @@ const Index = () => {
                   transition={{ duration: 0.5, delay: 0.2 }}
                   className="text-center"
                 >
-                  <h4 className="text-5xl font-light text-accent mb-2">500+</h4>
-                  <p className="text-muted-foreground">Happy Customers</p>
+                  <h4 className="text-5xl font-light text-pink-400 mb-2">20</h4>
+                  <p className="text-gray-600">Happy Customers</p>
+                </motion.div>
+
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.5 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.5, delay: 0.4 }}
+                  className="text-center"
+                >
+                  <h4 className="text-5xl font-light text-pink-400 mb-2">60</h4>
+                  <p className="text-gray-600">Satisfaction Guranteed</p>
                 </motion.div>
               </div>
             </div>
@@ -315,7 +328,7 @@ const Index = () => {
               className="relative h-[600px] rounded-2xl overflow-hidden"
             >
               <img
-                src="/lovable-uploads/daed8c08-150b-4242-8b90-e0a06e01df8e.png"
+                src="/lovable-uploads/2e116253-a86d-444d-ac71-a4192e8bd3ca.png"
                 alt="Spa and Beauty Products"
                 className="w-full h-full object-cover"
               />
