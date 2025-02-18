@@ -1,3 +1,4 @@
+
 import { motion } from "framer-motion";
 import { Instagram, Mail, Phone } from "lucide-react";
 import WhatsAppSupport from "@/components/WhatsAppSupport";
@@ -19,21 +20,7 @@ const Team = () => {
         instagram: "drayse",
         email: "ayse@example.com",
         phone: "+90 555 555 55 55"
-      },
-      portfolio: [
-        {
-          title: "Lazer Epilasyon",
-          image: "/lovable-uploads/57c192c4-a8eb-4747-8a7d-e90308a924db.png"
-        },
-        {
-          title: "Cilt Bakımı",
-          image: "/lovable-uploads/645106e4-0ba1-406c-81b7-809eefae0292.png"
-        },
-        {
-          title: "Anti-Aging",
-          image: "/lovable-uploads/2e116253-a86d-444d-ac71-a4192e8bd3ca.png"
-        }
-      ]
+      }
     },
     {
       id: 2,
@@ -47,21 +34,7 @@ const Team = () => {
         instagram: "zeynepbeauty",
         email: "zeynep@example.com",
         phone: "+90 555 555 55 56"
-      },
-      portfolio: [
-        {
-          title: "Saç Bakımı",
-          image: "/lovable-uploads/2e54b248-c48c-4bdf-9e70-3f7000d0a4a4.png"
-        },
-        {
-          title: "Keratin Tedavisi",
-          image: "/lovable-uploads/db42afb7-b175-4b3d-a2cf-713523bc80ea.png"
-        },
-        {
-          title: "Saç Boyama",
-          image: "/lovable-uploads/2e116253-a86d-444d-ac71-a4192e8bd3ca.png"
-        }
-      ]
+      }
     },
     {
       id: 3,
@@ -75,21 +48,7 @@ const Team = () => {
         instagram: "elifnails",
         email: "elif@example.com",
         phone: "+90 555 555 55 57"
-      },
-      portfolio: [
-        {
-          title: "Manikür",
-          image: "/lovable-uploads/57c192c4-a8eb-4747-8a7d-e90308a924db.png"
-        },
-        {
-          title: "Pedikür",
-          image: "/lovable-uploads/645106e4-0ba1-406c-81b7-809eefae0292.png"
-        },
-        {
-          title: "Protez Tırnak",
-          image: "/lovable-uploads/2e116253-a86d-444d-ac71-a4192e8bd3ca.png"
-        }
-      ]
+      }
     }
   ];
 
@@ -139,8 +98,7 @@ const Team = () => {
           animate={{ opacity: 1, y: 0 }}
           className="container mx-auto px-6 mb-20"
         >
-          <div className="max-w-6xl mx-auto space-y-20">
-            {/* Profil Bilgileri */}
+          <div className="max-w-6xl mx-auto">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
               <div className="relative h-[600px] rounded-2xl overflow-hidden group">
                 <img
@@ -203,31 +161,6 @@ const Team = () => {
                     <Phone size={24} />
                   </a>
                 </div>
-              </div>
-            </div>
-
-            {/* Hizmetlerimiz Bölümü */}
-            <div>
-              <h3 className="text-3xl font-light text-center mb-12">Hizmetlerimiz</h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {activeMember.portfolio.map((work, index) => (
-                  <motion.div
-                    key={index}
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    transition={{ delay: index * 0.1 }}
-                    className="group"
-                  >
-                    <div className="relative h-64 rounded-xl overflow-hidden mb-4">
-                      <img
-                        src={work.image}
-                        alt={work.title}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                      />
-                    </div>
-                    <h4 className="text-xl font-medium text-center">{work.title}</h4>
-                  </motion.div>
-                ))}
               </div>
             </div>
           </div>
