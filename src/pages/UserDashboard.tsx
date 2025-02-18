@@ -108,8 +108,13 @@ const UserDashboard = () => {
       <WhatsAppSupport />
       
       <div className="container mx-auto px-4">
-        <h1 className="text-4xl font-light text-center mb-4">Müşteri Listesi</h1>
-        <p className="text-muted-foreground text-center mb-12">Müşterilerinizi ve randevularınızı kolayca yönetin</p>
+        <div className="text-center mb-12">
+          <h1 className="text-4xl font-light mb-2">İlayda Bağ</h1>
+          <p className="text-2xl font-light text-muted-foreground mb-2">Güzellik Uzmanı</p>
+          <div className="w-20 h-1 bg-gradient-to-r from-primary/80 to-accent mx-auto mb-8"></div>
+          <h2 className="text-3xl font-light">Müşteri Listesi</h2>
+          <p className="text-muted-foreground">Müşterilerinizi ve randevularınızı kolayca yönetin</p>
+        </div>
         
         <Card className="border-none shadow-lg bg-card/50 backdrop-blur-sm">
           <CardHeader>
