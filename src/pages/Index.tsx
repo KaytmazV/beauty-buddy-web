@@ -318,7 +318,7 @@ const Index = () => {
               className="relative h-[600px] rounded-2xl overflow-hidden"
             >
               <img
-                src="/lovable-uploads/2e116253-a86d-444d-ac71-a4192e8bd3ca.png"
+                src="/lovable-uploads/daed8c08-150b-4242-8b90-e0a06e01df8e.png"
                 alt="Spa and Beauty Products"
                 className="w-full h-full object-cover"
               />
