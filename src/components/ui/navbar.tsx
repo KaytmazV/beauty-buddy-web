@@ -1,7 +1,7 @@
 
 import { Link } from "react-router-dom";
 import { Button } from "./button";
-import { Calendar, ChevronDown } from "lucide-react";
+import { Calendar, ChevronDown, Menu } from "lucide-react";
 import { motion } from "framer-motion";
 import {
   DropdownMenu,
@@ -25,11 +25,16 @@ const Navbar = () => {
               alt="Atasoy Beauty Center Logo" 
               className="h-12"
             />
-            <span className="text-2xl font-light text-accent">
+            <span className="text-2xl font-light text-accent hidden sm:inline">
               Atasoy Beauty Center
             </span>
           </Link>
           
+          {/* Mobile Menu Button */}
+          <button className="md:hidden text-gray-700 hover:text-accent transition-colors">
+            <Menu className="w-6 h-6" />
+          </button>
+
           <div className="hidden md:flex items-center gap-8">
             <Link to="/" className="text-gray-700 hover:text-accent transition-colors">
               Anasayfa
@@ -75,7 +80,7 @@ const Navbar = () => {
             </Link>
           </div>
 
-          <Link to="/appointment">
+          <Link to="/appointment" className="hidden md:block">
             <Button className="hidden md:flex bg-accent hover:bg-accent/90 text-white gap-2">
               <Calendar className="w-4 h-4" />
               Randevu Al
