@@ -1,3 +1,4 @@
+
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Check, Calendar } from "lucide-react";
@@ -207,9 +208,9 @@ const LazerEpilasyon = () => {
                 initial={{ opacity: 0, scale: 0.9 }}
                 whileInView={{ opacity: 1, scale: 1 }}
                 transition={{ delay: index * 0.1 }}
-                className="space-y-4"
+                className="space-y-4 bg-white rounded-xl p-6 shadow-lg"
               >
-                <h3 className="text-xl font-medium text-center mb-4">{image.title}</h3>
+                <h3 className="text-xl font-medium text-center mb-4 text-gray-800">{image.title}</h3>
                 <ReactBeforeAfterSlider
                   firstImage={{ imageUrl: image.before }}
                   secondImage={{ imageUrl: image.after }}
