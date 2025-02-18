@@ -215,45 +215,6 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Services Section */}
-      <section className="py-12 md:py-20 bg-secondary">
-        <div className="container mx-auto px-4 md:px-6">
-          <div className="text-center mb-10 md:mb-16">
-            <h2 className="text-3xl md:text-4xl font-light text-gray-800 mb-4">Hizmetlerimiz</h2>
-            <p className="text-muted-foreground">Size özel profesyonel bakım hizmetleri</p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-            {services.map((service, index) => (
-              <motion.div
-                key={service.title}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="group relative overflow-hidden rounded-lg h-64 md:h-80"
-              >
-                <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity z-10" />
-                <img 
-                  src={service.image} 
-                  alt={service.title}
-                  className="w-full h-full object-cover transition-transform group-hover:scale-110"
-                />
-                <div className="absolute inset-0 flex flex-col items-center justify-center z-20 opacity-0 group-hover:opacity-100 transition-opacity p-4">
-                  <div className="w-12 h-12 bg-accent/10 rounded-full flex items-center justify-center mb-4">
-                    {service.icon}
-                  </div>
-                  <h3 className="text-xl font-medium mb-2 text-white">{service.title}</h3>
-                  <p className="text-white/80 text-center max-w-xs">{service.description}</p>
-                  <Button variant="outline" className="mt-4 text-white border-white hover:bg-white/20">
-                    Detaylı Bilgi
-                  </Button>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* Who We Are Section */}
       <section className="py-12 md:py-20 bg-pink-50">
         <div className="container mx-auto px-4 md:px-6">
@@ -318,8 +279,8 @@ const Index = () => {
               className="relative h-[300px] md:h-[600px] rounded-2xl overflow-hidden mt-8 md:mt-0"
             >
               <img
-                src="/lovable-uploads/daed8c08-150b-4242-8b90-e0a06e01df8e.png"
-                alt="Spa and Beauty Products"
+                src="https://images.unsplash.com/photo-1560066984-138dadb4c035?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80"
+                alt="Beauty Salon Interior"
                 className="w-full h-full object-cover"
               />
             </motion.div>
