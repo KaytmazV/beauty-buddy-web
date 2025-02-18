@@ -56,21 +56,23 @@ const Index = () => {
           </div>
 
           <div className="relative max-w-5xl mx-auto">
-            <div className="grid grid-cols-2 gap-8">
+            <div className="grid grid-cols-2 gap-12">
               {/* Left Side Items */}
-              <div className="space-y-16">
+              <div className="space-y-12">
                 <motion.div 
                   initial={{ opacity: 0, x: -20 }}
                   whileInView={{ opacity: 1, x: 0 }}
                   transition={{ duration: 0.5 }}
-                  className="text-right flex items-center justify-end gap-4"
+                  className="text-right flex items-center justify-end gap-6"
                 >
                   <div>
-                    <h3 className="text-xl font-medium mb-2">Deneyimli Ekip</h3>
-                    <p className="text-muted-foreground">Alanında uzman profesyonel kadro</p>
+                    <h3 className="text-xl font-medium mb-3">Deneyimli Ekip</h3>
+                    <p className="text-muted-foreground text-lg">
+                      Alanında uzman profesyonel kadro ile hizmetinizdeyiz <Users className="inline-block ml-2 w-5 h-5 text-accent" />
+                    </p>
                   </div>
-                  <div className="w-12 h-12 bg-accent/10 rounded-full flex items-center justify-center flex-shrink-0">
-                    <Users className="w-6 h-6 text-accent" />
+                  <div className="w-16 h-16 bg-accent/10 rounded-full flex items-center justify-center flex-shrink-0">
+                    <Users className="w-8 h-8 text-accent" />
                   </div>
                 </motion.div>
 
@@ -78,14 +80,16 @@ const Index = () => {
                   initial={{ opacity: 0, x: -20 }}
                   whileInView={{ opacity: 1, x: 0 }}
                   transition={{ duration: 0.5, delay: 0.2 }}
-                  className="text-right flex items-center justify-end gap-4"
+                  className="text-right flex items-center justify-end gap-6"
                 >
                   <div>
-                    <h3 className="text-xl font-medium mb-2">Modern Ekipman</h3>
-                    <p className="text-muted-foreground">En son teknoloji cihazlar</p>
+                    <h3 className="text-xl font-medium mb-3">Modern Ekipman</h3>
+                    <p className="text-muted-foreground text-lg">
+                      En son teknoloji cihazlarla güzelliğinize güzellik katıyoruz <Star className="inline-block ml-2 w-5 h-5 text-accent" />
+                    </p>
                   </div>
-                  <div className="w-12 h-12 bg-accent/10 rounded-full flex items-center justify-center flex-shrink-0">
-                    <Star className="w-6 h-6 text-accent" />
+                  <div className="w-16 h-16 bg-accent/10 rounded-full flex items-center justify-center flex-shrink-0">
+                    <Star className="w-8 h-8 text-accent" />
                   </div>
                 </motion.div>
 
@@ -93,20 +97,22 @@ const Index = () => {
                   initial={{ opacity: 0, x: -20 }}
                   whileInView={{ opacity: 1, x: 0 }}
                   transition={{ duration: 0.5, delay: 0.4 }}
-                  className="text-right flex items-center justify-end gap-4"
+                  className="text-right flex items-center justify-end gap-6"
                 >
                   <div>
-                    <h3 className="text-xl font-medium mb-2">Steril Ortam</h3>
-                    <p className="text-muted-foreground">Hijyenik ve güvenli hizmet</p>
+                    <h3 className="text-xl font-medium mb-3">Steril Ortam</h3>
+                    <p className="text-muted-foreground text-lg">
+                      Hijyenik ve güvenli hizmet standardı <Heart className="inline-block ml-2 w-5 h-5 text-accent" />
+                    </p>
                   </div>
-                  <div className="w-12 h-12 bg-accent/10 rounded-full flex items-center justify-center flex-shrink-0">
-                    <Heart className="w-6 h-6 text-accent" />
+                  <div className="w-16 h-16 bg-accent/10 rounded-full flex items-center justify-center flex-shrink-0">
+                    <Heart className="w-8 h-8 text-accent" />
                   </div>
                 </motion.div>
               </div>
 
               {/* Center Image */}
-              <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 md:w-80 md:h-80">
+              <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-72 h-72 md:w-96 md:h-96">
                 <motion.div 
                   initial={{ opacity: 0, scale: 0.8 }}
                   whileInView={{ opacity: 1, scale: 1 }}
@@ -122,19 +128,21 @@ const Index = () => {
               </div>
 
               {/* Right Side Items */}
-              <div className="col-start-2 space-y-16">
+              <div className="col-start-2 space-y-12">
                 <motion.div 
                   initial={{ opacity: 0, x: 20 }}
                   whileInView={{ opacity: 1, x: 0 }}
                   transition={{ duration: 0.5 }}
-                  className="flex items-center gap-4"
+                  className="flex items-center gap-6"
                 >
-                  <div className="w-12 h-12 bg-accent/10 rounded-full flex items-center justify-center flex-shrink-0">
-                    <Scissors className="w-6 h-6 text-accent" />
+                  <div className="w-16 h-16 bg-accent/10 rounded-full flex items-center justify-center flex-shrink-0">
+                    <Scissors className="w-8 h-8 text-accent" />
                   </div>
                   <div>
-                    <h3 className="text-xl font-medium mb-2">Profesyonel Hizmet</h3>
-                    <p className="text-muted-foreground">Kişiye özel bakım planlaması</p>
+                    <h3 className="text-xl font-medium mb-3">Profesyonel Hizmet</h3>
+                    <p className="text-muted-foreground text-lg">
+                      Kişiye özel bakım planlaması <Scissors className="inline-block ml-2 w-5 h-5 text-accent" />
+                    </p>
                   </div>
                 </motion.div>
 
@@ -142,14 +150,16 @@ const Index = () => {
                   initial={{ opacity: 0, x: 20 }}
                   whileInView={{ opacity: 1, x: 0 }}
                   transition={{ duration: 0.5, delay: 0.2 }}
-                  className="flex items-center gap-4"
+                  className="flex items-center gap-6"
                 >
-                  <div className="w-12 h-12 bg-accent/10 rounded-full flex items-center justify-center flex-shrink-0">
-                    <Calendar className="w-6 h-6 text-accent" />
+                  <div className="w-16 h-16 bg-accent/10 rounded-full flex items-center justify-center flex-shrink-0">
+                    <Calendar className="w-8 h-8 text-accent" />
                   </div>
                   <div>
-                    <h3 className="text-xl font-medium mb-2">Esnek Çalışma</h3>
-                    <p className="text-muted-foreground">Size uygun randevu imkanı</p>
+                    <h3 className="text-xl font-medium mb-3">Esnek Çalışma</h3>
+                    <p className="text-muted-foreground text-lg">
+                      Size uygun randevu imkanı <Calendar className="inline-block ml-2 w-5 h-5 text-accent" />
+                    </p>
                   </div>
                 </motion.div>
 
@@ -157,14 +167,16 @@ const Index = () => {
                   initial={{ opacity: 0, x: 20 }}
                   whileInView={{ opacity: 1, x: 0 }}
                   transition={{ duration: 0.5, delay: 0.4 }}
-                  className="flex items-center gap-4"
+                  className="flex items-center gap-6"
                 >
-                  <div className="w-12 h-12 bg-accent/10 rounded-full flex items-center justify-center flex-shrink-0">
-                    <MapPin className="w-6 h-6 text-accent" />
+                  <div className="w-16 h-16 bg-accent/10 rounded-full flex items-center justify-center flex-shrink-0">
+                    <MapPin className="w-8 h-8 text-accent" />
                   </div>
                   <div>
-                    <h3 className="text-xl font-medium mb-2">Merkezi Konum</h3>
-                    <p className="text-muted-foreground">Kolay ulaşım imkanı</p>
+                    <h3 className="text-xl font-medium mb-3">Merkezi Konum</h3>
+                    <p className="text-muted-foreground text-lg">
+                      Kolay ulaşım imkanı <MapPin className="inline-block ml-2 w-5 h-5 text-accent" />
+                    </p>
                   </div>
                 </motion.div>
               </div>
