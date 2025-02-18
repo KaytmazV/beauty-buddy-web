@@ -536,20 +536,20 @@ const services = [
 const teamMembers = [
   {
     name: "Ayşe Yılmaz",
-    role: "Saç Tasarım Uzmanı",
-    image: "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80",
+    role: "Cilt Bakım Uzmanı",
+    image: "/lovable-uploads/645106e4-0ba1-406c-81b7-809eefae0292.png",
     instagram: "https://instagram.com/ayseyilmaz"
   },
   {
     name: "Zeynep Kaya",
-    role: "Makyaj ve Cilt Bakım Uzmanı",
-    image: "https://images.unsplash.com/photo-1560066984-138dadb4c035?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80",
+    role: "Lazer Epilasyon Uzmanı",
+    image: "/lovable-uploads/693c8ffe-710b-40f8-9218-b562b9b63f05.png",
     instagram: "https://instagram.com/zeynepkaya"
   },
   {
     name: "Merve Demir",
-    role: "Lazer ve Epilasyon Uzmanı",
-    image: "https://images.unsplash.com/photo-1581092795360-fd1ca04f0952?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80",
+    role: "Makyaj ve Güzellik Uzmanı",
+    image: "/lovable-uploads/57c192c4-a8eb-4747-8a7d-e90308a924db.png",
     instagram: "https://instagram.com/mervedemir"
   }
 ];
