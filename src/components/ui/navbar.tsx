@@ -35,10 +35,12 @@ const Navbar = () => {
             </Link>
           </div>
 
-          <Button className="hidden md:flex bg-accent hover:bg-accent/90 text-white gap-2">
-            <Calendar className="w-4 h-4" />
-            Randevu Al
-          </Button>
+          <Link to="/appointment">
+            <Button className="hidden md:flex bg-accent hover:bg-accent/90 text-white gap-2">
+              <Calendar className="w-4 h-4" />
+              Randevu Al
+            </Button>
+          </Link>
         </div>
       </div>
     </motion.nav>

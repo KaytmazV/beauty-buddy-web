@@ -5,6 +5,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
+import AppointmentForm from "./components/AppointmentForm";
 import NotFound from "./pages/NotFound";
 import Navbar from "./components/ui/navbar";
 
@@ -19,6 +20,7 @@ const App = () => (
         <Navbar />
         <Routes>
           <Route path="/" element={<Index />} />
+          <Route path="/appointment" element={<AppointmentForm />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
