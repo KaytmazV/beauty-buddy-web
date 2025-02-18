@@ -93,27 +93,11 @@ const Index = () => {
               </motion.div>
             </div>
 
-            {/* Center Column with Image */}
-            <div className="relative">
-              <motion.div 
-                initial={{ opacity: 0, scale: 0.8 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.5 }}
-                className="w-full aspect-square rounded-full overflow-hidden border-4 border-accent/20"
-              >
-                <img 
-                  src="https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80" 
-                  alt="Beauty Center" 
-                  className="w-full h-full object-cover"
-                />
-              </motion.div>
-            </div>
-
-            {/* Right Column */}
+            {/* Center Column */}
             <div className="space-y-12">
               <motion.div 
-                initial={{ opacity: 0, x: 20 }}
-                whileInView={{ opacity: 1, x: 0 }}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5 }}
                 className="text-center"
               >
@@ -129,8 +113,8 @@ const Index = () => {
               </motion.div>
 
               <motion.div 
-                initial={{ opacity: 0, x: 20 }}
-                whileInView={{ opacity: 1, x: 0 }}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.2 }}
                 className="text-center"
               >
@@ -141,6 +125,43 @@ const Index = () => {
                   <h3 className="text-xl font-medium mb-3">Premium Kalite</h3>
                   <p className="text-muted-foreground text-lg">
                     En kaliteli ürünler ve hizmet
+                  </p>
+                </div>
+              </motion.div>
+            </div>
+
+            {/* Right Column */}
+            <div className="space-y-12">
+              <motion.div 
+                initial={{ opacity: 0, x: 20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.5 }}
+                className="text-center"
+              >
+                <div className="w-24 h-24 bg-accent/10 rounded-full flex items-center justify-center mx-auto mb-6">
+                  <Calendar className="w-14 h-14 text-accent" />
+                </div>
+                <div>
+                  <h3 className="text-xl font-medium mb-3">Esnek Çalışma</h3>
+                  <p className="text-muted-foreground text-lg">
+                    Size uygun randevu imkanı
+                  </p>
+                </div>
+              </motion.div>
+
+              <motion.div 
+                initial={{ opacity: 0, x: 20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.5, delay: 0.2 }}
+                className="text-center"
+              >
+                <div className="w-24 h-24 bg-accent/10 rounded-full flex items-center justify-center mx-auto mb-6">
+                  <MapPin className="w-14 h-14 text-accent" />
+                </div>
+                <div>
+                  <h3 className="text-xl font-medium mb-3">Merkezi Konum</h3>
+                  <p className="text-muted-foreground text-lg">
+                    Kolay ulaşılabilir merkezi lokasyon
                   </p>
                 </div>
               </motion.div>
