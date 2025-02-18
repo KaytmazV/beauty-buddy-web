@@ -2,14 +2,11 @@
 import { motion } from "framer-motion";
 import { Instagram, Mail, Phone } from "lucide-react";
 import WhatsAppSupport from "@/components/WhatsAppSupport";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
+import { useState } from "react";
 
 const Team = () => {
+  const [activeTeamMember, setActiveTeamMember] = useState(1);
+
   const team = [
     {
       id: 1,
@@ -55,102 +52,120 @@ const Team = () => {
     }
   ];
 
+  const activeMember = team.find(member => member.id === activeTeamMember);
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-secondary to-white pt-24">
       <WhatsAppSupport />
       
       {/* Ana Başlık */}
-      <section className="container mx-auto px-6 mb-20">
+      <section className="container mx-auto px-6 mb-12">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           className="text-center max-w-3xl mx-auto"
         >
           <h1 className="text-4xl md:text-5xl font-light text-gray-800 mb-6">
-            Çalışanlarımız 
+            Çalışanlarımız
           </h1>
-          <p className="text-lg text-muted-foreground">
-            Deneyimli ve uzman kadromuzla size en iyi hizmeti sunmak için buradayız
-          </p>
         </motion.div>
       </section>
 
-      {/* Çalışanlar Listesi */}
-      <section className="container mx-auto px-6 mb-20">
-        <Accordion type="single" collapsible className="w-full max-w-4xl mx-auto">
-          {team.map((member, index) => (
-            <AccordionItem key={member.id} value={`item-${index}`}>
-              <AccordionTrigger className="text-2xl font-light hover:no-underline py-8">
-                <div className="flex items-center gap-4">
-                  <span>{member.name}</span>
-                  <span className="text-lg text-muted-foreground font-normal">
-                    {member.role}
-                  </span>
-                </div>
-              </AccordionTrigger>
-              <AccordionContent>
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start py-6">
-                  <div className="relative h-[500px] rounded-2xl overflow-hidden group">
-                    <img
-                      src={member.image}
-                      alt={member.name}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                    />
-                  </div>
-                  
-                  <div className="space-y-6">
-                    <div>
-                      <h3 className="text-xl font-medium mb-4">Uzmanlık Alanları</h3>
-                      <div className="flex flex-wrap gap-2">
-                        {member.expertise.map((exp, i) => (
-                          <span
-                            key={i}
-                            className="bg-accent/10 text-accent px-4 py-2 rounded-full"
-                          >
-                            {exp}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-
-                    <div>
-                      <h3 className="text-xl font-medium mb-4">Deneyim</h3>
-                      <p className="text-lg text-muted-foreground">{member.experience}</p>
-                    </div>
-
-                    <p className="text-lg text-muted-foreground">
-                      {member.description}
-                    </p>
-
-                    <div className="flex items-center gap-6 pt-4">
-                      <a
-                        href={`https://instagram.com/${member.social.instagram}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-muted-foreground hover:text-accent transition-colors"
-                      >
-                        <Instagram size={24} />
-                      </a>
-                      <a
-                        href={`mailto:${member.social.email}`}
-                        className="text-muted-foreground hover:text-accent transition-colors"
-                      >
-                        <Mail size={24} />
-                      </a>
-                      <a
-                        href={`tel:${member.social.phone}`}
-                        className="text-muted-foreground hover:text-accent transition-colors"
-                      >
-                        <Phone size={24} />
-                      </a>
-                    </div>
-                  </div>
-                </div>
-              </AccordionContent>
-            </AccordionItem>
+      {/* Alt Başlıklar - Navigation */}
+      <section className="container mx-auto px-6 mb-16">
+        <div className="flex flex-col md:flex-row justify-center items-center gap-6 max-w-4xl mx-auto">
+          {team.map((member) => (
+            <button
+              key={member.id}
+              onClick={() => setActiveTeamMember(member.id)}
+              className={`text-xl font-light py-2 px-6 rounded-full transition-colors ${
+                activeTeamMember === member.id 
+                ? "bg-accent text-white" 
+                : "text-gray-600 hover:text-accent"
+              }`}
+            >
+              {member.name}
+            </button>
           ))}
-        </Accordion>
+        </div>
       </section>
+
+      {/* Aktif Üye Portföyü */}
+      {activeMember && (
+        <motion.section 
+          key={activeMember.id}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="container mx-auto px-6 mb-20"
+        >
+          <div className="max-w-6xl mx-auto">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+              <div className="relative h-[600px] rounded-2xl overflow-hidden group">
+                <img
+                  src={activeMember.image}
+                  alt={activeMember.name}
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                />
+              </div>
+              
+              <div className="space-y-6">
+                <div className="mb-8">
+                  <h2 className="text-3xl font-light text-gray-800 mb-2">
+                    {activeMember.name}
+                  </h2>
+                  <p className="text-xl text-muted-foreground">{activeMember.role}</p>
+                </div>
+
+                <div>
+                  <h3 className="text-xl font-medium mb-4">Uzmanlık Alanları</h3>
+                  <div className="flex flex-wrap gap-2">
+                    {activeMember.expertise.map((exp, i) => (
+                      <span
+                        key={i}
+                        className="bg-accent/10 text-accent px-4 py-2 rounded-full"
+                      >
+                        {exp}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+                <div>
+                  <h3 className="text-xl font-medium mb-4">Deneyim</h3>
+                  <p className="text-lg text-muted-foreground">{activeMember.experience}</p>
+                </div>
+
+                <p className="text-lg text-muted-foreground">
+                  {activeMember.description}
+                </p>
+
+                <div className="flex items-center gap-6 pt-4">
+                  <a
+                    href={`https://instagram.com/${activeMember.social.instagram}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-muted-foreground hover:text-accent transition-colors"
+                  >
+                    <Instagram size={24} />
+                  </a>
+                  <a
+                    href={`mailto:${activeMember.social.email}`}
+                    className="text-muted-foreground hover:text-accent transition-colors"
+                  >
+                    <Mail size={24} />
+                  </a>
+                  <a
+                    href={`tel:${activeMember.social.phone}`}
+                    className="text-muted-foreground hover:text-accent transition-colors"
+                  >
+                    <Phone size={24} />
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </motion.section>
+      )}
 
       {/* Testimonials Section */}
       <section className="bg-accent text-white py-20">
