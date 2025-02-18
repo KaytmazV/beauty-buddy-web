@@ -55,131 +55,95 @@ const Index = () => {
             </p>
           </div>
 
-          <div className="relative max-w-5xl mx-auto">
-            <div className="grid grid-cols-2 gap-12">
-              {/* Left Side Items */}
-              <div className="space-y-12">
-                <motion.div 
-                  initial={{ opacity: 0, x: -20 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.5 }}
-                  className="text-right flex items-center justify-end gap-6"
-                >
-                  <div>
-                    <h3 className="text-xl font-medium mb-3">Deneyimli Ekip</h3>
-                    <p className="text-muted-foreground text-lg">
-                      Alanında uzman profesyonel kadro ile hizmetinizdeyiz <Users className="inline-block ml-2 w-5 h-5 text-accent" />
-                    </p>
-                  </div>
-                  <div className="w-16 h-16 bg-accent/10 rounded-full flex items-center justify-center flex-shrink-0">
-                    <Users className="w-8 h-8 text-accent" />
-                  </div>
-                </motion.div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-12 max-w-6xl mx-auto">
+            {/* Left Column */}
+            <div className="space-y-12">
+              <motion.div 
+                initial={{ opacity: 0, x: -20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.5 }}
+                className="text-center"
+              >
+                <div className="w-24 h-24 bg-accent/10 rounded-full flex items-center justify-center mx-auto mb-6">
+                  <Users className="w-14 h-14 text-accent" />
+                </div>
+                <div>
+                  <h3 className="text-xl font-medium mb-3">Deneyimli Ekip</h3>
+                  <p className="text-muted-foreground text-lg">
+                    Alanında uzman profesyonel kadro ile hizmetinizdeyiz
+                  </p>
+                </div>
+              </motion.div>
 
-                <motion.div 
-                  initial={{ opacity: 0, x: -20 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.5, delay: 0.2 }}
-                  className="text-right flex items-center justify-end gap-6"
-                >
-                  <div>
-                    <h3 className="text-xl font-medium mb-3">Modern Ekipman</h3>
-                    <p className="text-muted-foreground text-lg">
-                      En son teknoloji cihazlarla güzelliğinize güzellik katıyoruz <Star className="inline-block ml-2 w-5 h-5 text-accent" />
-                    </p>
-                  </div>
-                  <div className="w-16 h-16 bg-accent/10 rounded-full flex items-center justify-center flex-shrink-0">
-                    <Star className="w-8 h-8 text-accent" />
-                  </div>
-                </motion.div>
+              <motion.div 
+                initial={{ opacity: 0, x: -20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.5, delay: 0.2 }}
+                className="text-center"
+              >
+                <div className="w-24 h-24 bg-accent/10 rounded-full flex items-center justify-center mx-auto mb-6">
+                  <Heart className="w-14 h-14 text-accent" />
+                </div>
+                <div>
+                  <h3 className="text-xl font-medium mb-3">Özenli Hizmet</h3>
+                  <p className="text-muted-foreground text-lg">
+                    Her müşterimize özel ilgi ve hassasiyet
+                  </p>
+                </div>
+              </motion.div>
+            </div>
 
-                <motion.div 
-                  initial={{ opacity: 0, x: -20 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.5, delay: 0.4 }}
-                  className="text-right flex items-center justify-end gap-6"
-                >
-                  <div>
-                    <h3 className="text-xl font-medium mb-3">Steril Ortam</h3>
-                    <p className="text-muted-foreground text-lg">
-                      Hijyenik ve güvenli hizmet standardı <Heart className="inline-block ml-2 w-5 h-5 text-accent" />
-                    </p>
-                  </div>
-                  <div className="w-16 h-16 bg-accent/10 rounded-full flex items-center justify-center flex-shrink-0">
-                    <Heart className="w-8 h-8 text-accent" />
-                  </div>
-                </motion.div>
-              </div>
+            {/* Center Column with Image */}
+            <div className="relative">
+              <motion.div 
+                initial={{ opacity: 0, scale: 0.8 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.5 }}
+                className="w-full aspect-square rounded-full overflow-hidden border-4 border-accent/20"
+              >
+                <img 
+                  src="https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80" 
+                  alt="Beauty Center" 
+                  className="w-full h-full object-cover"
+                />
+              </motion.div>
+            </div>
 
-              {/* Center Image */}
-              <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-72 h-72 md:w-96 md:h-96">
-                <motion.div 
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  whileInView={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 0.5 }}
-                  className="w-full h-full rounded-full overflow-hidden border-4 border-accent/20"
-                >
-                  <img 
-                    src="https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80" 
-                    alt="Beauty Center" 
-                    className="w-full h-full object-cover"
-                  />
-                </motion.div>
-              </div>
+            {/* Right Column */}
+            <div className="space-y-12">
+              <motion.div 
+                initial={{ opacity: 0, x: 20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.5 }}
+                className="text-center"
+              >
+                <div className="w-24 h-24 bg-accent/10 rounded-full flex items-center justify-center mx-auto mb-6">
+                  <Scissors className="w-14 h-14 text-accent" />
+                </div>
+                <div>
+                  <h3 className="text-xl font-medium mb-3">Profesyonel Hizmet</h3>
+                  <p className="text-muted-foreground text-lg">
+                    Kişiye özel bakım planlaması
+                  </p>
+                </div>
+              </motion.div>
 
-              {/* Right Side Items */}
-              <div className="col-start-2 space-y-12">
-                <motion.div 
-                  initial={{ opacity: 0, x: 20 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.5 }}
-                  className="flex items-center gap-6"
-                >
-                  <div className="w-16 h-16 bg-accent/10 rounded-full flex items-center justify-center flex-shrink-0">
-                    <Scissors className="w-8 h-8 text-accent" />
-                  </div>
-                  <div>
-                    <h3 className="text-xl font-medium mb-3">Profesyonel Hizmet</h3>
-                    <p className="text-muted-foreground text-lg">
-                      Kişiye özel bakım planlaması <Scissors className="inline-block ml-2 w-5 h-5 text-accent" />
-                    </p>
-                  </div>
-                </motion.div>
-
-                <motion.div 
-                  initial={{ opacity: 0, x: 20 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.5, delay: 0.2 }}
-                  className="flex items-center gap-6"
-                >
-                  <div className="w-16 h-16 bg-accent/10 rounded-full flex items-center justify-center flex-shrink-0">
-                    <Calendar className="w-8 h-8 text-accent" />
-                  </div>
-                  <div>
-                    <h3 className="text-xl font-medium mb-3">Esnek Çalışma</h3>
-                    <p className="text-muted-foreground text-lg">
-                      Size uygun randevu imkanı <Calendar className="inline-block ml-2 w-5 h-5 text-accent" />
-                    </p>
-                  </div>
-                </motion.div>
-
-                <motion.div 
-                  initial={{ opacity: 0, x: 20 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.5, delay: 0.4 }}
-                  className="flex items-center gap-6"
-                >
-                  <div className="w-16 h-16 bg-accent/10 rounded-full flex items-center justify-center flex-shrink-0">
-                    <MapPin className="w-8 h-8 text-accent" />
-                  </div>
-                  <div>
-                    <h3 className="text-xl font-medium mb-3">Merkezi Konum</h3>
-                    <p className="text-muted-foreground text-lg">
-                      Kolay ulaşım imkanı <MapPin className="inline-block ml-2 w-5 h-5 text-accent" />
-                    </p>
-                  </div>
-                </motion.div>
-              </div>
+              <motion.div 
+                initial={{ opacity: 0, x: 20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.5, delay: 0.2 }}
+                className="text-center"
+              >
+                <div className="w-24 h-24 bg-accent/10 rounded-full flex items-center justify-center mx-auto mb-6">
+                  <Star className="w-14 h-14 text-accent" />
+                </div>
+                <div>
+                  <h3 className="text-xl font-medium mb-3">Premium Kalite</h3>
+                  <p className="text-muted-foreground text-lg">
+                    En kaliteli ürünler ve hizmet
+                  </p>
+                </div>
+              </motion.div>
             </div>
           </div>
         </div>
