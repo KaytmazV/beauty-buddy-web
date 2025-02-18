@@ -2,6 +2,12 @@
 import { motion } from "framer-motion";
 import { Instagram, Mail, Phone } from "lucide-react";
 import WhatsAppSupport from "@/components/WhatsAppSupport";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 
 const Team = () => {
   const team = [
@@ -53,7 +59,7 @@ const Team = () => {
     <div className="min-h-screen bg-gradient-to-b from-secondary to-white pt-24">
       <WhatsAppSupport />
       
-      {/* Main Heading */}
+      {/* Ana Başlık */}
       <section className="container mx-auto px-6 mb-20">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -61,7 +67,7 @@ const Team = () => {
           className="text-center max-w-3xl mx-auto"
         >
           <h1 className="text-4xl md:text-5xl font-light text-gray-800 mb-6">
-            Çalışanlarımız
+            Çalışanlarımız 
           </h1>
           <p className="text-lg text-muted-foreground">
             Deneyimli ve uzman kadromuzla size en iyi hizmeti sunmak için buradayız
@@ -69,82 +75,81 @@ const Team = () => {
         </motion.div>
       </section>
 
-      {/* Team Members */}
+      {/* Çalışanlar Listesi */}
       <section className="container mx-auto px-6 mb-20">
-        {team.map((member, index) => (
-          <motion.div
-            key={member.id}
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ delay: index * 0.2 }}
-            className="mb-32 last:mb-0"
-          >
-            <div className="max-w-6xl mx-auto">
-              <h2 className="text-3xl font-light text-gray-800 mb-12 text-center">
-                {member.name}
-                <span className="block text-xl text-muted-foreground mt-2">{member.role}</span>
-              </h2>
-              
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-                <div className="relative h-[600px] rounded-2xl overflow-hidden group">
-                  <img
-                    src={member.image}
-                    alt={member.name}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                  />
+        <Accordion type="single" collapsible className="w-full max-w-4xl mx-auto">
+          {team.map((member, index) => (
+            <AccordionItem key={member.id} value={`item-${index}`}>
+              <AccordionTrigger className="text-2xl font-light hover:no-underline py-8">
+                <div className="flex items-center gap-4">
+                  <span>{member.name}</span>
+                  <span className="text-lg text-muted-foreground font-normal">
+                    {member.role}
+                  </span>
                 </div>
-                
-                <div className="space-y-6">
-                  <div>
-                    <h3 className="text-xl font-medium mb-4">Uzmanlık Alanları</h3>
-                    <div className="flex flex-wrap gap-2">
-                      {member.expertise.map((exp, i) => (
-                        <span
-                          key={i}
-                          className="bg-accent/10 text-accent px-4 py-2 rounded-full"
-                        >
-                          {exp}
-                        </span>
-                      ))}
+              </AccordionTrigger>
+              <AccordionContent>
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start py-6">
+                  <div className="relative h-[500px] rounded-2xl overflow-hidden group">
+                    <img
+                      src={member.image}
+                      alt={member.name}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    />
+                  </div>
+                  
+                  <div className="space-y-6">
+                    <div>
+                      <h3 className="text-xl font-medium mb-4">Uzmanlık Alanları</h3>
+                      <div className="flex flex-wrap gap-2">
+                        {member.expertise.map((exp, i) => (
+                          <span
+                            key={i}
+                            className="bg-accent/10 text-accent px-4 py-2 rounded-full"
+                          >
+                            {exp}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div>
+                      <h3 className="text-xl font-medium mb-4">Deneyim</h3>
+                      <p className="text-lg text-muted-foreground">{member.experience}</p>
+                    </div>
+
+                    <p className="text-lg text-muted-foreground">
+                      {member.description}
+                    </p>
+
+                    <div className="flex items-center gap-6 pt-4">
+                      <a
+                        href={`https://instagram.com/${member.social.instagram}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-muted-foreground hover:text-accent transition-colors"
+                      >
+                        <Instagram size={24} />
+                      </a>
+                      <a
+                        href={`mailto:${member.social.email}`}
+                        className="text-muted-foreground hover:text-accent transition-colors"
+                      >
+                        <Mail size={24} />
+                      </a>
+                      <a
+                        href={`tel:${member.social.phone}`}
+                        className="text-muted-foreground hover:text-accent transition-colors"
+                      >
+                        <Phone size={24} />
+                      </a>
                     </div>
                   </div>
-
-                  <div>
-                    <h3 className="text-xl font-medium mb-4">Deneyim</h3>
-                    <p className="text-lg text-muted-foreground">{member.experience}</p>
-                  </div>
-
-                  <p className="text-lg text-muted-foreground">
-                    {member.description}
-                  </p>
-
-                  <div className="flex items-center gap-6 pt-4">
-                    <a
-                      href={`https://instagram.com/${member.social.instagram}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-muted-foreground hover:text-accent transition-colors"
-                    >
-                      <Instagram size={24} />
-                    </a>
-                    <a
-                      href={`mailto:${member.social.email}`}
-                      className="text-muted-foreground hover:text-accent transition-colors"
-                    >
-                      <Mail size={24} />
-                    </a>
-                    <a
-                      href={`tel:${member.social.phone}`}
-                      className="text-muted-foreground hover:text-accent transition-colors"
-                    >
-                      <Phone size={24} />
-                    </a>
-                  </div>
                 </div>
-              </div>
-            </div>
-          </motion.div>
-        ))}
+              </AccordionContent>
+            </AccordionItem>
+          ))}
+        </Accordion>
       </section>
 
       {/* Testimonials Section */}
