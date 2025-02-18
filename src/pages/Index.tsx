@@ -100,7 +100,7 @@ const Index = () => {
                 className="w-full h-full rounded-full overflow-hidden border-4 border-accent/20"
               >
                 <img 
-                  src="https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80" 
+                  src="/lovable-uploads/db42afb7-b175-4b3d-a2cf-713523bc80ea.png"
                   alt="Beauty Center" 
                   className="w-full h-full object-cover"
                 />
