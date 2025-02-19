@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
-import { Calendar, Phone, Search, Minus, Eye, Clock, CheckCircle2, FileEdit } from "lucide-react";
+import { Calendar, Phone, Search, Minus, Eye, Clock, CheckCircle2, FileEdit, Send, MessageCircle, Bell, Star, Award, List, DollarSign } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Textarea } from "@/components/ui/textarea";
@@ -112,11 +112,141 @@ const UserDashboard = () => {
           <h1 className="text-4xl font-light mb-2">İlayda Bağ</h1>
           <p className="text-2xl font-light text-muted-foreground mb-2">Güzellik Uzmanı</p>
           <div className="w-20 h-1 bg-gradient-to-r from-primary/80 to-accent mx-auto mb-8"></div>
-          <h2 className="text-3xl font-light">Müşteri Listesi</h2>
-          <p className="text-muted-foreground">Müşterilerinizi ve randevularınızı kolayca yönetin</p>
+          <h2 className="text-3xl font-light">Yönetim Paneli</h2>
+          <p className="text-muted-foreground">Müşterilerinizi ve işlemlerinizi kolayca yönetin</p>
         </div>
-        
-        <Card className="border-none shadow-lg bg-card/50 backdrop-blur-sm">
+
+        <div className="grid gap-6 md:grid-cols-2">
+          {/* Hızlı İşlemler */}
+          <Card className="border-none shadow-lg bg-card/50 backdrop-blur-sm">
+            <CardHeader>
+              <CardTitle className="text-xl font-semibold flex items-center gap-2">
+                <Send className="w-5 h-5 text-primary" />
+                Hızlı İşlemler
+              </CardTitle>
+              <CardDescription>Hızlı işlemler ve bildirimler</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="grid grid-cols-2 gap-2">
+                <Button variant="outline" className="flex items-center gap-2">
+                  <MessageCircle className="w-4 h-4" />
+                  WhatsApp Mesajı
+                </Button>
+                <Button variant="outline" className="flex items-center gap-2">
+                  <Bell className="w-4 h-4" />
+                  SMS Hatırlatma
+                </Button>
+                <Button variant="outline" className="flex items-center gap-2">
+                  <CheckCircle2 className="w-4 h-4" />
+                  Tamamlandı İşaretle
+                </Button>
+                <Button variant="outline" className="flex items-center gap-2">
+                  <Clock className="w-4 h-4" />
+                  Durumu Güncelle
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Müşteri Sadakat Sistemi */}
+          <Card className="border-none shadow-lg bg-card/50 backdrop-blur-sm">
+            <CardHeader>
+              <CardTitle className="text-xl font-semibold flex items-center gap-2">
+                <Star className="w-5 h-5 text-primary" />
+                Müşteri Sadakat Sistemi
+              </CardTitle>
+              <CardDescription>Sadakat programı ve kampanyalar</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="grid gap-4">
+                <div className="flex items-center justify-between p-3 rounded-lg bg-accent/10">
+                  <div className="flex items-center gap-3">
+                    <Award className="w-5 h-5 text-primary" />
+                    <div>
+                      <p className="font-medium">VIP Müşteriler</p>
+                      <p className="text-sm text-muted-foreground">5+ ziyaret</p>
+                    </div>
+                  </div>
+                  <span className="text-2xl font-semibold">12</span>
+                </div>
+                <Button className="w-full bg-primary/10 hover:bg-primary/20 text-primary">
+                  Yeni Kampanya Oluştur
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Takvim Görünümü */}
+          <Card className="border-none shadow-lg bg-card/50 backdrop-blur-sm">
+            <CardHeader>
+              <CardTitle className="text-xl font-semibold flex items-center gap-2">
+                <Calendar className="w-5 h-5 text-primary" />
+                Takvim Görünümü
+              </CardTitle>
+              <CardDescription>Randevu takvimi ve planlaması</CardDescription>
+            </CardHeader>
+            <CardContent>
+              {/* Basit takvim görünümü */}
+              <div className="grid grid-cols-7 gap-1 text-center text-sm">
+                {["Pzt", "Sal", "Çar", "Per", "Cum", "Cmt", "Paz"].map((day) => (
+                  <div key={day} className="p-2 text-muted-foreground font-medium">
+                    {day}
+                  </div>
+                ))}
+                {Array.from({ length: 31 }, (_, i) => (
+                  <Button
+                    key={i}
+                    variant="ghost"
+                    className="p-2 h-12 hover:bg-accent/20"
+                  >
+                    {i + 1}
+                  </Button>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Hizmet Yönetimi */}
+          <Card className="border-none shadow-lg bg-card/50 backdrop-blur-sm">
+            <CardHeader>
+              <CardTitle className="text-xl font-semibold flex items-center gap-2">
+                <List className="w-5 h-5 text-primary" />
+                Hizmet Yönetimi
+              </CardTitle>
+              <CardDescription>Hizmetler ve paketler</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                <div className="flex items-center justify-between p-3 rounded-lg bg-accent/10">
+                  <div className="flex items-center gap-3">
+                    <DollarSign className="w-5 h-5 text-primary" />
+                    <div>
+                      <p className="font-medium">Lazer Epilasyon</p>
+                      <p className="text-sm text-muted-foreground">45 dk</p>
+                    </div>
+                  </div>
+                  <span className="font-semibold">₺400</span>
+                </div>
+                <div className="flex items-center justify-between p-3 rounded-lg bg-accent/10">
+                  <div className="flex items-center gap-3">
+                    <DollarSign className="w-5 h-5 text-primary" />
+                    <div>
+                      <p className="font-medium">Cilt Bakımı</p>
+                      <p className="text-sm text-muted-foreground">60 dk</p>
+                    </div>
+                  </div>
+                  <span className="font-semibold">₺500</span>
+                </div>
+                <Button className="w-full bg-primary/10 hover:bg-primary/20 text-primary">
+                  Yeni Hizmet Ekle
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Müşteri Listesi */}
+        <Card className="border-none shadow-lg bg-card/50 backdrop-blur-sm mt-6">
           <CardHeader>
             <div className="flex items-center justify-between">
               <div>
