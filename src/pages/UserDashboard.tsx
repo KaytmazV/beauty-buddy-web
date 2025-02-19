@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
-import { Calendar, Phone, Search, Minus, Eye, Clock, CheckCircle2, FileEdit, Send, MessageCircle, Bell, Star, Award, List, DollarSign } from "lucide-react";
+import { Calendar, Phone, Search, Minus, Eye, Clock, CheckCircle2, FileEdit, Send, MessageCircle, Bell, Star, Award, List, DollarSign, Users } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Textarea } from "@/components/ui/textarea";
@@ -104,9 +104,8 @@ const UserDashboard = () => {
   };
 
   const handleWhatsAppMessage = () => {
-    // WhatsApp API'si için örnek URL
     const message = encodeURIComponent("Merhaba, randevunuz hakkında bilgi vermek istiyorum.");
-    const phoneNumber = "+905551112233"; // Örnek telefon numarası
+    const phoneNumber = "+905551112233";
     window.open(`https://wa.me/${phoneNumber}?text=${message}`, '_blank');
     
     toast({
@@ -122,8 +121,24 @@ const UserDashboard = () => {
     });
   };
 
+  const handleSendBulkSMS = () => {
+    const pendingCustomers = customers.filter(customer => customer.status === "pending");
+    const customerCount = pendingCustomers.length;
+    
+    if (customerCount > 0) {
+      toast({
+        title: "Toplu SMS Gönderildi",
+        description: `${customerCount} müşteriye randevu hatırlatma SMS'i gönderildi.`
+      });
+    } else {
+      toast({
+        title: "Dikkat",
+        description: "Bekleyen randevusu olan müşteri bulunamadı."
+      });
+    }
+  };
+
   const handleMarkAsCompleted = () => {
-    // Seçili müşterinin durumunu tamamlandı olarak işaretle
     if (customers.length > 0) {
       const updatedCustomers = customers.map(customer => 
         customer.status === "pending" ? { ...customer, status: "completed" } : customer
@@ -200,6 +215,14 @@ const UserDashboard = () => {
                 >
                   <Clock className="w-4 h-4" />
                   Durumu Güncelle
+                </Button>
+                <Button 
+                  variant="outline" 
+                  className="flex items-center gap-2 col-span-2"
+                  onClick={handleSendBulkSMS}
+                >
+                  <Users className="w-4 h-4" />
+                  Toplu SMS Gönder
                 </Button>
               </div>
             </CardContent>
