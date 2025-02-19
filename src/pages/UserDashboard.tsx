@@ -187,6 +187,53 @@ const UserDashboard = () => {
     });
   };
 
+  const handleExportCustomers = () => {
+    const data = customers.map(customer => ({
+      Ad: customer.name,
+      Telefon: customer.phone,
+      Randevu: format(new Date(customer.appointmentDate), "d MMMM yyyy", { locale: tr }),
+      Hizmet: customer.service,
+      Durum: customer.status === "pending" ? "Bekliyor" : "Tamamlandı",
+      Not: customer.notes || ""
+    }));
+
+    const csvContent = "data:text/csv;charset=utf-8," + 
+      Object.keys(data[0]).join(",") + "\n" +
+      data.map(row => Object.values(row).join(",")).join("\n");
+
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", `musteriler-${format(new Date(), "dd-MM-yyyy")}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+
+    toast({
+      title: "Müşteri Listesi İndirildi",
+      description: "Müşteri bilgileri CSV formatında indirildi."
+    });
+  };
+
+  const handleTodayAppointments = () => {
+    const today = format(new Date(), "yyyy-MM-dd");
+    const todayAppointments = customers.filter(
+      customer => customer.appointmentDate === today && customer.status === "pending"
+    );
+
+    if (todayAppointments.length > 0) {
+      toast({
+        title: "Bugünkü Randevular",
+        description: `Bugün ${todayAppointments.length} randevunuz var.`
+      });
+    } else {
+      toast({
+        title: "Bugünkü Randevular",
+        description: "Bugün için planlanmış randevu bulunmuyor."
+      });
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-primary/5 via-secondary/10 to-accent/5 pt-24">
       <WhatsAppSupport />
@@ -227,6 +274,22 @@ const UserDashboard = () => {
                 >
                   <Bell className="w-4 h-4" />
                   SMS Hatırlatma
+                </Button>
+                <Button 
+                  variant="outline" 
+                  className="flex items-center gap-2"
+                  onClick={handleTodayAppointments}
+                >
+                  <Calendar className="w-4 h-4" />
+                  Bugünkü Randevular
+                </Button>
+                <Button 
+                  variant="outline" 
+                  className="flex items-center gap-2"
+                  onClick={handleExportCustomers}
+                >
+                  <List className="w-4 h-4" />
+                  Müşteri Listesi İndir
                 </Button>
                 <Button 
                   variant="outline" 
