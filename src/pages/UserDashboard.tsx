@@ -237,6 +237,7 @@ const UserDashboard = () => {
   // Yeni state ve fonksiyonlar için ekleme
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string>("");
+  const [currentImageId, setCurrentImageId] = useState<string | null>(null);
 
   const handleImageSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -248,17 +249,52 @@ const UserDashboard = () => {
     }
   };
 
-  const handleImageUpload = () => {
+  const handleImageUpload = (replaceImageId?: string) => {
     if (selectedImage) {
       // Burada gerçek bir upload işlemi yapılabilir
       toast({
-        title: "Görsel Yüklendi",
-        description: "Yeni görsel başarıyla yüklendi."
+        title: replaceImageId ? "Görsel Güncellendi" : "Görsel Yüklendi",
+        description: replaceImageId 
+          ? "Seçilen görsel başarıyla güncellendi."
+          : "Yeni görsel başarıyla yüklendi."
       });
       setSelectedImage(null);
       setPreviewUrl("");
+      setCurrentImageId(null);
     }
   };
+
+  const handleReplaceImage = (imageId: string) => {
+    setCurrentImageId(imageId);
+    // Input'u programmatik olarak tetikle
+    const input = document.getElementById("imageUpload") as HTMLInputElement;
+    if (input) {
+      input.click();
+    }
+  };
+
+  const websiteImages = [
+    {
+      id: "1",
+      path: "/lovable-uploads/2e116253-a86d-444d-ac71-a4192e8bd3ca.png",
+      title: "Ana Sayfa Banner"
+    },
+    {
+      id: "2",
+      path: "/lovable-uploads/2e54b248-c48c-4bdf-9e70-3f7000d0a4a4.png",
+      title: "Hakkımızda Görseli"
+    },
+    {
+      id: "3",
+      path: "/lovable-uploads/57c192c4-a8eb-4747-8a7d-e90308a924db.png",
+      title: "Hizmetler Banner"
+    },
+    {
+      id: "4",
+      path: "/lovable-uploads/645106e4-0ba1-406c-81b7-809eefae0292.png",
+      title: "İletişim Banner"
+    }
+  ];
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-primary/5 via-secondary/10 to-accent/5 pt-24">
@@ -376,82 +412,84 @@ const UserDashboard = () => {
           </CardHeader>
           
           <CardContent>
-            <div className="grid md:grid-cols-2 gap-6">
-              <div className="space-y-4">
-                <h3 className="text-lg font-medium">Yeni Görsel Yükle</h3>
-                <div className="border-2 border-dashed border-accent/30 rounded-lg p-6 hover:border-accent/50 transition-colors">
-                  <input
-                    type="file"
-                    accept="image/*"
-                    onChange={handleImageSelect}
-                    className="hidden"
-                    id="imageUpload"
-                  />
-                  <label
-                    htmlFor="imageUpload"
-                    className="flex flex-col items-center gap-2 cursor-pointer"
-                  >
-                    <div className="w-full aspect-video bg-accent/5 rounded-lg flex items-center justify-center">
-                      {previewUrl ? (
-                        <img
-                          src={previewUrl}
-                          alt="Önizleme"
-                          className="max-h-full rounded-lg object-contain"
-                        />
-                      ) : (
-                        <div className="text-center p-4">
-                          <FileEdit className="w-8 h-8 mx-auto text-accent/60 mb-2" />
-                          <p className="text-sm text-muted-foreground">
-                            Görsel seçmek için tıklayın
-                          </p>
-                        </div>
-                      )}
+            <div className="space-y-8">
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                {websiteImages.map((image) => (
+                  <div key={image.id} className="space-y-2">
+                    <div className="relative group aspect-video">
+                      <img
+                        src={image.path}
+                        alt={image.title}
+                        className="w-full h-full object-cover rounded-lg"
+                      />
+                      <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity rounded-lg flex items-center justify-center">
+                        <Button 
+                          variant="ghost" 
+                          size="sm" 
+                          className="text-white"
+                          onClick={() => handleReplaceImage(image.id)}
+                        >
+                          <FileEdit className="w-4 h-4 mr-2" />
+                          Değiştir
+                        </Button>
+                      </div>
                     </div>
-                  </label>
-                  {selectedImage && (
-                    <div className="mt-4">
-                      <Button
-                        onClick={handleImageUpload}
-                        className="w-full bg-accent hover:bg-accent/90"
-                      >
-                        Görseli Yükle
-                      </Button>
-                    </div>
-                  )}
-                </div>
+                    <p className="text-sm font-medium text-center">{image.title}</p>
+                  </div>
+                ))}
               </div>
 
-              <div className="space-y-4">
-                <h3 className="text-lg font-medium">Mevcut Görseller</h3>
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="relative group">
-                    <img
-                      src="/lovable-uploads/2e116253-a86d-444d-ac71-a4192e8bd3ca.png"
-                      alt="Site görseli"
-                      className="w-full aspect-video object-cover rounded-lg"
-                    />
-                    <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity rounded-lg flex items-center justify-center">
-                      <Button variant="ghost" size="sm" className="text-white">
-                        <FileEdit className="w-4 h-4 mr-2" />
-                        Değiştir
-                      </Button>
-                    </div>
-                  </div>
-                  <div className="relative group">
-                    <img
-                      src="/lovable-uploads/2e54b248-c48c-4bdf-9e70-3f7000d0a4a4.png"
-                      alt="Site görseli"
-                      className="w-full aspect-video object-cover rounded-lg"
-                    />
-                    <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity rounded-lg flex items-center justify-center">
-                      <Button variant="ghost" size="sm" className="text-white">
-                        <FileEdit className="w-4 h-4 mr-2" />
-                        Değiştir
-                      </Button>
-                    </div>
-                  </div>
+              {/* Görsel Yükleme Modal/Preview */}
+              {(selectedImage || previewUrl) && (
+                <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+                  <Card className="w-full max-w-2xl">
+                    <CardHeader>
+                      <CardTitle>Görsel Önizleme</CardTitle>
+                      <CardDescription>
+                        Seçtiğiniz görseli kontrol edin ve onaylayın
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                      <div className="aspect-video w-full bg-accent/5 rounded-lg overflow-hidden">
+                        {previewUrl && (
+                          <img
+                            src={previewUrl}
+                            alt="Önizleme"
+                            className="w-full h-full object-contain"
+                          />
+                        )}
+                      </div>
+                      <div className="flex gap-2 justify-end">
+                        <Button
+                          variant="outline"
+                          onClick={() => {
+                            setSelectedImage(null);
+                            setPreviewUrl("");
+                            setCurrentImageId(null);
+                          }}
+                        >
+                          İptal
+                        </Button>
+                        <Button
+                          onClick={() => handleImageUpload(currentImageId)}
+                          className="bg-accent hover:bg-accent/90"
+                        >
+                          {currentImageId ? "Görseli Güncelle" : "Görseli Yükle"}
+                        </Button>
+                      </div>
+                    </CardContent>
+                  </Card>
                 </div>
-              </div>
+              )}
+
+              {/* Gizli dosya input'u */}
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleImageSelect}
+                className="hidden"
+                id="imageUpload"
+              />
             </div>
           </CardContent>
         </Card>
