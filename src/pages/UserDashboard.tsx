@@ -148,34 +148,6 @@ const UserDashboard = () => {
             </CardContent>
           </Card>
 
-          {/* Müşteri Sadakat Sistemi */}
-          <Card className="border-none shadow-lg bg-card/50 backdrop-blur-sm">
-            <CardHeader>
-              <CardTitle className="text-xl font-semibold flex items-center gap-2">
-                <Star className="w-5 h-5 text-primary" />
-                Müşteri Sadakat Sistemi
-              </CardTitle>
-              <CardDescription>Sadakat programı ve kampanyalar</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="grid gap-4">
-                <div className="flex items-center justify-between p-3 rounded-lg bg-accent/10">
-                  <div className="flex items-center gap-3">
-                    <Award className="w-5 h-5 text-primary" />
-                    <div>
-                      <p className="font-medium">VIP Müşteriler</p>
-                      <p className="text-sm text-muted-foreground">5+ ziyaret</p>
-                    </div>
-                  </div>
-                  <span className="text-2xl font-semibold">12</span>
-                </div>
-                <Button className="w-full bg-primary/10 hover:bg-primary/20 text-primary">
-                  Yeni Kampanya Oluştur
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
-
           {/* Takvim Görünümü */}
           <Card className="border-none shadow-lg bg-card/50 backdrop-blur-sm">
             <CardHeader>
@@ -202,44 +174,6 @@ const UserDashboard = () => {
                     {i + 1}
                   </Button>
                 ))}
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Hizmet Yönetimi */}
-          <Card className="border-none shadow-lg bg-card/50 backdrop-blur-sm">
-            <CardHeader>
-              <CardTitle className="text-xl font-semibold flex items-center gap-2">
-                <List className="w-5 h-5 text-primary" />
-                Hizmet Yönetimi
-              </CardTitle>
-              <CardDescription>Hizmetler ve paketler</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                <div className="flex items-center justify-between p-3 rounded-lg bg-accent/10">
-                  <div className="flex items-center gap-3">
-                    <DollarSign className="w-5 h-5 text-primary" />
-                    <div>
-                      <p className="font-medium">Lazer Epilasyon</p>
-                      <p className="text-sm text-muted-foreground">45 dk</p>
-                    </div>
-                  </div>
-                  <span className="font-semibold">₺400</span>
-                </div>
-                <div className="flex items-center justify-between p-3 rounded-lg bg-accent/10">
-                  <div className="flex items-center gap-3">
-                    <DollarSign className="w-5 h-5 text-primary" />
-                    <div>
-                      <p className="font-medium">Cilt Bakımı</p>
-                      <p className="text-sm text-muted-foreground">60 dk</p>
-                    </div>
-                  </div>
-                  <span className="font-semibold">₺500</span>
-                </div>
-                <Button className="w-full bg-primary/10 hover:bg-primary/20 text-primary">
-                  Yeni Hizmet Ekle
-                </Button>
               </div>
             </CardContent>
           </Card>
