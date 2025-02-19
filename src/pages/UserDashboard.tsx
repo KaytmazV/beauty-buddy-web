@@ -140,9 +140,13 @@ const UserDashboard = () => {
 
   const handleMarkAsCompleted = () => {
     if (customers.length > 0) {
-      const updatedCustomers = customers.map(customer => 
-        customer.status === "pending" ? { ...customer, status: "completed" } : customer
-      );
+      const updatedCustomers = customers.map(customer => {
+        if (customer.status === "pending") {
+          return { ...customer, status: "completed" as const };
+        }
+        return customer;
+      });
+      
       setCustomers(updatedCustomers);
       
       toast({
