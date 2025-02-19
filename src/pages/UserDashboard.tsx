@@ -230,14 +230,6 @@ const UserDashboard = () => {
                 </Button>
                 <Button 
                   variant="outline" 
-                  className="flex items-center gap-2"
-                  onClick={handleMarkAsCompleted}
-                >
-                  <CheckCircle2 className="w-4 h-4" />
-                  Tamamlandı İşaretle
-                </Button>
-                <Button 
-                  variant="outline" 
                   className="flex items-center gap-2 col-span-2"
                   onClick={handleSendBulkSMS}
                 >
