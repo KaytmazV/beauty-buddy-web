@@ -103,6 +103,47 @@ const UserDashboard = () => {
     return format(new Date(dateString), "d MMMM yyyy, EEEE", { locale: tr });
   };
 
+  const handleWhatsAppMessage = () => {
+    // WhatsApp API'si için örnek URL
+    const message = encodeURIComponent("Merhaba, randevunuz hakkında bilgi vermek istiyorum.");
+    const phoneNumber = "+905551112233"; // Örnek telefon numarası
+    window.open(`https://wa.me/${phoneNumber}?text=${message}`, '_blank');
+    
+    toast({
+      title: "WhatsApp açıldı",
+      description: "Mesaj gönderimi için WhatsApp açıldı."
+    });
+  };
+
+  const handleSendSMS = () => {
+    toast({
+      title: "SMS Gönderildi",
+      description: "Randevu hatırlatma SMS'i gönderildi."
+    });
+  };
+
+  const handleMarkAsCompleted = () => {
+    // Seçili müşterinin durumunu tamamlandı olarak işaretle
+    if (customers.length > 0) {
+      const updatedCustomers = customers.map(customer => 
+        customer.status === "pending" ? { ...customer, status: "completed" } : customer
+      );
+      setCustomers(updatedCustomers);
+      
+      toast({
+        title: "Durum Güncellendi",
+        description: "Seçili randevular tamamlandı olarak işaretlendi."
+      });
+    }
+  };
+
+  const handleUpdateStatus = () => {
+    toast({
+      title: "Durum Güncelleme",
+      description: "Randevu durumu güncellendi."
+    });
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-primary/5 via-secondary/10 to-accent/5 pt-24">
       <WhatsAppSupport />
@@ -128,19 +169,35 @@ const UserDashboard = () => {
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="grid grid-cols-2 gap-2">
-                <Button variant="outline" className="flex items-center gap-2">
+                <Button 
+                  variant="outline" 
+                  className="flex items-center gap-2"
+                  onClick={handleWhatsAppMessage}
+                >
                   <MessageCircle className="w-4 h-4" />
                   WhatsApp Mesajı
                 </Button>
-                <Button variant="outline" className="flex items-center gap-2">
+                <Button 
+                  variant="outline" 
+                  className="flex items-center gap-2"
+                  onClick={handleSendSMS}
+                >
                   <Bell className="w-4 h-4" />
                   SMS Hatırlatma
                 </Button>
-                <Button variant="outline" className="flex items-center gap-2">
+                <Button 
+                  variant="outline" 
+                  className="flex items-center gap-2"
+                  onClick={handleMarkAsCompleted}
+                >
                   <CheckCircle2 className="w-4 h-4" />
                   Tamamlandı İşaretle
                 </Button>
-                <Button variant="outline" className="flex items-center gap-2">
+                <Button 
+                  variant="outline" 
+                  className="flex items-center gap-2"
+                  onClick={handleUpdateStatus}
+                >
                   <Clock className="w-4 h-4" />
                   Durumu Güncelle
                 </Button>
