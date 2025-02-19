@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
-import { Calendar, Phone, Search, Minus, Eye, Clock, CheckCircle2, FileEdit, Send, Bell, Star, Award, List, DollarSign, Users, MessagesSquare } from "lucide-react";
+import { Calendar, Phone, Search, Eye, Clock, CheckCircle2, FileEdit, Send, Bell, List, Users, MessagesSquare } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Textarea } from "@/components/ui/textarea";
@@ -171,6 +171,19 @@ const UserDashboard = () => {
     toast({
       title: "WhatsApp açıldı",
       description: "Mesaj gönderimi için WhatsApp açıldı."
+    });
+  };
+
+  const handleUpdateCustomerStatus = (customerId: string, newStatus: "pending" | "completed") => {
+    const updatedCustomers = customers.map(customer => 
+      customer.id === customerId ? { ...customer, status: newStatus } : customer
+    );
+    
+    setCustomers(updatedCustomers);
+    
+    toast({
+      title: "Durum Güncellendi",
+      description: `Müşteri durumu ${newStatus === "completed" ? "tamamlandı" : "bekliyor"} olarak güncellendi.`
     });
   };
 
@@ -426,6 +439,28 @@ const UserDashboard = () => {
                         <MessagesSquare className="h-3 w-3 mr-1" />
                         WhatsApp
                       </Button>
+
+                      {customer.status === "pending" ? (
+                        <Button 
+                          variant="ghost" 
+                          size="sm" 
+                          className="h-7 px-3 text-xs hover:bg-green-600/10 hover:text-green-600"
+                          onClick={() => handleUpdateCustomerStatus(customer.id, "completed")}
+                        >
+                          <CheckCircle2 className="h-3 w-3 mr-1" />
+                          Tamamlandı
+                        </Button>
+                      ) : (
+                        <Button 
+                          variant="ghost" 
+                          size="sm" 
+                          className="h-7 px-3 text-xs hover:bg-primary/10 hover:text-primary"
+                          onClick={() => handleUpdateCustomerStatus(customer.id, "pending")}
+                        >
+                          <Clock className="h-3 w-3 mr-1" />
+                          Bekliyor
+                        </Button>
+                      )}
                       
                       <Dialog>
                         <DialogTrigger asChild>
