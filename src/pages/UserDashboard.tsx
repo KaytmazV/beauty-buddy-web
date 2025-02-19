@@ -234,6 +234,32 @@ const UserDashboard = () => {
     }
   };
 
+  // Yeni state ve fonksiyonlar için ekleme
+  const [selectedImage, setSelectedImage] = useState<File | null>(null);
+  const [previewUrl, setPreviewUrl] = useState<string>("");
+
+  const handleImageSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      setSelectedImage(file);
+      // Seçilen görselin önizlemesini oluştur
+      const imageUrl = URL.createObjectURL(file);
+      setPreviewUrl(imageUrl);
+    }
+  };
+
+  const handleImageUpload = () => {
+    if (selectedImage) {
+      // Burada gerçek bir upload işlemi yapılabilir
+      toast({
+        title: "Görsel Yüklendi",
+        description: "Yeni görsel başarıyla yüklendi."
+      });
+      setSelectedImage(null);
+      setPreviewUrl("");
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-primary/5 via-secondary/10 to-accent/5 pt-24">
       <WhatsAppSupport />
@@ -333,6 +359,102 @@ const UserDashboard = () => {
             </CardContent>
           </Card>
         </div>
+
+        {/* Görsel Yönetimi Kartı */}
+        <Card className="border-none shadow-lg bg-card/50 backdrop-blur-sm mt-6">
+          <CardHeader>
+            <div className="flex items-center justify-between">
+              <div>
+                <CardTitle className="text-2xl bg-gradient-to-r from-primary/80 to-accent bg-clip-text text-transparent">
+                  Görsel Yönetimi
+                </CardTitle>
+                <CardDescription>
+                  Site görsellerini düzenleyin ve yeni görseller ekleyin
+                </CardDescription>
+              </div>
+            </div>
+          </CardHeader>
+          
+          <CardContent>
+            <div className="grid md:grid-cols-2 gap-6">
+              <div className="space-y-4">
+                <h3 className="text-lg font-medium">Yeni Görsel Yükle</h3>
+                <div className="border-2 border-dashed border-accent/30 rounded-lg p-6 hover:border-accent/50 transition-colors">
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleImageSelect}
+                    className="hidden"
+                    id="imageUpload"
+                  />
+                  <label
+                    htmlFor="imageUpload"
+                    className="flex flex-col items-center gap-2 cursor-pointer"
+                  >
+                    <div className="w-full aspect-video bg-accent/5 rounded-lg flex items-center justify-center">
+                      {previewUrl ? (
+                        <img
+                          src={previewUrl}
+                          alt="Önizleme"
+                          className="max-h-full rounded-lg object-contain"
+                        />
+                      ) : (
+                        <div className="text-center p-4">
+                          <FileEdit className="w-8 h-8 mx-auto text-accent/60 mb-2" />
+                          <p className="text-sm text-muted-foreground">
+                            Görsel seçmek için tıklayın
+                          </p>
+                        </div>
+                      )}
+                    </div>
+                  </label>
+                  {selectedImage && (
+                    <div className="mt-4">
+                      <Button
+                        onClick={handleImageUpload}
+                        className="w-full bg-accent hover:bg-accent/90"
+                      >
+                        Görseli Yükle
+                      </Button>
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              <div className="space-y-4">
+                <h3 className="text-lg font-medium">Mevcut Görseller</h3>
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="relative group">
+                    <img
+                      src="/lovable-uploads/2e116253-a86d-444d-ac71-a4192e8bd3ca.png"
+                      alt="Site görseli"
+                      className="w-full aspect-video object-cover rounded-lg"
+                    />
+                    <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity rounded-lg flex items-center justify-center">
+                      <Button variant="ghost" size="sm" className="text-white">
+                        <FileEdit className="w-4 h-4 mr-2" />
+                        Değiştir
+                      </Button>
+                    </div>
+                  </div>
+                  <div className="relative group">
+                    <img
+                      src="/lovable-uploads/2e54b248-c48c-4bdf-9e70-3f7000d0a4a4.png"
+                      alt="Site görseli"
+                      className="w-full aspect-video object-cover rounded-lg"
+                    />
+                    <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity rounded-lg flex items-center justify-center">
+                      <Button variant="ghost" size="sm" className="text-white">
+                        <FileEdit className="w-4 h-4 mr-2" />
+                        Değiştir
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
 
         {/* Müşteri Listesi */}
         <Card className="border-none shadow-lg bg-card/50 backdrop-blur-sm mt-6">
