@@ -238,14 +238,6 @@ const UserDashboard = () => {
                 </Button>
                 <Button 
                   variant="outline" 
-                  className="flex items-center gap-2"
-                  onClick={handleUpdateStatus}
-                >
-                  <Clock className="w-4 h-4" />
-                  Durumu Güncelle
-                </Button>
-                <Button 
-                  variant="outline" 
                   className="flex items-center gap-2 col-span-2"
                   onClick={handleSendBulkSMS}
                 >
