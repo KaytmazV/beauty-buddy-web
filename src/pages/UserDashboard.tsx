@@ -159,6 +159,17 @@ const UserDashboard = () => {
     });
   };
 
+  const handleCustomerWhatsApp = (phone: string) => {
+    const formattedPhone = phone.replace(/\s+/g, ''); // Boşlukları kaldır
+    const message = encodeURIComponent("Merhaba, randevunuz hakkında bilgi vermek istiyorum.");
+    window.open(`https://wa.me/${formattedPhone}?text=${message}`, '_blank');
+    
+    toast({
+      title: "WhatsApp açıldı",
+      description: "Mesaj gönderimi için WhatsApp açıldı."
+    });
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-primary/5 via-secondary/10 to-accent/5 pt-24">
       <WhatsAppSupport />
@@ -401,108 +412,120 @@ const UserDashboard = () => {
                       </div>
                     </div>
                     
-                    <Dialog>
-                      <DialogTrigger asChild>
-                        <Button variant="ghost" size="sm" className="h-7 px-3 text-xs hover:bg-accent/10">
-                          <Eye className="h-3 w-3 mr-1" />
-                          Detay
-                        </Button>
-                      </DialogTrigger>
-                      <DialogContent className="sm:max-w-[425px]">
-                        <DialogHeader>
-                          <DialogTitle className="text-xl font-semibold flex items-center gap-2">
-                            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary/10">
-                              {customer.name.charAt(0)}
-                            </div>
-                            {customer.name}
-                          </DialogTitle>
-                        </DialogHeader>
-                        <div className="space-y-6 mt-4">
-                          <div className="space-y-2">
-                            <h4 className="text-sm font-medium text-accent">Müşteri Bilgileri</h4>
-                            <div className="grid gap-1 text-sm">
-                              <div className="flex items-center">
-                                <Phone className="w-4 h-4 mr-2 text-muted-foreground" />
-                                <span>{customer.phone}</span>
+                    <div className="flex items-center gap-2">
+                      <Button 
+                        variant="ghost" 
+                        size="sm" 
+                        className="h-7 px-3 text-xs hover:bg-green-500/10 hover:text-green-500"
+                        onClick={() => handleCustomerWhatsApp(customer.phone)}
+                      >
+                        <MessageCircle className="h-3 w-3 mr-1" />
+                        WhatsApp
+                      </Button>
+                      
+                      <Dialog>
+                        <DialogTrigger asChild>
+                          <Button variant="ghost" size="sm" className="h-7 px-3 text-xs hover:bg-accent/10">
+                            <Eye className="h-3 w-3 mr-1" />
+                            Detay
+                          </Button>
+                        </DialogTrigger>
+                        <DialogContent className="sm:max-w-[425px]">
+                          <DialogHeader>
+                            <DialogTitle className="text-xl font-semibold flex items-center gap-2">
+                              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary/10">
+                                {customer.name.charAt(0)}
+                              </div>
+                              {customer.name}
+                            </DialogTitle>
+                          </DialogHeader>
+                          <div className="space-y-6 mt-4">
+                            <div className="space-y-2">
+                              <h4 className="text-sm font-medium text-accent">Müşteri Bilgileri</h4>
+                              <div className="grid gap-1 text-sm">
+                                <div className="flex items-center">
+                                  <Phone className="w-4 h-4 mr-2 text-muted-foreground" />
+                                  <span>{customer.phone}</span>
+                                </div>
                               </div>
                             </div>
-                          </div>
-                          <div className="space-y-2">
-                            <h4 className="text-sm font-medium text-accent">Randevu Bilgileri</h4>
-                            <div className="grid gap-2 text-sm">
-                              <div className="flex items-center">
-                                <Calendar className="w-4 h-4 mr-2 text-muted-foreground" />
-                                <span>{formatDate(customer.appointmentDate)}</span>
+                            <div className="space-y-2">
+                              <h4 className="text-sm font-medium text-accent">Randevu Bilgileri</h4>
+                              <div className="grid gap-2 text-sm">
+                                <div className="flex items-center">
+                                  <Calendar className="w-4 h-4 mr-2 text-muted-foreground" />
+                                  <span>{formatDate(customer.appointmentDate)}</span>
+                                </div>
+                                <div className="flex items-center">
+                                  <Clock className="w-4 h-4 mr-2 text-muted-foreground" />
+                                  <span>{customer.service}</span>
+                                </div>
+                                <div className="flex items-center">
+                                  {customer.status === "pending" ? (
+                                    <Clock className="w-4 h-4 mr-2 text-primary" />
+                                  ) : (
+                                    <CheckCircle2 className="w-4 h-4 mr-2 text-green-600" />
+                                  )}
+                                  <span>{customer.status === "pending" ? "Bekliyor" : "Tamamlandı"}</span>
+                                </div>
                               </div>
-                              <div className="flex items-center">
-                                <Clock className="w-4 h-4 mr-2 text-muted-foreground" />
-                                <span>{customer.service}</span>
-                              </div>
-                              <div className="flex items-center">
-                                {customer.status === "pending" ? (
-                                  <Clock className="w-4 h-4 mr-2 text-primary" />
-                                ) : (
-                                  <CheckCircle2 className="w-4 h-4 mr-2 text-green-600" />
-                                )}
-                                <span>{customer.status === "pending" ? "Bekliyor" : "Tamamlandı"}</span>
-                              </div>
+                              {customer.nextAppointmentDate && (
+                                <div className="mt-4 p-3 rounded-lg bg-accent/10 border border-accent/20">
+                                  <p className="text-sm font-medium text-accent flex items-center">
+                                    <Calendar className="w-4 h-4 mr-2" />
+                                    Sonraki Randevu
+                                  </p>
+                                  <p className="text-sm mt-1">{formatDate(customer.nextAppointmentDate)}</p>
+                                </div>
+                              )}
                             </div>
-                            {customer.nextAppointmentDate && (
-                              <div className="mt-4 p-3 rounded-lg bg-accent/10 border border-accent/20">
-                                <p className="text-sm font-medium text-accent flex items-center">
-                                  <Calendar className="w-4 h-4 mr-2" />
-                                  Sonraki Randevu
-                                </p>
-                                <p className="text-sm mt-1">{formatDate(customer.nextAppointmentDate)}</p>
-                              </div>
-                            )}
-                          </div>
-                          <div className="space-y-2">
-                            <h4 className="text-sm font-medium text-accent mb-2">Müşteri Notu</h4>
-                            {editingNotes?.id === customer.id ? (
-                              <div className="space-y-2">
-                                <Textarea
-                                  value={editingNotes.notes}
-                                  onChange={(e) => setEditingNotes({ ...editingNotes, notes: e.target.value })}
-                                  placeholder="Müşteri için not ekleyin..."
-                                  className="min-h-[100px] bg-background/50"
-                                />
-                                <div className="flex gap-2">
-                                  <Button 
-                                    onClick={() => updateCustomerNotes(customer.id, editingNotes.notes)}
-                                    size="sm"
-                                    className="bg-accent hover:bg-accent/90"
-                                  >
-                                    Kaydet
-                                  </Button>
+                            <div className="space-y-2">
+                              <h4 className="text-sm font-medium text-accent mb-2">Müşteri Notu</h4>
+                              {editingNotes?.id === customer.id ? (
+                                <div className="space-y-2">
+                                  <Textarea
+                                    value={editingNotes.notes}
+                                    onChange={(e) => setEditingNotes({ ...editingNotes, notes: e.target.value })}
+                                    placeholder="Müşteri için not ekleyin..."
+                                    className="min-h-[100px] bg-background/50"
+                                  />
+                                  <div className="flex gap-2">
+                                    <Button 
+                                      onClick={() => updateCustomerNotes(customer.id, editingNotes.notes)}
+                                      size="sm"
+                                      className="bg-accent hover:bg-accent/90"
+                                    >
+                                      Kaydet
+                                    </Button>
+                                    <Button 
+                                      variant="outline" 
+                                      size="sm"
+                                      onClick={() => setEditingNotes(null)}
+                                    >
+                                      İptal
+                                    </Button>
+                                  </div>
+                                </div>
+                              ) : (
+                                <div className="space-y-2">
+                                  <p className="text-sm text-muted-foreground">
+                                    {customer.notes || "Not eklenmemiş"}
+                                  </p>
                                   <Button 
                                     variant="outline" 
                                     size="sm"
-                                    onClick={() => setEditingNotes(null)}
+                                    onClick={() => setEditingNotes({ id: customer.id, notes: customer.notes || "" })}
+                                    className="hover:bg-accent/10 hover:text-accent"
                                   >
-                                    İptal
+                                    {customer.notes ? "Notu Düzenle" : "Not Ekle"}
                                   </Button>
                                 </div>
-                              </div>
-                            ) : (
-                              <div className="space-y-2">
-                                <p className="text-sm text-muted-foreground">
-                                  {customer.notes || "Not eklenmemiş"}
-                                </p>
-                                <Button 
-                                  variant="outline" 
-                                  size="sm"
-                                  onClick={() => setEditingNotes({ id: customer.id, notes: customer.notes || "" })}
-                                  className="hover:bg-accent/10 hover:text-accent"
-                                >
-                                  {customer.notes ? "Notu Düzenle" : "Not Ekle"}
-                                </Button>
-                              </div>
-                            )}
+                              )}
+                            </div>
                           </div>
-                        </div>
-                      </DialogContent>
-                    </Dialog>
+                        </DialogContent>
+                      </Dialog>
+                    </div>
                   </div>
                 ))}
               </div>
