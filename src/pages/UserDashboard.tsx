@@ -2,17 +2,6 @@ import { useState } from "react";
 import { Calendar } from "@/components/ui/calendar";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/components/ui/use-toast";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Button } from "@/components/ui/button";
-import { MoreVertical, Plus, FileEdit, Trash2, Calendar as CalendarIcon } from "lucide-react";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -22,15 +11,30 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-  AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import { Separator } from "@/components/ui/separator";
+import { MoreVertical, Plus, FileEdit, Trash2, Calendar as CalendarIcon } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import WhatsAppSupport from "@/components/WhatsAppSupport";
 import WhatsAppScheduler from "@/components/WhatsAppScheduler";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 const UserDashboard = () => {
   const { toast } = useToast();
@@ -259,7 +263,6 @@ const UserDashboard = () => {
 
   // Randevu oluşturma
   const handleCreateAppointment = (customer: Customer) => {
-    // Randevu sekmesine geç - type casting ile düzeltme
     const appointmentTab = document.querySelector('[value="appointments"]') as HTMLElement;
     if (appointmentTab) {
       appointmentTab.click();
@@ -270,8 +273,6 @@ const UserDashboard = () => {
       description: `${customer.name} için randevu oluşturuluyor...`,
     });
   };
-
-  // Silme dialog state'i
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-primary/5 via-secondary/10 to-accent/5 pt-24">
@@ -556,16 +557,16 @@ const UserDashboard = () => {
         </AlertDialog>
 
         {/* Müşteri Ekleme/Düzenleme Dialog */}
-        <AlertDialog open={isCustomerDialogOpen} onOpenChange={setIsCustomerDialogOpen}>
-          <AlertDialogContent className="sm:max-w-[500px]">
-            <AlertDialogHeader>
-              <AlertDialogTitle>
+        <Dialog open={isCustomerDialogOpen} onOpenChange={setIsCustomerDialogOpen}>
+          <DialogContent className="sm:max-w-[500px]">
+            <DialogHeader>
+              <DialogTitle>
                 {editingCustomer ? "Müşteriyi Düzenle" : "Yeni Müşteri"}
-              </AlertDialogTitle>
-              <AlertDialogDescription>
+              </DialogTitle>
+              <DialogDescription>
                 Müşteri bilgilerini düzenleyin
-              </AlertDialogDescription>
-            </AlertDialogHeader>
+              </DialogDescription>
+            </DialogHeader>
             <div className="grid gap-4 py-4">
               <div className="grid gap-2">
                 <Label htmlFor="customerName">Ad Soyad</Label>
@@ -600,14 +601,20 @@ const UserDashboard = () => {
                 />
               </div>
             </div>
-            <AlertDialogFooter>
-              <AlertDialogCancel>İptal</AlertDialogCancel>
-              <AlertDialogAction onClick={editingCustomer ? handleUpdateCustomer : handleAddCustomer}>
+            <DialogFooter>
+              <Button variant="outline" onClick={() => {
+                setIsCustomerDialogOpen(false);
+                setEditingCustomer(null);
+                setNewCustomer({ name: "", phone: "", treatments: "" });
+              }}>
+                İptal
+              </Button>
+              <Button onClick={editingCustomer ? handleUpdateCustomer : handleAddCustomer}>
                 {editingCustomer ? "Güncelle" : "Ekle"}
-              </AlertDialogAction>
-            </AlertDialogFooter>
-          </AlertDialogContent>
-        </AlertDialog>
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
 
         {/* WhatsApp Planlayıcı */}
         <div className="mt-6">
