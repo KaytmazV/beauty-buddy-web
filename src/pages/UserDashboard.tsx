@@ -146,8 +146,18 @@ const UserDashboard = () => {
     });
   };
 
+  // Müşteri interface'i
+  interface Customer {
+    id: number;
+    name: string;
+    phone: string;
+    lastVisit: string;
+    nextAppointment: string;
+    treatments: string[];
+  }
+
   // Müşteri listesi için state
-  const [customers] = useState([
+  const [customers, setCustomers] = useState<Customer[]>([
     {
       id: 1,
       name: "Elif Yılmaz",
@@ -173,6 +183,34 @@ const UserDashboard = () => {
       treatments: ["Tırnak Bakımı", "El Bakımı"]
     }
   ]);
+
+  // Yeni müşteri için state
+  const [isCustomerDialogOpen, setIsCustomerDialogOpen] = useState(false);
+  const [newCustomer, setNewCustomer] = useState({
+    name: "",
+    phone: "",
+    treatments: "",
+  });
+
+  // Yeni müşteri ekleme fonksiyonu
+  const handleAddCustomer = () => {
+    const customer: Customer = {
+      id: customers.length + 1,
+      name: newCustomer.name,
+      phone: newCustomer.phone,
+      lastVisit: "-",
+      nextAppointment: "-",
+      treatments: newCustomer.treatments.split(",").map(t => t.trim()),
+    };
+
+    setCustomers([...customers, customer]);
+    setNewCustomer({ name: "", phone: "", treatments: "" });
+    setIsCustomerDialogOpen(false);
+    toast({
+      title: "Müşteri eklendi",
+      description: "Yeni müşteri başarıyla eklendi.",
+    });
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-primary/5 via-secondary/10 to-accent/5 pt-24">
@@ -284,7 +322,7 @@ const UserDashboard = () => {
           <TabsContent value="customers">
             <div className="flex justify-between items-center mb-6">
               <h2 className="text-2xl font-semibold">Müşteri Listesi</h2>
-              <Button>
+              <Button onClick={() => setIsCustomerDialogOpen(true)}>
                 <Plus className="mr-2 h-4 w-4" />
                 Yeni Müşteri
               </Button>
@@ -435,6 +473,57 @@ const UserDashboard = () => {
               <AlertDialogCancel>İptal</AlertDialogCancel>
               <AlertDialogAction onClick={editingBlog ? handleUpdateBlog : handleAddBlog}>
                 {editingBlog ? "Güncelle" : "Ekle"}
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
+
+        {/* Yeni Müşteri Ekleme Dialog */}
+        <AlertDialog open={isCustomerDialogOpen} onOpenChange={setIsCustomerDialogOpen}>
+          <AlertDialogContent className="sm:max-w-[500px]">
+            <AlertDialogHeader>
+              <AlertDialogTitle>
+                Yeni Müşteri
+              </AlertDialogTitle>
+            </AlertDialogHeader>
+            <div className="grid gap-4 py-4">
+              <div className="grid gap-2">
+                <Label htmlFor="customerName">Ad Soyad</Label>
+                <Input
+                  id="customerName"
+                  value={newCustomer.name}
+                  onChange={(e) =>
+                    setNewCustomer({ ...newCustomer, name: e.target.value })
+                  }
+                />
+              </div>
+              <div className="grid gap-2">
+                <Label htmlFor="customerPhone">Telefon</Label>
+                <Input
+                  id="customerPhone"
+                  value={newCustomer.phone}
+                  placeholder="+90 5XX XXX XX XX"
+                  onChange={(e) =>
+                    setNewCustomer({ ...newCustomer, phone: e.target.value })
+                  }
+                />
+              </div>
+              <div className="grid gap-2">
+                <Label htmlFor="customerTreatments">Aldığı Hizmetler</Label>
+                <Input
+                  id="customerTreatments"
+                  value={newCustomer.treatments}
+                  placeholder="Hizmetleri virgülle ayırarak yazın"
+                  onChange={(e) =>
+                    setNewCustomer({ ...newCustomer, treatments: e.target.value })
+                  }
+                />
+              </div>
+            </div>
+            <AlertDialogFooter>
+              <AlertDialogCancel>İptal</AlertDialogCancel>
+              <AlertDialogAction onClick={handleAddCustomer}>
+                Ekle
               </AlertDialogAction>
             </AlertDialogFooter>
           </AlertDialogContent>
