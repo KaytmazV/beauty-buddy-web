@@ -44,7 +44,7 @@ const Index = () => {
       <WhatsAppSupport />
       {/* Hero Section */}
       <section className="relative h-[90vh] md:h-screen flex items-center justify-center overflow-hidden">
-        <div className="absolute inset-0 bg-[url('/lovable-uploads/64a521e6-1a33-4880-aa73-c55de1019236.png')] bg-cover bg-center">
+        <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1560066984-138dadb4c035?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80')] bg-cover bg-center">
           <div className="absolute inset-0 bg-black/40 backdrop-blur-sm"></div>
         </div>
         
@@ -281,7 +281,7 @@ const Index = () => {
               className="relative h-[300px] md:h-[600px] rounded-2xl overflow-hidden mt-8 md:mt-0"
             >
               <img
-                src="/lovable-uploads/daed8c08-150b-4242-8b90-e0a06e01df8e.png"
+                src="https://images.unsplash.com/photo-1560066984-138dadb4c035?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80"
                 alt="Beauty Salon Interior"
                 className="w-full h-full object-cover"
               />
@@ -485,7 +485,7 @@ const Index = () => {
               >
                 <img 
                   src="/lovable-uploads/64a521e6-1a33-4880-aa73-c55de1019236.png"
-                  alt="Beauty Salon Contact"
+                  alt="Beauty Salon Storefront"
                   className="w-full h-full object-cover"
                 />
               </motion.div>
