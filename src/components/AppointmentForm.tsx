@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { format } from "date-fns";
@@ -12,6 +11,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useToast } from "@/components/ui/use-toast";
 import { cn } from "@/lib/utils";
+import { useNavigate } from "react-router-dom";
 
 type Service = {
   id: string;
@@ -56,12 +56,13 @@ const timeSlots = Array.from({ length: 22 }, (_, i) => {
 });
 
 const AppointmentForm = () => {
+  const { toast } = useToast();
+  const navigate = useNavigate();
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [date, setDate] = useState<Date | undefined>(new Date());
   const [selectedTimes, setSelectedTimes] = useState<string[]>([]);
   const [selectedServices, setSelectedServices] = useState<string[]>([]);
-  const { toast } = useToast();
 
   const handleTimeClick = (time: string) => {
     if (selectedTimes.includes(time)) {
@@ -118,10 +119,16 @@ const AppointmentForm = () => {
       return;
     }
 
+    // Navigate to dashboard after successful appointment creation
     toast({
       title: "Randevunuz alındı!",
       description: "En kısa sürede size dönüş yapacağız.",
     });
+    
+    // Redirect to dashboard after a short delay
+    setTimeout(() => {
+      navigate("/dashboard");
+    }, 1500);
   };
 
   return (
