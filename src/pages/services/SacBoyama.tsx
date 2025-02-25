@@ -1,8 +1,9 @@
-
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Paintbrush, Palette, Check, Calendar } from "lucide-react";
 import { Link } from "react-router-dom";
+import ReactBeforeAfterSlider from "react-before-after-slider-component";
+import "react-before-after-slider-component/dist/build.css";
 import WhatsAppSupport from "@/components/WhatsAppSupport";
 
 const SacBoyama = () => {
@@ -21,6 +22,24 @@ const SacBoyama = () => {
       title: "Saç Bakımı",
       description: "Boya sonrası özel bakım",
       features: ["Renk koruyucu bakım", "Nem takviyesi", "Parlaklık bakımı"]
+    }
+  ];
+
+  const beforeAfterImages = [
+    {
+      before: "https://images.unsplash.com/photo-1493106641515-6b5631de4bb9",
+      after: "https://images.unsplash.com/photo-1492106087820-71f1a00d2b11",
+      title: "Sarı Tonlar"
+    },
+    {
+      before: "https://images.unsplash.com/photo-1500840216050-6ffa99d75160",
+      after: "https://images.unsplash.com/photo-1485178575877-1a13bf489dfe",
+      title: "Kahverengi Tonlar"
+    },
+    {
+      before: "https://images.unsplash.com/photo-1509704215857-7ac19c9842b4",
+      after: "https://images.unsplash.com/photo-1492106087820-71f1a00d2b11",
+      title: "Özel Teknikler"
     }
   ];
 
@@ -162,6 +181,104 @@ const SacBoyama = () => {
                 </ul>
               </motion.div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Fotoğraf Galerisi Section */}
+      <section className="py-20 bg-white">
+        <div className="container mx-auto px-6">
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            className="text-center max-w-3xl mx-auto mb-16"
+          >
+            <h2 className="text-3xl md:text-4xl font-light text-gray-800 mb-4">
+              Örnek Çalışmalarımız
+            </h2>
+            <p className="text-lg text-muted-foreground">
+              Öncesi ve sonrası fotoğraflarla müşteri memnuniyetimiz
+            </p>
+          </motion.div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {beforeAfterImages.map((image, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, scale: 0.9 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                transition={{ delay: index * 0.1 }}
+                className="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow"
+              >
+                <div className="bg-accent/10 py-4">
+                  <h3 className="text-xl font-medium text-center text-gray-800">{image.title}</h3>
+                </div>
+                <div className="p-6">
+                  <ReactBeforeAfterSlider
+                    firstImage={{ imageUrl: image.before }}
+                    secondImage={{ imageUrl: image.after }}
+                    currentPercentPosition={50}
+                    delimiterColor="#9B6B7D"
+                  />
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Galeri Section */}
+      <section className="py-20 bg-secondary">
+        <div className="container mx-auto px-6">
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            className="text-center max-w-3xl mx-auto mb-16"
+          >
+            <h2 className="text-3xl md:text-4xl font-light text-gray-800 mb-4">
+              Galeri
+            </h2>
+            <p className="text-lg text-muted-foreground">
+              En son saç boyama çalışmalarımızdan örnekler
+            </p>
+          </motion.div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              className="aspect-square rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow"
+            >
+              <img 
+                src="https://images.unsplash.com/photo-1605497788044-5a32c7078486" 
+                alt="Saç Boyama Örnek 1"
+                className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
+              />
+            </motion.div>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.1 }}
+              className="aspect-square rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow"
+            >
+              <img 
+                src="https://images.unsplash.com/photo-1562322140-8baeececf3df" 
+                alt="Saç Boyama Örnek 2"
+                className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
+              />
+            </motion.div>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2 }}
+              className="aspect-square rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow"
+            >
+              <img 
+                src="https://images.unsplash.com/photo-1600948836101-f9ffda59d250" 
+                alt="Saç Boyama Örnek 3"
+                className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
+              />
+            </motion.div>
           </div>
         </div>
       </section>
