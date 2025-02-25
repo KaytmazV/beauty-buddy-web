@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Calendar } from "@/components/ui/calendar";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -147,6 +146,34 @@ const UserDashboard = () => {
     });
   };
 
+  // Müşteri listesi için state
+  const [customers] = useState([
+    {
+      id: 1,
+      name: "Elif Yılmaz",
+      phone: "+90 532 111 2233",
+      lastVisit: "10 Mart 2024",
+      nextAppointment: "25 Mart 2024",
+      treatments: ["Lazer Epilasyon", "Cilt Bakımı"]
+    },
+    {
+      id: 2,
+      name: "Ayşe Kara",
+      phone: "+90 535 444 5566",
+      lastVisit: "15 Mart 2024",
+      nextAppointment: "1 Nisan 2024",
+      treatments: ["Saç Boyama"]
+    },
+    {
+      id: 3,
+      name: "Fatma Demir",
+      phone: "+90 542 777 8899",
+      lastVisit: "18 Mart 2024",
+      nextAppointment: "28 Mart 2024",
+      treatments: ["Tırnak Bakımı", "El Bakımı"]
+    }
+  ]);
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-primary/5 via-secondary/10 to-accent/5 pt-24">
       <WhatsAppSupport />
@@ -180,6 +207,7 @@ const UserDashboard = () => {
         <Tabs defaultValue="blog" className="mb-8">
           <TabsList>
             <TabsTrigger value="blog">Blog Yönetimi</TabsTrigger>
+            <TabsTrigger value="customers">Müşteriler</TabsTrigger>
             <TabsTrigger value="appointments">Randevular</TabsTrigger>
             <TabsTrigger value="services">Hizmetler</TabsTrigger>
           </TabsList>
@@ -246,6 +274,73 @@ const UserDashboard = () => {
                           </AlertDialogFooter>
                         </AlertDialogContent>
                       </AlertDialog>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </TabsContent>
+
+          <TabsContent value="customers">
+            <div className="flex justify-between items-center mb-6">
+              <h2 className="text-2xl font-semibold">Müşteri Listesi</h2>
+              <Button>
+                <Plus className="mr-2 h-4 w-4" />
+                Yeni Müşteri
+              </Button>
+            </div>
+
+            <div className="grid gap-6">
+              {customers.map((customer) => (
+                <Card key={customer.id}>
+                  <CardContent className="flex items-center justify-between p-6">
+                    <div className="flex items-center gap-4">
+                      <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center">
+                        <span className="text-primary font-medium">
+                          {customer.name.split(' ').map(name => name[0]).join('')}
+                        </span>
+                      </div>
+                      <div>
+                        <h3 className="font-semibold">{customer.name}</h3>
+                        <p className="text-sm text-muted-foreground">{customer.phone}</p>
+                        <div className="flex gap-2 mt-1">
+                          {customer.treatments.map((treatment, index) => (
+                            <span 
+                              key={index}
+                              className="inline-flex items-center rounded-full bg-accent/10 px-2.5 py-0.5 text-xs font-medium text-accent"
+                            >
+                              {treatment}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                    <div className="flex flex-col items-end gap-2">
+                      <div className="text-sm text-right">
+                        <p>Son Ziyaret: <span className="text-muted-foreground">{customer.lastVisit}</span></p>
+                        <p>Sonraki Randevu: <span className="text-muted-foreground">{customer.nextAppointment}</span></p>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <Button 
+                          variant="outline" 
+                          size="sm"
+                          onClick={() => window.open(`https://wa.me/${customer.phone.replace(/\D/g, '')}`, '_blank')}
+                        >
+                          WhatsApp
+                        </Button>
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
+                            <Button variant="ghost" size="icon">
+                              <MoreVertical className="h-4 w-4" />
+                            </Button>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent align="end">
+                            <DropdownMenuItem>Düzenle</DropdownMenuItem>
+                            <DropdownMenuItem>Randevu Oluştur</DropdownMenuItem>
+                            <DropdownMenuItem className="text-destructive">Sil</DropdownMenuItem>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
+                      </div>
                     </div>
                   </CardContent>
                 </Card>
