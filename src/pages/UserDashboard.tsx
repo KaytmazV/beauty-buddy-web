@@ -1,175 +1,48 @@
 import { useState } from "react";
-import { Calendar } from "@/components/ui/calendar";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { useToast } from "@/components/ui/use-toast";
+import { motion } from "framer-motion";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Plus, ImagePlus } from "lucide-react";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@/components/ui/tabs"
+import { useToast } from "@/components/ui/use-toast"
+import { Plus, User, Users, Mail, Phone, Calendar, Trash2 } from "lucide-react";
+import {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableFooter,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table"
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog"
 import WhatsAppSupport from "@/components/WhatsAppSupport";
 import WhatsAppScheduler from "@/components/WhatsAppScheduler";
-import { CustomerList } from "@/components/customers/CustomerList";
-import { CustomerForm } from "@/components/customers/CustomerForm";
-import { DeleteCustomerDialog } from "@/components/customers/DeleteCustomerDialog";
-import { Customer, CustomerFormData } from "@/types/customer";
-
-interface BlogPost {
-  id: number;
-  title: string;
-  description: string;
-  image: string;
-  category: string;
-  date: string;
-  author: string;
-  content?: string;
-  tags?: string[];
-}
+import { useCustomerStore } from "@/store/customerStore";
+import { BlogPost } from "@/store/blogStore";
+import { useBlogStore } from "@/store/blogStore";
 
 const UserDashboard = () => {
   const { toast } = useToast();
-  const [customers, setCustomers] = useState<Customer[]>([
-    {
-      id: 1,
-      name: "Elif Yılmaz",
-      phone: "+90 532 111 2233",
-      lastVisit: "10 Mart 2024",
-      nextAppointment: "25 Mart 2024",
-      treatments: ["Lazer Epilasyon", "Cilt Bakımı"]
-    },
-    {
-      id: 2,
-      name: "Ayşe Kara",
-      phone: "+90 535 444 5566",
-      lastVisit: "15 Mart 2024",
-      nextAppointment: "1 Nisan 2024",
-      treatments: ["Saç Boyama"]
-    },
-    {
-      id: 3,
-      name: "Fatma Demir",
-      phone: "+90 542 777 8899",
-      lastVisit: "18 Mart 2024",
-      nextAppointment: "28 Mart 2024",
-      treatments: ["Tırnak Bakımı", "El Bakımı"]
-    }
-  ]);
-
-  const [isCustomerDialogOpen, setIsCustomerDialogOpen] = useState(false);
-  const [editingCustomer, setEditingCustomer] = useState<Customer | null>(null);
-  const [customerToDelete, setCustomerToDelete] = useState<Customer | null>(null);
-  const [newCustomer, setNewCustomer] = useState<CustomerFormData>({
-    name: "",
-    phone: "",
-    treatments: "",
-  });
-
-  const handleAddCustomer = () => {
-    const customer: Customer = {
-      id: customers.length + 1,
-      name: newCustomer.name,
-      phone: newCustomer.phone,
-      lastVisit: "-",
-      nextAppointment: "-",
-      treatments: newCustomer.treatments.split(",").map(t => t.trim()),
-    };
-
-    setCustomers([...customers, customer]);
-    setNewCustomer({ name: "", phone: "", treatments: "" });
-    setIsCustomerDialogOpen(false);
-    toast({
-      title: "Müşteri eklendi",
-      description: "Yeni müşteri başarıyla eklendi.",
-    });
-  };
-
-  const handleEditCustomer = (customer: Customer) => {
-    setEditingCustomer(customer);
-    setNewCustomer({
-      name: customer.name,
-      phone: customer.phone,
-      treatments: customer.treatments.join(", "),
-    });
-    setIsCustomerDialogOpen(true);
-  };
-
-  const handleUpdateCustomer = () => {
-    if (!editingCustomer) return;
-
-    const updatedCustomer: Customer = {
-      ...editingCustomer,
-      name: newCustomer.name,
-      phone: newCustomer.phone,
-      treatments: newCustomer.treatments.split(",").map(t => t.trim()),
-    };
-
-    setCustomers(customers.map(c => 
-      c.id === editingCustomer.id ? updatedCustomer : c
-    ));
-
-    setIsCustomerDialogOpen(false);
-    setEditingCustomer(null);
-    setNewCustomer({ name: "", phone: "", treatments: "" });
-
-    toast({
-      title: "Müşteri güncellendi",
-      description: "Müşteri bilgileri başarıyla güncellendi.",
-    });
-  };
-
-  const handleDeleteCustomer = (id: number) => {
-    setCustomers(customers.filter(c => c.id !== id));
-    toast({
-      title: "Müşteri silindi",
-      description: "Müşteri başarıyla silindi.",
-    });
-  };
-
-  const handleCreateAppointment = (customer: Customer) => {
-    const appointmentTab = document.querySelector('[value="appointments"]') as HTMLElement;
-    if (appointmentTab) {
-      appointmentTab.click();
-    }
-    
-    toast({
-      title: "Randevu oluştur",
-      description: `${customer.name} için randevu oluşturuluyor...`,
-    });
-  };
-
-  const handleDialogClose = (open: boolean) => {
-    if (!open) {
-      setIsCustomerDialogOpen(false);
-      setEditingCustomer(null);
-      setNewCustomer({ name: "", phone: "", treatments: "" });
-    }
-  };
-
-  // Blog state
   const [isAddingPost, setIsAddingPost] = useState(false);
-  const [blogPosts, setBlogPosts] = useState<BlogPost[]>([
-    {
-      id: 1,
-      title: "Saç Boyama Trendleri 2024",
-      description: "Bu yılın en popüler saç renkleri ve teknikleri",
-      image: "https://images.unsplash.com/photo-1605497788044-5a32c7078486",
-      category: "Saç Bakımı",
-      date: "15 Mart 2024",
-      author: "İlayda Bağ",
-      tags: ["Saç", "Trend", "2024"]
-    },
-    {
-      id: 2,
-      title: "Doğal Cilt Bakım Rutini",
-      description: "Evde uygulayabileceğiniz etkili cilt bakım önerileri",
-      image: "https://images.unsplash.com/photo-1598440947619-2c35fc9aa908",
-      category: "Cilt Bakımı",
-      date: "12 Mart 2024",
-      author: "İlayda Bağ",
-      tags: ["Cilt Bakımı", "Doğal", "Rutin"]
-    }
-  ]);
   const [newPost, setNewPost] = useState<Partial<BlogPost>>({
     title: "",
     description: "",
@@ -177,6 +50,51 @@ const UserDashboard = () => {
     category: "",
     tags: [],
   });
+
+  // Blog store
+  const { posts, addPost, deletePost } = useBlogStore();
+
+  const [isAddingCustomer, setIsAddingCustomer] = useState(false);
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const [customerToDelete, setCustomerToDelete] = useState<string | null>(null);
+  const { customers, addCustomer, deleteCustomer } = useCustomerStore();
+  const [newCustomer, setNewCustomer] = useState({
+    name: "",
+    email: "",
+    phone: "",
+  });
+
+  const handleAddCustomer = () => {
+    if (!newCustomer.name || !newCustomer.email || !newCustomer.phone) {
+      toast({
+        title: "Hata",
+        description: "Lütfen tüm alanları doldurun.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    addCustomer(newCustomer);
+    setNewCustomer({ name: "", email: "", phone: "" });
+    setIsAddingCustomer(false);
+
+    toast({
+      title: "Başarılı",
+      description: "Müşteri başarıyla eklendi.",
+    });
+  };
+
+  const handleDeleteCustomer = () => {
+    if (customerToDelete) {
+      deleteCustomer(customerToDelete);
+      setCustomerToDelete(null);
+      setIsDeleteDialogOpen(false);
+      toast({
+        title: "Başarılı",
+        description: "Müşteri başarıyla silindi.",
+      });
+    }
+  };
 
   const handleAddPost = () => {
     if (!newPost.title || !newPost.description || !newPost.category) {
@@ -188,25 +106,15 @@ const UserDashboard = () => {
       return;
     }
 
-    const currentDate = new Date();
-    const formattedDate = currentDate.toLocaleDateString('tr-TR', {
-      day: 'numeric',
-      month: 'long',
-      year: 'numeric'
-    });
-
-    const post: BlogPost = {
-      id: blogPosts.length + 1,
+    addPost({
       title: newPost.title,
       description: newPost.description,
       image: newPost.image || "https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7",
       category: newPost.category,
-      date: formattedDate,
       author: "İlayda Bağ",
       tags: newPost.tags || [],
-    };
+    });
 
-    setBlogPosts([post, ...blogPosts]);
     setNewPost({
       title: "",
       description: "",
@@ -222,80 +130,19 @@ const UserDashboard = () => {
     });
   };
 
-  const handleDeletePost = (id: number) => {
-    setBlogPosts(blogPosts.filter(post => post.id !== id));
-    toast({
-      title: "Blog yazısı silindi",
-      description: "Blog yazısı başarıyla silindi.",
-    });
-  };
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-primary/5 via-secondary/10 to-accent/5 pt-24">
       <WhatsAppSupport />
       
       <div className="container mx-auto px-4">
-        <div className="mb-8 flex items-center justify-between">
-          <div>
-            <h1 className="scroll-m-20 text-3xl font-semibold tracking-tight transition-colors first:mt-0">
-              Hoş Geldiniz, İlayda
-            </h1>
-            <p className="text-sm text-muted-foreground">
-              İlayda Bağ Güzellik Salonu Yönetim Paneli
-            </p>
-          </div>
-        </div>
+        <h1 className="text-3xl font-semibold mb-6">Yönetim Paneli</h1>
 
-        <Tabs defaultValue="customers" className="mb-8">
+        <Tabs defaultValue="blog" className="w-full">
           <TabsList>
-            <TabsTrigger value="customers">Müşteriler</TabsTrigger>
-            <TabsTrigger value="appointments">Randevular</TabsTrigger>
-            <TabsTrigger value="services">Hizmetler</TabsTrigger>
             <TabsTrigger value="blog">Blog</TabsTrigger>
+            <TabsTrigger value="customers">Müşteriler</TabsTrigger>
+            <TabsTrigger value="settings">Ayarlar</TabsTrigger>
           </TabsList>
-
-          <TabsContent value="customers">
-            <div className="flex justify-between items-center mb-6">
-              <h2 className="text-2xl font-semibold">Müşteri Listesi</h2>
-              <Button onClick={() => {
-                setEditingCustomer(null);
-                setNewCustomer({ name: "", phone: "", treatments: "" });
-                setIsCustomerDialogOpen(true);
-              }}>
-                <Plus className="mr-2 h-4 w-4" />
-                Yeni Müşteri
-              </Button>
-            </div>
-
-            <CustomerList
-              customers={customers}
-              onEdit={handleEditCustomer}
-              onDelete={setCustomerToDelete}
-              onCreateAppointment={handleCreateAppointment}
-            />
-          </TabsContent>
-
-          <TabsContent value="appointments">
-            <Card>
-              <CardHeader>
-                <CardTitle>Randevular</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <Calendar />
-              </CardContent>
-            </Card>
-          </TabsContent>
-
-          <TabsContent value="services">
-            <Card>
-              <CardHeader>
-                <CardTitle>Hizmetler</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p>Hizmet yönetimi yakında eklenecek...</p>
-              </CardContent>
-            </Card>
-          </TabsContent>
 
           <TabsContent value="blog">
             <div className="flex justify-between items-center mb-6">
@@ -307,74 +154,53 @@ const UserDashboard = () => {
             </div>
 
             {isAddingPost && (
-              <Card className="mb-6">
-                <CardHeader>
-                  <CardTitle>Yeni Blog Yazısı</CardTitle>
-                  <CardDescription>Blog yazınızı oluşturun</CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="space-y-2">
+              <div className="mb-6 p-4 rounded-md bg-secondary/50">
+                <h3 className="text-xl font-semibold mb-4">Yeni Blog Yazısı Ekle</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
                     <Label htmlFor="title">Başlık</Label>
                     <Input
+                      type="text"
                       id="title"
-                      value={newPost.title}
+                      value={newPost.title || ""}
                       onChange={(e) => setNewPost({ ...newPost, title: e.target.value })}
                     />
                   </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="description">Özet</Label>
-                    <Textarea
-                      id="description"
-                      value={newPost.description}
-                      onChange={(e) => setNewPost({ ...newPost, description: e.target.value })}
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="image">Görsel URL</Label>
-                    <Input
-                      id="image"
-                      value={newPost.image}
-                      onChange={(e) => setNewPost({ ...newPost, image: e.target.value })}
-                      placeholder="https://..."
-                    />
-                  </div>
-                  <div className="space-y-2">
+                  <div>
                     <Label htmlFor="category">Kategori</Label>
                     <Input
+                      type="text"
                       id="category"
-                      value={newPost.category}
+                      value={newPost.category || ""}
                       onChange={(e) => setNewPost({ ...newPost, category: e.target.value })}
                     />
                   </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="tags">Etiketler (virgülle ayırın)</Label>
-                    <Input
-                      id="tags"
-                      value={newPost.tags?.join(", ")}
-                      onChange={(e) => setNewPost({ 
-                        ...newPost, 
-                        tags: e.target.value.split(",").map(tag => tag.trim())
-                      })}
-                      placeholder="Örnek: Saç, Bakım, Trend"
-                    />
-                  </div>
-                  <div className="flex justify-end gap-4 pt-4">
-                    <Button 
-                      variant="outline" 
-                      onClick={() => setIsAddingPost(false)}
-                    >
-                      İptal
-                    </Button>
-                    <Button onClick={handleAddPost}>
-                      Yazıyı Yayınla
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
+                </div>
+                <div className="mt-4">
+                  <Label htmlFor="description">Açıklama</Label>
+                  <Textarea
+                    id="description"
+                    value={newPost.description || ""}
+                    onChange={(e) => setNewPost({ ...newPost, description: e.target.value })}
+                  />
+                </div>
+                <div className="mt-4">
+                  <Label htmlFor="image">Resim URL</Label>
+                  <Input
+                    type="text"
+                    id="image"
+                    value={newPost.image || ""}
+                    onChange={(e) => setNewPost({ ...newPost, image: e.target.value })}
+                  />
+                </div>
+                <Button className="mt-4" onClick={handleAddPost}>
+                  Ekle
+                </Button>
+              </div>
             )}
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {blogPosts.map((post) => (
+              {posts.map((post) => (
                 <Card key={post.id} className="overflow-hidden">
                   <div className="aspect-[16/9] relative">
                     <img 
@@ -390,7 +216,7 @@ const UserDashboard = () => {
                         variant="ghost" 
                         size="sm"
                         className="text-destructive"
-                        onClick={() => handleDeletePost(post.id)}
+                        onClick={() => deletePost(post.id)}
                       >
                         Sil
                       </Button>
@@ -418,33 +244,198 @@ const UserDashboard = () => {
               ))}
             </div>
           </TabsContent>
+
+          <TabsContent value="customers">
+            <div className="flex justify-between items-center mb-6">
+              <h2 className="text-2xl font-semibold">Müşteriler</h2>
+              <Button onClick={() => setIsAddingCustomer(true)}>
+                <Plus className="mr-2 h-4 w-4" />
+                Yeni Müşteri Ekle
+              </Button>
+            </div>
+
+            {isAddingCustomer && (
+              <CustomerForm
+                newCustomer={newCustomer}
+                setNewCustomer={setNewCustomer}
+                handleAddCustomer={handleAddCustomer}
+                onClose={() => setIsAddingCustomer(false)}
+              />
+            )}
+
+            <Table>
+              <TableCaption>A list of your recent customers.</TableCaption>
+              <TableHeader>
+                <TableRow>
+                  <TableHead className="w-[100px]">Ad Soyad</TableHead>
+                  <TableHead>Email</TableHead>
+                  <TableHead>Telefon</TableHead>
+                  <TableHead className="text-right">İşlemler</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {customers.map((customer) => (
+                  <TableRow key={customer.id}>
+                    <TableCell className="font-medium">{customer.name}</TableCell>
+                    <TableCell>{customer.email}</TableCell>
+                    <TableCell>{customer.phone}</TableCell>
+                    <TableCell className="text-right">
+                      <AlertDialog>
+                        <AlertDialogTrigger asChild>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            className="text-destructive"
+                            onClick={() => setCustomerToDelete(customer.id)}
+                          >
+                            <Trash2 className="mr-2 h-4 w-4" />
+                            Sil
+                          </Button>
+                        </AlertDialogTrigger>
+                        <AlertDialogContent>
+                          <AlertDialogHeader>
+                            <AlertDialogTitle>Emin misiniz?</AlertDialogTitle>
+                            <AlertDialogDescription>
+                              Bu işlem geri alınamaz. Devam etmek istediğinizden emin
+                              misiniz?
+                            </AlertDialogDescription>
+                          </AlertDialogHeader>
+                          <AlertDialogFooter>
+                            <AlertDialogCancel>İptal</AlertDialogCancel>
+                            <AlertDialogAction onClick={handleDeleteCustomer}>
+                              Sil
+                            </AlertDialogAction>
+                          </AlertDialogFooter>
+                        </AlertDialogContent>
+                      </AlertDialog>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+              <TableFooter>
+                <TableRow>
+                  <TableCell colSpan={4}>
+                    Toplam {customers.length} müşteri
+                  </TableCell>
+                </TableRow>
+              </TableFooter>
+            </Table>
+          </TabsContent>
+
+          <TabsContent value="settings">
+            <h2 className="text-2xl font-semibold mb-6">Ayarlar</h2>
+            <p>Ayarlar sayfası</p>
+          </TabsContent>
         </Tabs>
 
         <CustomerForm
-          open={isCustomerDialogOpen}
-          onOpenChange={handleDialogClose}
-          formData={newCustomer}
-          onFormDataChange={setNewCustomer}
-          onSubmit={editingCustomer ? handleUpdateCustomer : handleAddCustomer}
-          onCancel={() => handleDialogClose(false)}
-          isEditing={!!editingCustomer}
+          newCustomer={newCustomer}
+          setNewCustomer={setNewCustomer}
+          handleAddCustomer={handleAddCustomer}
+          onClose={() => setIsAddingCustomer(false)}
         />
 
         <DeleteCustomerDialog
-          customer={customerToDelete}
-          onOpenChange={(open) => !open && setCustomerToDelete(null)}
-          onConfirm={() => {
-            if (customerToDelete) {
-              handleDeleteCustomer(customerToDelete.id);
-              setCustomerToDelete(null);
-            }
-          }}
-          onCancel={() => setCustomerToDelete(null)}
+          isOpen={isDeleteDialogOpen}
+          onClose={() => setIsDeleteDialogOpen(false)}
+          onDelete={handleDeleteCustomer}
         />
 
         <WhatsAppScheduler />
       </div>
     </div>
+  );
+};
+
+interface CustomerFormProps {
+  newCustomer: { name: string; email: string; phone: string };
+  setNewCustomer: React.Dispatch<
+    React.SetStateAction<{ name: string; email: string; phone: string }>
+  >;
+  handleAddCustomer: () => void;
+  onClose: () => void;
+}
+
+const CustomerForm: React.FC<CustomerFormProps> = ({
+  newCustomer,
+  setNewCustomer,
+  handleAddCustomer,
+  onClose,
+}) => {
+  return (
+    <div className="mb-6 p-4 rounded-md bg-secondary/50">
+      <h3 className="text-xl font-semibold mb-4">Yeni Müşteri Ekle</h3>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <Label htmlFor="name">Ad Soyad</Label>
+          <Input
+            type="text"
+            id="name"
+            value={newCustomer.name}
+            onChange={(e) =>
+              setNewCustomer({ ...newCustomer, name: e.target.value })
+            }
+          />
+        </div>
+        <div>
+          <Label htmlFor="email">Email</Label>
+          <Input
+            type="email"
+            id="email"
+            value={newCustomer.email}
+            onChange={(e) =>
+              setNewCustomer({ ...newCustomer, email: e.target.value })
+            }
+          />
+        </div>
+      </div>
+      <div className="mt-4">
+        <Label htmlFor="phone">Telefon</Label>
+        <Input
+          type="tel"
+          id="phone"
+          value={newCustomer.phone}
+          onChange={(e) =>
+            setNewCustomer({ ...newCustomer, phone: e.target.value })
+          }
+        />
+      </div>
+      <div className="mt-4 flex justify-end gap-2">
+        <Button variant="secondary" onClick={onClose}>
+          İptal
+        </Button>
+        <Button onClick={handleAddCustomer}>Ekle</Button>
+      </div>
+    </div>
+  );
+};
+
+interface DeleteCustomerDialogProps {
+  isOpen: boolean;
+  onClose: () => void;
+  onDelete: () => void;
+}
+
+const DeleteCustomerDialog: React.FC<DeleteCustomerDialogProps> = ({
+  isOpen,
+  onClose,
+  onDelete,
+}) => {
+  return (
+    <AlertDialog open={isOpen} onOpenChange={onClose}>
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>Müşteriyi Sil</AlertDialogTitle>
+          <AlertDialogDescription>
+            Bu işlem geri alınamaz. Devam etmek istediğinizden emin misiniz?
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+        <AlertDialogFooter>
+          <AlertDialogCancel onClick={onClose}>İptal</AlertDialogCancel>
+          <AlertDialogAction onClick={onDelete}>Sil</AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
   );
 };
 

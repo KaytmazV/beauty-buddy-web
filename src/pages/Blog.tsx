@@ -1,45 +1,12 @@
 
-import { useState } from "react";
 import { motion } from "framer-motion";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Link } from "react-router-dom";
-
-interface BlogPost {
-  id: number;
-  title: string;
-  description: string;
-  image: string;
-  category: string;
-  date: string;
-  author: string;
-  content?: string;
-  tags?: string[];
-}
-
-const BLOG_POSTS: BlogPost[] = [
-  {
-    id: 1,
-    title: "Saç Boyama Trendleri 2024",
-    description: "Bu yılın en popüler saç renkleri ve teknikleri",
-    image: "https://images.unsplash.com/photo-1605497788044-5a32c7078486",
-    category: "Saç Bakımı",
-    date: "15 Mart 2024",
-    author: "İlayda Bağ",
-    tags: ["Saç", "Trend", "2024"]
-  },
-  {
-    id: 2,
-    title: "Doğal Cilt Bakım Rutini",
-    description: "Evde uygulayabileceğiniz etkili cilt bakım önerileri",
-    image: "https://images.unsplash.com/photo-1598440947619-2c35fc9aa908",
-    category: "Cilt Bakımı",
-    date: "12 Mart 2024",
-    author: "İlayda Bağ",
-    tags: ["Cilt Bakımı", "Doğal", "Rutin"]
-  }
-];
+import { useBlogStore } from "@/store/blogStore";
 
 const Blog = () => {
+  const posts = useBlogStore((state) => state.posts);
+
   return (
     <div className="min-h-screen bg-secondary">
       <section className="py-20 bg-accent">
@@ -62,7 +29,7 @@ const Blog = () => {
       <section className="py-20">
         <div className="container mx-auto px-6">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {BLOG_POSTS.map((post, index) => (
+            {posts.map((post, index) => (
               <motion.div
                 key={post.id}
                 initial={{ opacity: 0, y: 20 }}
