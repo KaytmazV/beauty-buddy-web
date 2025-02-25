@@ -24,18 +24,12 @@ export function CustomerForm({
   onCancel,
   isEditing,
 }: CustomerFormProps) {
-  const handleClose = () => {
-    onCancel();
-    onOpenChange(false);
-  };
-
   return (
-    <Dialog open={open} onOpenChange={handleClose}>
-      <DialogContent 
-        className="sm:max-w-[500px]"
-        onPointerDownOutside={(e) => e.preventDefault()}
-        onInteractOutside={(e) => e.preventDefault()}
-      >
+    <Dialog 
+      open={open} 
+      onOpenChange={onOpenChange}
+    >
+      <DialogContent className="sm:max-w-[500px]">
         <DialogHeader>
           <DialogTitle>
             {isEditing ? "Müşteriyi Düzenle" : "Yeni Müşteri"}
@@ -79,7 +73,7 @@ export function CustomerForm({
           </div>
         </div>
         <DialogFooter>
-          <Button variant="outline" onClick={handleClose}>
+          <Button variant="outline" onClick={onCancel}>
             İptal
           </Button>
           <Button onClick={onSubmit}>

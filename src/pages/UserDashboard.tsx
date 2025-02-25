@@ -50,7 +50,7 @@ const UserDashboard = () => {
     phone: "",
     treatments: "",
   });
-  
+
   const handleAddCustomer = () => {
     const customer: Customer = {
       id: customers.length + 1,
@@ -113,7 +113,6 @@ const UserDashboard = () => {
   };
 
   const handleCreateAppointment = (customer: Customer) => {
-    // Randevu sekmesine geçiş yapalım
     const appointmentTab = document.querySelector('[value="appointments"]') as HTMLElement;
     if (appointmentTab) {
       appointmentTab.click();
@@ -123,6 +122,14 @@ const UserDashboard = () => {
       title: "Randevu oluştur",
       description: `${customer.name} için randevu oluşturuluyor...`,
     });
+  };
+
+  const handleDialogClose = (open: boolean) => {
+    if (!open) {
+      setIsCustomerDialogOpen(false);
+      setEditingCustomer(null);
+      setNewCustomer({ name: "", phone: "", treatments: "" });
+    }
   };
 
   return (
@@ -204,21 +211,15 @@ const UserDashboard = () => {
           </TabsContent>
         </Tabs>
 
-        {isCustomerDialogOpen && (
-          <CustomerForm
-            open={isCustomerDialogOpen}
-            onOpenChange={setIsCustomerDialogOpen}
-            formData={newCustomer}
-            onFormDataChange={setNewCustomer}
-            onSubmit={editingCustomer ? handleUpdateCustomer : handleAddCustomer}
-            onCancel={() => {
-              setIsCustomerDialogOpen(false);
-              setEditingCustomer(null);
-              setNewCustomer({ name: "", phone: "", treatments: "" });
-            }}
-            isEditing={!!editingCustomer}
-          />
-        )}
+        <CustomerForm
+          open={isCustomerDialogOpen}
+          onOpenChange={handleDialogClose}
+          formData={newCustomer}
+          onFormDataChange={setNewCustomer}
+          onSubmit={editingCustomer ? handleUpdateCustomer : handleAddCustomer}
+          onCancel={() => handleDialogClose(false)}
+          isEditing={!!editingCustomer}
+        />
 
         <DeleteCustomerDialog
           customer={customerToDelete}
