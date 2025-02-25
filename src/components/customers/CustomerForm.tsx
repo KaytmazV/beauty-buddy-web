@@ -1,9 +1,8 @@
 
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Plus } from "lucide-react";
 import { CustomerFormData } from "@/types/customer";
 
 interface CustomerFormProps {
@@ -25,9 +24,18 @@ export function CustomerForm({
   onCancel,
   isEditing,
 }: CustomerFormProps) {
+  const handleClose = () => {
+    onCancel();
+    onOpenChange(false);
+  };
+
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[500px]">
+    <Dialog open={open} onOpenChange={handleClose}>
+      <DialogContent 
+        className="sm:max-w-[500px]"
+        onPointerDownOutside={(e) => e.preventDefault()}
+        onInteractOutside={(e) => e.preventDefault()}
+      >
         <DialogHeader>
           <DialogTitle>
             {isEditing ? "Müşteriyi Düzenle" : "Yeni Müşteri"}
@@ -71,7 +79,7 @@ export function CustomerForm({
           </div>
         </div>
         <DialogFooter>
-          <Button variant="outline" onClick={onCancel}>
+          <Button variant="outline" onClick={handleClose}>
             İptal
           </Button>
           <Button onClick={onSubmit}>
