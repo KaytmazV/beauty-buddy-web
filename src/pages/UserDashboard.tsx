@@ -1,6 +1,6 @@
 
 import { useState } from "react";
-import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -20,6 +20,7 @@ import { useCustomerStore } from "@/store/customerStore";
 import { useBlogStore, type BlogPost } from "@/store/blogStore";
 
 const UserDashboard = () => {
+  const navigate = useNavigate();
   const { toast } = useToast();
   const [isAddingPost, setIsAddingPost] = useState(false);
   const [newPost, setNewPost] = useState<Partial<BlogPost>>({
@@ -94,6 +95,9 @@ const UserDashboard = () => {
       title: "Başarılı",
       description: "Blog yazısı başarıyla eklendi.",
     });
+
+    // Blog sayfasına yönlendir
+    navigate("/blog");
   };
 
   return (
