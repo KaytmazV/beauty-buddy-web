@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Calendar } from "@/components/ui/calendar";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -12,7 +13,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
-import { MoreVertical, Plus } from "lucide-react";
+import { MoreVertical, Plus, FileEdit } from "lucide-react";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -41,7 +42,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Toast } from "@/components/ui/toast";
 import { Toaster } from "@/components/ui/toaster";
-import { WhatsAppSupport } from "@/components/WhatsAppSupport";
+import WhatsAppSupport from "@/components/WhatsAppSupport";
 import WhatsAppScheduler from "@/components/WhatsAppScheduler";
 
 const UserDashboard = () => {
