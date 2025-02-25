@@ -12,7 +12,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
-import { MoreVertical, Plus, FileEdit, Trash2 } from "lucide-react";
+import { MoreVertical, Plus, FileEdit, Trash2, Calendar as CalendarIcon } from "lucide-react";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -146,7 +146,7 @@ const UserDashboard = () => {
     });
   };
 
-  // Müşteri interface'i
+  // Müşteri states ve interface
   interface Customer {
     id: number;
     name: string;
@@ -156,7 +156,6 @@ const UserDashboard = () => {
     treatments: string[];
   }
 
-  // Müşteri listesi için state
   const [customers, setCustomers] = useState<Customer[]>([
     {
       id: 1,
@@ -184,15 +183,15 @@ const UserDashboard = () => {
     }
   ]);
 
-  // Yeni müşteri için state
   const [isCustomerDialogOpen, setIsCustomerDialogOpen] = useState(false);
+  const [editingCustomer, setEditingCustomer] = useState<Customer | null>(null);
   const [newCustomer, setNewCustomer] = useState({
     name: "",
     phone: "",
     treatments: "",
   });
 
-  // Yeni müşteri ekleme fonksiyonu
+  // Müşteri ekleme
   const handleAddCustomer = () => {
     const customer: Customer = {
       id: customers.length + 1,
@@ -209,6 +208,61 @@ const UserDashboard = () => {
     toast({
       title: "Müşteri eklendi",
       description: "Yeni müşteri başarıyla eklendi.",
+    });
+  };
+
+  // Müşteri düzenleme
+  const handleEditCustomer = (customer: Customer) => {
+    setEditingCustomer(customer);
+    setNewCustomer({
+      name: customer.name,
+      phone: customer.phone,
+      treatments: customer.treatments.join(", "),
+    });
+    setIsCustomerDialogOpen(true);
+  };
+
+  // Müşteri güncelleme
+  const handleUpdateCustomer = () => {
+    if (!editingCustomer) return;
+
+    const updatedCustomer: Customer = {
+      ...editingCustomer,
+      name: newCustomer.name,
+      phone: newCustomer.phone,
+      treatments: newCustomer.treatments.split(",").map(t => t.trim()),
+    };
+
+    setCustomers(customers.map(c => 
+      c.id === editingCustomer.id ? updatedCustomer : c
+    ));
+
+    setIsCustomerDialogOpen(false);
+    setEditingCustomer(null);
+    setNewCustomer({ name: "", phone: "", treatments: "" });
+
+    toast({
+      title: "Müşteri güncellendi",
+      description: "Müşteri bilgileri başarıyla güncellendi.",
+    });
+  };
+
+  // Müşteri silme
+  const handleDeleteCustomer = (id: number) => {
+    setCustomers(customers.filter(c => c.id !== id));
+    toast({
+      title: "Müşteri silindi",
+      description: "Müşteri başarıyla silindi.",
+    });
+  };
+
+  // Randevu oluşturma
+  const handleCreateAppointment = (customer: Customer) => {
+    // Randevu sekmesine geç
+    document.querySelector('[value="appointments"]')?.click();
+    toast({
+      title: "Randevu oluştur",
+      description: `${customer.name} için randevu oluşturuluyor...`,
     });
   };
 
@@ -322,7 +376,10 @@ const UserDashboard = () => {
           <TabsContent value="customers">
             <div className="flex justify-between items-center mb-6">
               <h2 className="text-2xl font-semibold">Müşteri Listesi</h2>
-              <Button onClick={() => setIsCustomerDialogOpen(true)}>
+              <Button onClick={() => {
+                setEditingCustomer(null);
+                setIsCustomerDialogOpen(true);
+              }}>
                 <Plus className="mr-2 h-4 w-4" />
                 Yeni Müşteri
               </Button>
@@ -373,9 +430,41 @@ const UserDashboard = () => {
                             </Button>
                           </DropdownMenuTrigger>
                           <DropdownMenuContent align="end">
-                            <DropdownMenuItem>Düzenle</DropdownMenuItem>
-                            <DropdownMenuItem>Randevu Oluştur</DropdownMenuItem>
-                            <DropdownMenuItem className="text-destructive">Sil</DropdownMenuItem>
+                            <DropdownMenuItem onClick={() => handleEditCustomer(customer)}>
+                              <FileEdit className="mr-2 h-4 w-4" />
+                              Düzenle
+                            </DropdownMenuItem>
+                            <DropdownMenuItem onClick={() => handleCreateAppointment(customer)}>
+                              <CalendarIcon className="mr-2 h-4 w-4" />
+                              Randevu Oluştur
+                            </DropdownMenuItem>
+                            <DropdownMenuSeparator />
+                            <AlertDialog>
+                              <AlertDialogTrigger asChild>
+                                <DropdownMenuItem className="text-destructive" onSelect={(e) => e.preventDefault()}>
+                                  <Trash2 className="mr-2 h-4 w-4" />
+                                  Sil
+                                </DropdownMenuItem>
+                              </AlertDialogTrigger>
+                              <AlertDialogContent>
+                                <AlertDialogHeader>
+                                  <AlertDialogTitle>Müşteriyi sil</AlertDialogTitle>
+                                  <AlertDialogDescription>
+                                    {customer.name} isimli müşteriyi silmek istediğinize emin misiniz?
+                                    Bu işlem geri alınamaz.
+                                  </AlertDialogDescription>
+                                </AlertDialogHeader>
+                                <AlertDialogFooter>
+                                  <AlertDialogCancel>İptal</AlertDialogCancel>
+                                  <AlertDialogAction
+                                    onClick={() => handleDeleteCustomer(customer.id)}
+                                    className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                                  >
+                                    Sil
+                                  </AlertDialogAction>
+                                </AlertDialogFooter>
+                              </AlertDialogContent>
+                            </AlertDialog>
                           </DropdownMenuContent>
                         </DropdownMenu>
                       </div>
@@ -478,12 +567,12 @@ const UserDashboard = () => {
           </AlertDialogContent>
         </AlertDialog>
 
-        {/* Yeni Müşteri Ekleme Dialog */}
+        {/* Müşteri Ekleme/Düzenleme Dialog */}
         <AlertDialog open={isCustomerDialogOpen} onOpenChange={setIsCustomerDialogOpen}>
           <AlertDialogContent className="sm:max-w-[500px]">
             <AlertDialogHeader>
               <AlertDialogTitle>
-                Yeni Müşteri
+                {editingCustomer ? "Müşteriyi Düzenle" : "Yeni Müşteri"}
               </AlertDialogTitle>
             </AlertDialogHeader>
             <div className="grid gap-4 py-4">
@@ -522,8 +611,8 @@ const UserDashboard = () => {
             </div>
             <AlertDialogFooter>
               <AlertDialogCancel>İptal</AlertDialogCancel>
-              <AlertDialogAction onClick={handleAddCustomer}>
-                Ekle
+              <AlertDialogAction onClick={editingCustomer ? handleUpdateCustomer : handleAddCustomer}>
+                {editingCustomer ? "Güncelle" : "Ekle"}
               </AlertDialogAction>
             </AlertDialogFooter>
           </AlertDialogContent>
