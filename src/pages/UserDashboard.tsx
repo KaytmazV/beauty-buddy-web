@@ -74,19 +74,12 @@ const UserDashboard = () => {
       return;
     }
 
-    const currentDate = new Date().toLocaleDateString('tr-TR', {
-      day: 'numeric',
-      month: 'long',
-      year: 'numeric'
-    });
-
     addPost({
       title: newPost.title,
       description: newPost.description,
       image: newPost.image || "https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7",
       category: newPost.category,
       author: "İlayda Bağ",
-      date: currentDate,
       tags: newPost.tags || [],
     });
 
