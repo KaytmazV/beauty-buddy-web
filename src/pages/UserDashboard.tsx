@@ -1,783 +1,173 @@
-import { useState } from "react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { Button } from "@/components/ui/button";
-import { Calendar, Phone, Search, Eye, Clock, CheckCircle2, FileEdit, Send, Bell, List, Users, MessagesSquare } from "lucide-react";
-import { Input } from "@/components/ui/input";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { Textarea } from "@/components/ui/textarea";
-import WhatsAppSupport from "@/components/WhatsAppSupport";
-import { useToast } from "@/hooks/use-toast";
-import { format, addMonths } from "date-fns";
-import { tr } from "date-fns/locale";
 
-interface Customer {
-  id: string;
-  name: string;
-  phone: string;
-  appointmentDate: string;
-  service: string;
-  status: "pending" | "completed";
-  notes?: string;
-  nextAppointmentDate?: string;
-}
+import { useState } from "react";
+import { Calendar } from "@/components/ui/calendar";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useToast } from "@/components/ui/use-toast";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Button } from "@/components/ui/button";
+import { MoreVertical, Plus, FileEdit } from "lucide-react";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Separator } from "@/components/ui/separator";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Switch } from "@/components/ui/switch";
+import { Slider } from "@/components/ui/slider";
+import { Checkbox } from "@/components/ui/checkbox";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Command, CommandDialog, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList, CommandSeparator } from "@/components/ui/command";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Toast } from "@/components/ui/toast";
+import { Toaster } from "@/components/ui/toaster";
+import WhatsAppSupport from "@/components/WhatsAppSupport";
+import WhatsAppScheduler from "@/components/WhatsAppScheduler";
 
 const UserDashboard = () => {
-  const { toast } = useToast();
-  const [customers, setCustomers] = useState<Customer[]>([
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [newImageName, setNewImageName] = useState("");
+  const [newImageDescription, setNewImageDescription] = useState("");
+  const [images, setImages] = useState([
     {
-      id: "1",
-      name: "Ayşe Yılmaz",
-      phone: "+90 555 111 2233",
-      appointmentDate: "2024-03-20",
-      service: "Lazer Epilasyon",
-      status: "pending",
-      notes: "Hassas cilt, düşük güç kullanılacak",
-      nextAppointmentDate: "2024-05-20"
+      id: 1,
+      name: "Manikür",
+      description: "Profesyonel manikür hizmeti",
+      url: "https://via.placeholder.com/150",
     },
     {
-      id: "2",
-      name: "Fatma Demir",
-      phone: "+90 555 444 5566",
-      appointmentDate: "2024-03-15",
-      service: "Saç Bakımı",
-      status: "completed",
-      notes: "Saç boyası alerjisi var",
-      nextAppointmentDate: "2024-04-15"
+      id: 2,
+      name: "Pedikür",
+      description: "Rahatlatıcı pedikür deneyimi",
+      url: "https://via.placeholder.com/150",
     },
-    {
-      id: "3",
-      name: "Zeynep Kaya",
-      phone: "+90 555 777 8899",
-      appointmentDate: "2024-03-25",
-      service: "Cilt Bakımı",
-      status: "pending",
-      nextAppointmentDate: "2024-04-25"
-    }
   ]);
 
-  const [searchTerm, setSearchTerm] = useState("");
-  const [statusFilter, setStatusFilter] = useState<"all" | "pending" | "completed">("all");
-  const [newCustomer, setNewCustomer] = useState({ name: "", phone: "", appointmentDate: "", service: "" });
-  const [editingNotes, setEditingNotes] = useState<{ id: string; notes: string } | null>(null);
-
-  const filteredCustomers = customers.filter(customer => {
-    const matchesSearch = customer.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      customer.phone.includes(searchTerm);
-    const matchesStatus = statusFilter === "all" ? true : customer.status === statusFilter;
-    return matchesSearch && matchesStatus;
-  });
-
-  const handleAddCustomer = () => {
-    if (newCustomer.name && newCustomer.phone && newCustomer.appointmentDate && newCustomer.service) {
-      const appointmentDate = new Date(newCustomer.appointmentDate);
-      const nextAppointmentDate = format(addMonths(appointmentDate, 1), "yyyy-MM-dd");
-      
-      const customer: Customer = {
-        id: (customers.length + 1).toString(),
-        ...newCustomer,
-        status: "pending",
-        nextAppointmentDate
-      };
-      setCustomers([...customers, customer]);
-      setNewCustomer({ name: "", phone: "", appointmentDate: "", service: "" });
-      toast({
-        title: "Müşteri eklendi",
-        description: "Yeni müşteri başarıyla eklendi."
-      });
-    }
+  const handleOpenDialog = () => {
+    setIsDialogOpen(true);
   };
 
-  const updateCustomerNotes = (customerId: string, notes: string) => {
-    setCustomers(customers.map(customer => 
-      customer.id === customerId ? { ...customer, notes } : customer
-    ));
-    setEditingNotes(null);
-    toast({
-      title: "Not güncellendi",
-      description: "Müşteri notu başarıyla güncellendi."
-    });
+  const handleCloseDialog = () => {
+    setIsDialogOpen(false);
   };
 
-  const formatDate = (dateString: string) => {
-    return format(new Date(dateString), "d MMMM yyyy, EEEE", { locale: tr });
+  const handleAddImage = () => {
+    const newImage = {
+      id: images.length + 1,
+      name: newImageName,
+      description: newImageDescription,
+      url: "https://via.placeholder.com/150",
+    };
+    setImages([...images, newImage]);
+    handleCloseDialog();
   };
-
-  const handleWhatsAppMessage = () => {
-    const message = encodeURIComponent("Merhaba, randevunuz hakkında bilgi vermek istiyorum.");
-    const phoneNumber = "+905551112233";
-    window.open(`https://wa.me/${phoneNumber}?text=${message}`, '_blank');
-    
-    toast({
-      title: "WhatsApp açıldı",
-      description: "Mesaj gönderimi için WhatsApp açıldı."
-    });
-  };
-
-  const handleSendSMS = () => {
-    toast({
-      title: "SMS Gönderildi",
-      description: "Randevu hatırlatma SMS'i gönderildi."
-    });
-  };
-
-  const handleSendBulkSMS = () => {
-    const pendingCustomers = customers.filter(customer => customer.status === "pending");
-    const customerCount = pendingCustomers.length;
-    
-    if (customerCount > 0) {
-      toast({
-        title: "Toplu SMS Gönderildi",
-        description: `${customerCount} müşteriye randevu hatırlatma SMS'i gönderildi.`
-      });
-    } else {
-      toast({
-        title: "Dikkat",
-        description: "Bekleyen randevusu olan müşteri bulunamadı."
-      });
-    }
-  };
-
-  const handleMarkAsCompleted = () => {
-    if (customers.length > 0) {
-      const updatedCustomers = customers.map(customer => {
-        if (customer.status === "pending") {
-          return { ...customer, status: "completed" as const };
-        }
-        return customer;
-      });
-      
-      setCustomers(updatedCustomers);
-      
-      toast({
-        title: "Durum Güncellendi",
-        description: "Seçili randevular tamamlandı olarak işaretlendi."
-      });
-    }
-  };
-
-  const handleUpdateStatus = () => {
-    toast({
-      title: "Durum Güncelleme",
-      description: "Randevu durumu güncellendi."
-    });
-  };
-
-  const handleCustomerWhatsApp = (phone: string) => {
-    const formattedPhone = phone.replace(/\s+/g, ''); // Boşlukları kaldır
-    const message = encodeURIComponent("Merhaba, randevunuz hakkında bilgi vermek istiyorum.");
-    window.open(`https://wa.me/${formattedPhone}?text=${message}`, '_blank');
-    
-    toast({
-      title: "WhatsApp açıldı",
-      description: "Mesaj gönderimi için WhatsApp açıldı."
-    });
-  };
-
-  const handleUpdateCustomerStatus = (customerId: string, newStatus: "pending" | "completed") => {
-    const updatedCustomers = customers.map(customer => 
-      customer.id === customerId ? { ...customer, status: newStatus } : customer
-    );
-    
-    setCustomers(updatedCustomers);
-    
-    toast({
-      title: "Durum Güncellendi",
-      description: `Müşteri durumu ${newStatus === "completed" ? "tamamlandı" : "bekliyor"} olarak güncellendi.`
-    });
-  };
-
-  const handleExportCustomers = () => {
-    const data = customers.map(customer => ({
-      Ad: customer.name,
-      Telefon: customer.phone,
-      Randevu: format(new Date(customer.appointmentDate), "d MMMM yyyy", { locale: tr }),
-      Hizmet: customer.service,
-      Durum: customer.status === "pending" ? "Bekliyor" : "Tamamlandı",
-      Not: customer.notes || ""
-    }));
-
-    const csvContent = "data:text/csv;charset=utf-8," + 
-      Object.keys(data[0]).join(",") + "\n" +
-      data.map(row => Object.values(row).join(",")).join("\n");
-
-    const encodedUri = encodeURI(csvContent);
-    const link = document.createElement("a");
-    link.setAttribute("href", encodedUri);
-    link.setAttribute("download", `musteriler-${format(new Date(), "dd-MM-yyyy")}.csv`);
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-
-    toast({
-      title: "Müşteri Listesi İndirildi",
-      description: "Müşteri bilgileri CSV formatında indirildi."
-    });
-  };
-
-  const handleTodayAppointments = () => {
-    const today = format(new Date(), "yyyy-MM-dd");
-    const todayAppointments = customers.filter(
-      customer => customer.appointmentDate === today && customer.status === "pending"
-    );
-
-    if (todayAppointments.length > 0) {
-      toast({
-        title: "Bugünkü Randevular",
-        description: `Bugün ${todayAppointments.length} randevunuz var.`
-      });
-    } else {
-      toast({
-        title: "Bugünkü Randevular",
-        description: "Bugün için planlanmış randevu bulunmuyor."
-      });
-    }
-  };
-
-  // Yeni state ve fonksiyonlar için ekleme
-  const [selectedImage, setSelectedImage] = useState<File | null>(null);
-  const [previewUrl, setPreviewUrl] = useState<string>("");
-  const [currentImageId, setCurrentImageId] = useState<string | null>(null);
-
-  const handleImageSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      setSelectedImage(file);
-      // Seçilen görselin önizlemesini oluştur
-      const imageUrl = URL.createObjectURL(file);
-      setPreviewUrl(imageUrl);
-    }
-  };
-
-  const handleImageUpload = (replaceImageId?: string) => {
-    if (selectedImage) {
-      // Burada gerçek bir upload işlemi yapılabilir
-      toast({
-        title: replaceImageId ? "Görsel Güncellendi" : "Görsel Yüklendi",
-        description: replaceImageId 
-          ? "Seçilen görsel başarıyla güncellendi."
-          : "Yeni görsel başarıyla yüklendi."
-      });
-      setSelectedImage(null);
-      setPreviewUrl("");
-      setCurrentImageId(null);
-    }
-  };
-
-  const handleReplaceImage = (imageId: string) => {
-    setCurrentImageId(imageId);
-    // Input'u programmatik olarak tetikle
-    const input = document.getElementById("imageUpload") as HTMLInputElement;
-    if (input) {
-      input.click();
-    }
-  };
-
-  const websiteImages = [
-    {
-      id: "1",
-      path: "/lovable-uploads/2e116253-a86d-444d-ac71-a4192e8bd3ca.png",
-      title: "Ana Sayfa Banner"
-    },
-    {
-      id: "2",
-      path: "/lovable-uploads/2e54b248-c48c-4bdf-9e70-3f7000d0a4a4.png",
-      title: "Hakkımızda Görseli"
-    },
-    {
-      id: "3",
-      path: "/lovable-uploads/57c192c4-a8eb-4747-8a7d-e90308a924db.png",
-      title: "Hizmetler Banner"
-    },
-    {
-      id: "4",
-      path: "/lovable-uploads/645106e4-0ba1-406c-81b7-809eefae0292.png",
-      title: "İletişim Banner"
-    }
-  ];
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-primary/5 via-secondary/10 to-accent/5 pt-24">
       <WhatsAppSupport />
       
       <div className="container mx-auto px-4">
-        <div className="text-center mb-12">
-          <h1 className="text-4xl font-light mb-2">İlayda Bağ</h1>
-          <p className="text-2xl font-light text-muted-foreground mb-2">Güzellik Uzmanı</p>
-          <div className="w-20 h-1 bg-gradient-to-r from-primary/80 to-accent mx-auto mb-8"></div>
-          <h2 className="text-3xl font-light">Yönetim Paneli</h2>
-          <p className="text-muted-foreground">Müşterilerinizi ve işlemlerinizi kolayca yönetin</p>
+        <div className="mb-8 flex items-center justify-between">
+          <div>
+            <h1 className="scroll-m-20 text-3xl font-semibold tracking-tight transition-colors first:mt-0">
+              Hoş Geldiniz, İlayda
+            </h1>
+            <p className="text-sm text-muted-foreground">
+              İlayda Bağ Güzellik Salonu Yönetim Paneli
+            </p>
+          </div>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" className="h-8 w-8 p-0">
+                <span className="sr-only">Menüyü aç</span>
+                <MoreVertical className="h-4 w-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuLabel>Hesap</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem>Ayarlar</DropdownMenuItem>
+              <DropdownMenuItem>Çıkış Yap</DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
 
         <div className="grid gap-6 md:grid-cols-2">
-          {/* Hızlı İşlemler */}
-          <Card className="border-none shadow-lg bg-card/50 backdrop-blur-sm">
+          <Card>
             <CardHeader>
-              <CardTitle className="text-xl font-semibold flex items-center gap-2">
-                <Send className="w-5 h-5 text-primary" />
-                Hızlı İşlemler
-              </CardTitle>
-              <CardDescription>Hızlı işlemler ve bildirimler</CardDescription>
+              <CardTitle>Hızlı İşlemler</CardTitle>
             </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="grid grid-cols-2 gap-2">
-                <Button 
-                  variant="outline" 
-                  className="flex items-center gap-2"
-                  onClick={handleWhatsAppMessage}
-                >
-                  <MessagesSquare className="w-4 h-4" />
-                  WhatsApp Mesajı
-                </Button>
-                <Button 
-                  variant="outline" 
-                  className="flex items-center gap-2"
-                  onClick={handleSendSMS}
-                >
-                  <Bell className="w-4 h-4" />
-                  SMS Hatırlatma
-                </Button>
-                <Button 
-                  variant="outline" 
-                  className="flex items-center gap-2"
-                  onClick={handleTodayAppointments}
-                >
-                  <Calendar className="w-4 h-4" />
-                  Bugünkü Randevular
-                </Button>
-                <Button 
-                  variant="outline" 
-                  className="flex items-center gap-2"
-                  onClick={handleExportCustomers}
-                >
-                  <List className="w-4 h-4" />
-                  Müşteri Listesi İndir
-                </Button>
-                <Button 
-                  variant="outline" 
-                  className="flex items-center gap-2 col-span-2"
-                  onClick={handleSendBulkSMS}
-                >
-                  <Users className="w-4 h-4" />
-                  Toplu SMS Gönder
-                </Button>
-              </div>
+            <CardContent className="grid gap-4">
+              <Button>Yeni Randevu Ekle</Button>
+              <Button>Müşteri Ara</Button>
+              <Button>Hizmet Ekle</Button>
             </CardContent>
           </Card>
 
-          {/* Takvim Görünümü */}
-          <Card className="border-none shadow-lg bg-card/50 backdrop-blur-sm">
+          <Card>
             <CardHeader>
-              <CardTitle className="text-xl font-semibold flex items-center gap-2">
-                <Calendar className="w-5 h-5 text-primary" />
-                Takvim Görünümü
-              </CardTitle>
-              <CardDescription>Randevu takvimi ve planlaması</CardDescription>
+              <CardTitle>Takvim</CardTitle>
             </CardHeader>
-            <CardContent>
-              {/* Basit takvim görünümü */}
-              <div className="grid grid-cols-7 gap-1 text-center text-sm">
-                {["Pzt", "Sal", "Çar", "Per", "Cum", "Cmt", "Paz"].map((day) => (
-                  <div key={day} className="p-2 text-muted-foreground font-medium">
-                    {day}
-                  </div>
-                ))}
-                {Array.from({ length: 31 }, (_, i) => (
-                  <Button
-                    key={i}
-                    variant="ghost"
-                    className="p-2 h-12 hover:bg-accent/20"
-                  >
-                    {i + 1}
-                  </Button>
-                ))}
-              </div>
+            <CardContent className="grid gap-4">
+              <Calendar />
             </CardContent>
           </Card>
         </div>
 
-        {/* Görsel Yönetimi Kartı */}
-        <Card className="border-none shadow-lg bg-card/50 backdrop-blur-sm mt-6">
-          <CardHeader>
-            <div className="flex items-center justify-between">
-              <div>
-                <CardTitle className="text-2xl bg-gradient-to-r from-primary/80 to-accent bg-clip-text text-transparent">
-                  Görsel Yönetimi
-                </CardTitle>
-                <CardDescription>
-                  Site görsellerini düzenleyin ve yeni görseller ekleyin
-                </CardDescription>
-              </div>
-            </div>
-          </CardHeader>
-          
-          <CardContent>
-            <div className="space-y-8">
-              <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                {websiteImages.map((image) => (
-                  <div key={image.id} className="space-y-2">
-                    <div className="relative group aspect-video">
-                      <img
-                        src={image.path}
-                        alt={image.title}
-                        className="w-full h-full object-cover rounded-lg"
-                      />
-                      <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity rounded-lg flex items-center justify-center">
-                        <Button 
-                          variant="ghost" 
-                          size="sm" 
-                          className="text-white"
-                          onClick={() => handleReplaceImage(image.id)}
-                        >
-                          <FileEdit className="w-4 h-4 mr-2" />
-                          Değiştir
-                        </Button>
-                      </div>
-                    </div>
-                    <p className="text-sm font-medium text-center">{image.title}</p>
-                  </div>
-                ))}
-              </div>
+        {/* WhatsApp Planlayıcı */}
+        <div className="mt-6">
+          <WhatsAppScheduler />
+        </div>
 
-              {/* Görsel Yükleme Modal/Preview */}
-              {(selectedImage || previewUrl) && (
-                <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-                  <Card className="w-full max-w-2xl">
-                    <CardHeader>
-                      <CardTitle>Görsel Önizleme</CardTitle>
-                      <CardDescription>
-                        Seçtiğiniz görseli kontrol edin ve onaylayın
-                      </CardDescription>
-                    </CardHeader>
-                    <CardContent className="space-y-4">
-                      <div className="aspect-video w-full bg-accent/5 rounded-lg overflow-hidden">
-                        {previewUrl && (
-                          <img
-                            src={previewUrl}
-                            alt="Önizleme"
-                            className="w-full h-full object-contain"
-                          />
-                        )}
-                      </div>
-                      <div className="flex gap-2 justify-end">
-                        <Button
-                          variant="outline"
-                          onClick={() => {
-                            setSelectedImage(null);
-                            setPreviewUrl("");
-                            setCurrentImageId(null);
-                          }}
-                        >
-                          İptal
-                        </Button>
-                        <Button
-                          onClick={() => handleImageUpload(currentImageId)}
-                          className="bg-accent hover:bg-accent/90"
-                        >
-                          {currentImageId ? "Görseli Güncelle" : "Görseli Yükle"}
-                        </Button>
-                      </div>
-                    </CardContent>
-                  </Card>
-                </div>
-              )}
-
-              {/* Gizli dosya input'u */}
-              <input
-                type="file"
-                accept="image/*"
-                onChange={handleImageSelect}
-                className="hidden"
-                id="imageUpload"
-              />
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Müşteri Listesi */}
-        <Card className="border-none shadow-lg bg-card/50 backdrop-blur-sm mt-6">
-          <CardHeader>
-            <div className="flex items-center justify-between">
-              <div>
-                <CardTitle className="text-2xl bg-gradient-to-r from-primary/80 to-accent bg-clip-text text-transparent">
-                  Müşteriler
-                </CardTitle>
-                <CardDescription>
-                  Tüm müşterileriniz ve işlem bilgileri
-                </CardDescription>
-              </div>
-              <Dialog>
-                <DialogTrigger asChild>
-                  <Button className="bg-accent hover:bg-accent/90">
-                    <Calendar className="mr-2 h-4 w-4" />
-                    Yeni Müşteri
-                  </Button>
-                </DialogTrigger>
-                <DialogContent className="sm:max-w-[425px]">
-                  <DialogHeader>
-                    <DialogTitle className="text-xl font-semibold">Yeni Müşteri Ekle</DialogTitle>
-                  </DialogHeader>
-                  <div className="space-y-4 mt-4">
-                    <Input
-                      placeholder="Müşteri Adı"
-                      value={newCustomer.name}
-                      onChange={(e) => setNewCustomer({ ...newCustomer, name: e.target.value })}
-                      className="bg-background/50"
-                    />
-                    <Input
-                      placeholder="Telefon Numarası"
-                      value={newCustomer.phone}
-                      onChange={(e) => setNewCustomer({ ...newCustomer, phone: e.target.value })}
-                      className="bg-background/50"
-                    />
-                    <Input
-                      type="date"
-                      value={newCustomer.appointmentDate}
-                      onChange={(e) => setNewCustomer({ ...newCustomer, appointmentDate: e.target.value })}
-                      className="bg-background/50"
-                    />
-                    <Input
-                      placeholder="Hizmet"
-                      value={newCustomer.service}
-                      onChange={(e) => setNewCustomer({ ...newCustomer, service: e.target.value })}
-                      className="bg-background/50"
-                    />
-                    <Button onClick={handleAddCustomer} className="w-full bg-accent hover:bg-accent/90">
-                      Ekle
-                    </Button>
-                  </div>
-                </DialogContent>
-              </Dialog>
-            </div>
-            
-            <div className="mt-6 space-y-4">
-              <div className="relative">
-                <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
-                <Input
-                  placeholder="Müşteri adı veya telefon numarası ile ara..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="pl-8 bg-background/50"
-                />
-              </div>
-              
-              <div className="flex gap-2">
-                <Button
-                  variant={statusFilter === "all" ? "default" : "outline"}
-                  onClick={() => setStatusFilter("all")}
-                  size="sm"
-                  className={statusFilter === "all" ? "bg-accent hover:bg-accent/90" : ""}
-                >
-                  Tümü
-                </Button>
-                <Button
-                  variant={statusFilter === "pending" ? "default" : "outline"}
-                  onClick={() => setStatusFilter("pending")}
-                  size="sm"
-                  className={`gap-1 ${statusFilter === "pending" ? "bg-primary hover:bg-primary/90" : ""}`}
-                >
-                  <Clock className="h-3 w-3" />
-                  Bekleyen
-                </Button>
-                <Button
-                  variant={statusFilter === "completed" ? "default" : "outline"}
-                  onClick={() => setStatusFilter("completed")}
-                  size="sm"
-                  className={`gap-1 ${statusFilter === "completed" ? "bg-green-600 hover:bg-green-600/90" : ""}`}
-                >
-                  <CheckCircle2 className="h-3 w-3" />
-                  Tamamlanan
-                </Button>
-              </div>
-            </div>
-          </CardHeader>
-          
-          <CardContent>
-            <ScrollArea className="h-[400px] w-full">
-              <div className="space-y-3">
-                {filteredCustomers.map((customer) => (
-                  <div
-                    key={customer.id}
-                    className="flex items-center justify-between p-3 rounded-lg transition-all hover:scale-[1.01] border border-border/50 hover:border-accent/30 hover:bg-accent/5 bg-card/50 backdrop-blur-sm"
-                  >
-                    <div className="flex items-center gap-3">
-                      <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary/10">
-                        {customer.name.charAt(0)}
-                      </div>
-                      <div>
-                        <h3 className="text-sm font-medium">{customer.name}</h3>
-                        <div className="flex items-center gap-4 text-xs text-muted-foreground mt-1">
-                          <span className="flex items-center">
-                            <Phone className="mr-1 h-3 w-3" />
-                            {customer.phone}
-                          </span>
-                          <span className="flex items-center">
-                            <Calendar className="mr-1 h-3 w-3" />
-                            {formatDate(customer.appointmentDate)}
-                          </span>
-                          {customer.status === "pending" ? (
-                            <span className="flex items-center text-primary">
-                              <Clock className="mr-1 h-3 w-3" />
-                              Bekliyor
-                            </span>
-                          ) : (
-                            <span className="flex items-center text-green-600">
-                              <CheckCircle2 className="mr-1 h-3 w-3" />
-                              Tamamlandı
-                            </span>
-                          )}
-                          {customer.notes && (
-                            <span className="flex items-center text-blue-500">
-                              <FileEdit className="mr-1 h-3 w-3" />
-                              Not var
-                            </span>
-                          )}
-                        </div>
-                      </div>
-                    </div>
-                    
-                    <div className="flex items-center gap-2">
-                      <Button 
-                        variant="ghost" 
-                        size="sm" 
-                        className="h-7 px-3 text-xs hover:bg-green-500/10 hover:text-green-500"
-                        onClick={() => handleCustomerWhatsApp(customer.phone)}
-                      >
-                        <MessagesSquare className="h-3 w-3 mr-1" />
-                        WhatsApp
-                      </Button>
-
-                      {customer.status === "pending" ? (
-                        <Button 
-                          variant="ghost" 
-                          size="sm" 
-                          className="h-7 px-3 text-xs hover:bg-green-600/10 hover:text-green-600"
-                          onClick={() => handleUpdateCustomerStatus(customer.id, "completed")}
-                        >
-                          <CheckCircle2 className="h-3 w-3 mr-1" />
-                          Tamamlandı
-                        </Button>
-                      ) : (
-                        <Button 
-                          variant="ghost" 
-                          size="sm" 
-                          className="h-7 px-3 text-xs hover:bg-primary/10 hover:text-primary"
-                          onClick={() => handleUpdateCustomerStatus(customer.id, "pending")}
-                        >
-                          <Clock className="h-3 w-3 mr-1" />
-                          Bekliyor
-                        </Button>
-                      )}
-                      
-                      <Dialog>
-                        <DialogTrigger asChild>
-                          <Button variant="ghost" size="sm" className="h-7 px-3 text-xs hover:bg-accent/10">
-                            <Eye className="h-3 w-3 mr-1" />
-                            Detay
-                          </Button>
-                        </DialogTrigger>
-                        <DialogContent className="sm:max-w-[425px]">
-                          <DialogHeader>
-                            <DialogTitle className="text-xl font-semibold flex items-center gap-2">
-                              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary/10">
-                                {customer.name.charAt(0)}
-                              </div>
-                              {customer.name}
-                            </DialogTitle>
-                          </DialogHeader>
-                          <div className="space-y-6 mt-4">
-                            <div className="space-y-2">
-                              <h4 className="text-sm font-medium text-accent">Müşteri Bilgileri</h4>
-                              <div className="grid gap-1 text-sm">
-                                <div className="flex items-center">
-                                  <Phone className="w-4 h-4 mr-2 text-muted-foreground" />
-                                  <span>{customer.phone}</span>
-                                </div>
-                              </div>
-                            </div>
-                            <div className="space-y-2">
-                              <h4 className="text-sm font-medium text-accent">Randevu Bilgileri</h4>
-                              <div className="grid gap-2 text-sm">
-                                <div className="flex items-center">
-                                  <Calendar className="w-4 h-4 mr-2 text-muted-foreground" />
-                                  <span>{formatDate(customer.appointmentDate)}</span>
-                                </div>
-                                <div className="flex items-center">
-                                  <Clock className="w-4 h-4 mr-2 text-muted-foreground" />
-                                  <span>{customer.service}</span>
-                                </div>
-                                <div className="flex items-center">
-                                  {customer.status === "pending" ? (
-                                    <Clock className="w-4 h-4 mr-2 text-primary" />
-                                  ) : (
-                                    <CheckCircle2 className="w-4 h-4 mr-2 text-green-600" />
-                                  )}
-                                  <span>{customer.status === "pending" ? "Bekliyor" : "Tamamlandı"}</span>
-                                </div>
-                              </div>
-                              {customer.nextAppointmentDate && (
-                                <div className="mt-4 p-3 rounded-lg bg-accent/10 border border-accent/20">
-                                  <p className="text-sm font-medium text-accent flex items-center">
-                                    <Calendar className="w-4 h-4 mr-2" />
-                                    Sonraki Randevu
-                                  </p>
-                                  <p className="text-sm mt-1">{formatDate(customer.nextAppointmentDate)}</p>
-                                </div>
-                              )}
-                            </div>
-                            <div className="space-y-2">
-                              <h4 className="text-sm font-medium text-accent mb-2">Müşteri Notu</h4>
-                              {editingNotes?.id === customer.id ? (
-                                <div className="space-y-2">
-                                  <Textarea
-                                    value={editingNotes.notes}
-                                    onChange={(e) => setEditingNotes({ ...editingNotes, notes: e.target.value })}
-                                    placeholder="Müşteri için not ekleyin..."
-                                    className="min-h-[100px] bg-background/50"
-                                  />
-                                  <div className="flex gap-2">
-                                    <Button 
-                                      onClick={() => updateCustomerNotes(customer.id, editingNotes.notes)}
-                                      size="sm"
-                                      className="bg-accent hover:bg-accent/90"
-                                    >
-                                      Kaydet
-                                    </Button>
-                                    <Button 
-                                      variant="outline" 
-                                      size="sm"
-                                      onClick={() => setEditingNotes(null)}
-                                    >
-                                      İptal
-                                    </Button>
-                                  </div>
-                                </div>
-                              ) : (
-                                <div className="space-y-2">
-                                  <p className="text-sm text-muted-foreground">
-                                    {customer.notes || "Not eklenmemiş"}
-                                  </p>
-                                  <Button 
-                                    variant="outline" 
-                                    size="sm"
-                                    onClick={() => setEditingNotes({ id: customer.id, notes: customer.notes || "" })}
-                                    className="hover:bg-accent/10 hover:text-accent"
-                                  >
-                                    {customer.notes ? "Notu Düzenle" : "Not Ekle"}
-                                  </Button>
-                                </div>
-                              )}
-                            </div>
-                          </div>
-                        </DialogContent>
-                      </Dialog>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </ScrollArea>
-          </CardContent>
-        </Card>
+        <div className="mt-6">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight transition-colors first:mt-0">
+              Görseller
+            </h2>
+            <Button onClick={handleOpenDialog}>
+              <Plus className="mr-2 h-4 w-4" />
+              Yeni Ekle
+            </Button>
+          </div>
+          <div className="grid gap-4 md:grid-cols-3">
+            {images.map((image) => (
+              <Card key={image.id}>
+                <CardContent>
+                  <img
+                    src={image.url}
+                    alt={image.name}
+                    className="rounded-md mb-2"
+                  />
+                  <h3 className="font-semibold">{image.name}</h3>
+                  <p className="text-sm text-muted-foreground">
+                    {image.description}
+                  </p>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
       </div>
     </div>
   );
