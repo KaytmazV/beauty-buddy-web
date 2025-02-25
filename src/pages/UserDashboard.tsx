@@ -26,6 +26,8 @@ const UserDashboard = () => {
     category: "",
     tags: [],
   });
+  const [selectedImage, setSelectedImage] = useState<File | null>(null);
+  const [previewUrl, setPreviewUrl] = useState<string>("");
 
   const { posts, addPost, deletePost } = useBlogStore();
   const [customers, setCustomers] = useState<Customer[]>([
@@ -64,6 +66,25 @@ const UserDashboard = () => {
     treatments: "",
   });
 
+  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      if (file.size > 5 * 1024 * 1024) { // 5MB limit
+        toast({
+          title: "Hata",
+          description: "Resim boyutu 5MB'dan küçük olmalıdır.",
+          variant: "destructive",
+        });
+        return;
+      }
+
+      setSelectedImage(file);
+      const imageUrl = URL.createObjectURL(file);
+      setPreviewUrl(imageUrl);
+      setNewPost(prev => ({ ...prev, image: imageUrl }));
+    }
+  };
+
   const handleAddPost = () => {
     if (!newPost.title || !newPost.description || !newPost.category) {
       toast({
@@ -77,7 +98,7 @@ const UserDashboard = () => {
     addPost({
       title: newPost.title,
       description: newPost.description,
-      image: newPost.image || "https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7",
+      image: previewUrl || "https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7",
       category: newPost.category,
       author: "İlayda Bağ",
       tags: newPost.tags || [],
@@ -90,6 +111,8 @@ const UserDashboard = () => {
       category: "",
       tags: [],
     });
+    setSelectedImage(null);
+    setPreviewUrl("");
     setIsAddingPost(false);
 
     toast({
@@ -235,13 +258,24 @@ const UserDashboard = () => {
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="image">Görsel URL</Label>
-                    <Input
-                      id="image"
-                      value={newPost.image}
-                      onChange={(e) => setNewPost({ ...newPost, image: e.target.value })}
-                      placeholder="https://..."
-                    />
+                    <Label htmlFor="image">Görsel</Label>
+                    <div className="grid gap-4">
+                      <Input
+                        id="image"
+                        type="file"
+                        accept="image/*"
+                        onChange={handleImageChange}
+                      />
+                      {previewUrl && (
+                        <div className="relative aspect-video w-full overflow-hidden rounded-lg border">
+                          <img
+                            src={previewUrl}
+                            alt="Preview"
+                            className="object-cover w-full h-full"
+                          />
+                        </div>
+                      )}
+                    </div>
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="category">Kategori</Label>
@@ -266,7 +300,11 @@ const UserDashboard = () => {
                   <div className="flex justify-end gap-4 pt-4">
                     <Button 
                       variant="outline" 
-                      onClick={() => setIsAddingPost(false)}
+                      onClick={() => {
+                        setIsAddingPost(false);
+                        setSelectedImage(null);
+                        setPreviewUrl("");
+                      }}
                     >
                       İptal
                     </Button>
