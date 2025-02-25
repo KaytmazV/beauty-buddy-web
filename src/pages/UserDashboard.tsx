@@ -1,17 +1,31 @@
-
 import { useState } from "react";
 import { Calendar } from "@/components/ui/calendar";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { useToast } from "@/components/ui/use-toast";
 import { Button } from "@/components/ui/button";
-import { Plus } from "lucide-react";
+import { Plus, ImagePlus } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import WhatsAppSupport from "@/components/WhatsAppSupport";
 import WhatsAppScheduler from "@/components/WhatsAppScheduler";
 import { CustomerList } from "@/components/customers/CustomerList";
 import { CustomerForm } from "@/components/customers/CustomerForm";
 import { DeleteCustomerDialog } from "@/components/customers/DeleteCustomerDialog";
 import { Customer, CustomerFormData } from "@/types/customer";
+
+interface BlogPost {
+  id: number;
+  title: string;
+  description: string;
+  image: string;
+  category: string;
+  date: string;
+  author: string;
+  content?: string;
+  tags?: string[];
+}
 
 const UserDashboard = () => {
   const { toast } = useToast();
@@ -132,6 +146,90 @@ const UserDashboard = () => {
     }
   };
 
+  // Blog state
+  const [isAddingPost, setIsAddingPost] = useState(false);
+  const [blogPosts, setBlogPosts] = useState<BlogPost[]>([
+    {
+      id: 1,
+      title: "Saç Boyama Trendleri 2024",
+      description: "Bu yılın en popüler saç renkleri ve teknikleri",
+      image: "https://images.unsplash.com/photo-1605497788044-5a32c7078486",
+      category: "Saç Bakımı",
+      date: "15 Mart 2024",
+      author: "İlayda Bağ",
+      tags: ["Saç", "Trend", "2024"]
+    },
+    {
+      id: 2,
+      title: "Doğal Cilt Bakım Rutini",
+      description: "Evde uygulayabileceğiniz etkili cilt bakım önerileri",
+      image: "https://images.unsplash.com/photo-1598440947619-2c35fc9aa908",
+      category: "Cilt Bakımı",
+      date: "12 Mart 2024",
+      author: "İlayda Bağ",
+      tags: ["Cilt Bakımı", "Doğal", "Rutin"]
+    }
+  ]);
+  const [newPost, setNewPost] = useState<Partial<BlogPost>>({
+    title: "",
+    description: "",
+    image: "",
+    category: "",
+    tags: [],
+  });
+
+  const handleAddPost = () => {
+    if (!newPost.title || !newPost.description || !newPost.category) {
+      toast({
+        title: "Hata",
+        description: "Lütfen tüm gerekli alanları doldurun.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    const currentDate = new Date();
+    const formattedDate = currentDate.toLocaleDateString('tr-TR', {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric'
+    });
+
+    const post: BlogPost = {
+      id: blogPosts.length + 1,
+      title: newPost.title,
+      description: newPost.description,
+      image: newPost.image || "https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7",
+      category: newPost.category,
+      date: formattedDate,
+      author: "İlayda Bağ",
+      tags: newPost.tags || [],
+    };
+
+    setBlogPosts([post, ...blogPosts]);
+    setNewPost({
+      title: "",
+      description: "",
+      image: "",
+      category: "",
+      tags: [],
+    });
+    setIsAddingPost(false);
+
+    toast({
+      title: "Başarılı",
+      description: "Blog yazısı başarıyla eklendi.",
+    });
+  };
+
+  const handleDeletePost = (id: number) => {
+    setBlogPosts(blogPosts.filter(post => post.id !== id));
+    toast({
+      title: "Blog yazısı silindi",
+      description: "Blog yazısı başarıyla silindi.",
+    });
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-primary/5 via-secondary/10 to-accent/5 pt-24">
       <WhatsAppSupport />
@@ -200,14 +298,125 @@ const UserDashboard = () => {
           </TabsContent>
 
           <TabsContent value="blog">
-            <Card>
-              <CardHeader>
-                <CardTitle>Blog Yazıları</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p>Blog yönetimi yakında eklenecek...</p>
-              </CardContent>
-            </Card>
+            <div className="flex justify-between items-center mb-6">
+              <h2 className="text-2xl font-semibold">Blog Yazıları</h2>
+              <Button onClick={() => setIsAddingPost(true)}>
+                <Plus className="mr-2 h-4 w-4" />
+                Yeni Blog Yazısı
+              </Button>
+            </div>
+
+            {isAddingPost && (
+              <Card className="mb-6">
+                <CardHeader>
+                  <CardTitle>Yeni Blog Yazısı</CardTitle>
+                  <CardDescription>Blog yazınızı oluşturun</CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="title">Başlık</Label>
+                    <Input
+                      id="title"
+                      value={newPost.title}
+                      onChange={(e) => setNewPost({ ...newPost, title: e.target.value })}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="description">Özet</Label>
+                    <Textarea
+                      id="description"
+                      value={newPost.description}
+                      onChange={(e) => setNewPost({ ...newPost, description: e.target.value })}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="image">Görsel URL</Label>
+                    <Input
+                      id="image"
+                      value={newPost.image}
+                      onChange={(e) => setNewPost({ ...newPost, image: e.target.value })}
+                      placeholder="https://..."
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="category">Kategori</Label>
+                    <Input
+                      id="category"
+                      value={newPost.category}
+                      onChange={(e) => setNewPost({ ...newPost, category: e.target.value })}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="tags">Etiketler (virgülle ayırın)</Label>
+                    <Input
+                      id="tags"
+                      value={newPost.tags?.join(", ")}
+                      onChange={(e) => setNewPost({ 
+                        ...newPost, 
+                        tags: e.target.value.split(",").map(tag => tag.trim())
+                      })}
+                      placeholder="Örnek: Saç, Bakım, Trend"
+                    />
+                  </div>
+                  <div className="flex justify-end gap-4 pt-4">
+                    <Button 
+                      variant="outline" 
+                      onClick={() => setIsAddingPost(false)}
+                    >
+                      İptal
+                    </Button>
+                    <Button onClick={handleAddPost}>
+                      Yazıyı Yayınla
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            )}
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {blogPosts.map((post) => (
+                <Card key={post.id} className="overflow-hidden">
+                  <div className="aspect-[16/9] relative">
+                    <img 
+                      src={post.image} 
+                      alt={post.title}
+                      className="absolute inset-0 w-full h-full object-cover"
+                    />
+                  </div>
+                  <CardHeader>
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm text-accent">{post.category}</span>
+                      <Button 
+                        variant="ghost" 
+                        size="sm"
+                        className="text-destructive"
+                        onClick={() => handleDeletePost(post.id)}
+                      >
+                        Sil
+                      </Button>
+                    </div>
+                    <CardTitle className="text-xl mt-2">{post.title}</CardTitle>
+                    <CardDescription>{post.description}</CardDescription>
+                    <div className="flex flex-wrap gap-2 mt-2">
+                      {post.tags?.map((tag, i) => (
+                        <span 
+                          key={i}
+                          className="text-xs bg-accent/10 text-accent px-2 py-1 rounded-full"
+                        >
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="flex items-center justify-between text-sm text-muted-foreground">
+                      <span>{post.author}</span>
+                      <span>{post.date}</span>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
           </TabsContent>
         </Tabs>
 
