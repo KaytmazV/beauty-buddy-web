@@ -433,7 +433,7 @@ const UserDashboard = () => {
                               <MoreVertical className="h-4 w-4" />
                             </Button>
                           </DropdownMenuTrigger>
-                          <DropdownMenuContent align="end">
+                          <DropdownMenuContent align="end" className="w-48">
                             <DropdownMenuItem onClick={() => handleEditCustomer(customer)}>
                               <FileEdit className="mr-2 h-4 w-4" />
                               Düzenle
@@ -445,7 +445,13 @@ const UserDashboard = () => {
                             <DropdownMenuSeparator />
                             <AlertDialog>
                               <AlertDialogTrigger asChild>
-                                <DropdownMenuItem className="text-destructive" onSelect={(e) => e.preventDefault()}>
+                                <DropdownMenuItem
+                                  className="text-destructive"
+                                  onClick={(e) => {
+                                    e.preventDefault();
+                                    e.stopPropagation();
+                                  }}
+                                >
                                   <Trash2 className="mr-2 h-4 w-4" />
                                   Sil
                                 </DropdownMenuItem>
