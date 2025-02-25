@@ -1,5 +1,5 @@
 
-import { ArrowDown } from "lucide-react";
+import { ArrowDown, Medal, Users, Laptop, Globe, Sparkles } from "lucide-react";
 import { motion } from "framer-motion";
 import { useInView } from "framer-motion";
 import { useRef } from "react";
@@ -9,33 +9,39 @@ interface TimelineItem {
   year: number;
   title: string;
   description: string;
+  icon: React.ReactNode;
 }
 
 const timeline: TimelineItem[] = [
   {
     year: 2011,
     title: "Sektöre İlk Adım",
-    description: "İlayda Bağ Güzellik Salonu olarak sektöre ilk adımımızı attık. Müşterilerimize en iyi hizmeti sunma hedefiyle yola çıktık."
+    description: "İlayda Bağ Güzellik Salonu olarak sektöre ilk adımımızı attık. Müşterilerimize en iyi hizmeti sunma hedefiyle yola çıktık.",
+    icon: <Medal className="w-8 h-8 text-accent" />
   },
   {
     year: 2015,
     title: "Büyüme ve Gelişim",
-    description: "Artan müşteri memnuniyeti ve talep doğrultusunda salonumuzu genişlettik. Ekibimize yeni uzmanlar katıldı."
+    description: "Artan müşteri memnuniyeti ve talep doğrultusunda salonumuzu genişlettik. Ekibimize yeni uzmanlar katıldı.",
+    icon: <Users className="w-8 h-8 text-accent" />
   },
   {
     year: 2017,
     title: "Teknoloji Yatırımı",
-    description: "En son teknoloji cihazlarla donanımımızı yeniledik. Lazer epilasyon ve cilt bakımı alanında öncü teknolojileri müşterilerimizle buluşturduk."
+    description: "En son teknoloji cihazlarla donanımımızı yeniledik. Lazer epilasyon ve cilt bakımı alanında öncü teknolojileri müşterilerimizle buluşturduk.",
+    icon: <Laptop className="w-8 h-8 text-accent" />
   },
   {
     year: 2020,
     title: "Dijital Dönüşüm",
-    description: "Pandemi sürecinde dijital randevu sistemimizi geliştirdik. Online danışmanlık hizmetlerimizi başlattık."
+    description: "Pandemi sürecinde dijital randevu sistemimizi geliştirdik. Online danışmanlık hizmetlerimizi başlattık.",
+    icon: <Globe className="w-8 h-8 text-accent" />
   },
   {
     year: 2022,
     title: "Yenilikçi Hizmetler",
-    description: "Yeni nesil cilt bakım teknolojileri ve organik ürün serimizi müşterilerimizle buluşturduk. Sürdürülebilir güzellik anlayışımızı güçlendirdik."
+    description: "Yeni nesil cilt bakım teknolojileri ve organik ürün serimizi müşterilerimizle buluşturduk. Sürdürülebilir güzellik anlayışımızı güçlendirdik.",
+    icon: <Sparkles className="w-8 h-8 text-accent" />
   }
 ];
 
@@ -60,9 +66,11 @@ const TimelineItem = ({ item, index }: { item: TimelineItem; index: number }) =>
 
       {/* Ok ve çizgi */}
       <div className="flex flex-col items-center">
-        <div className="w-3 h-3 bg-accent rounded-full z-10"></div>
+        <div className="w-10 h-10 bg-accent/10 rounded-full flex items-center justify-center z-10">
+          {item.icon}
+        </div>
         <motion.div 
-          className="w-0.5 bg-accent/30 h-full absolute top-3"
+          className="w-0.5 bg-accent/30 h-full absolute top-10"
           initial={{ height: 0 }}
           animate={isInView ? { height: "100%" } : { height: 0 }}
           transition={{ duration: 0.5 }}
@@ -70,7 +78,7 @@ const TimelineItem = ({ item, index }: { item: TimelineItem; index: number }) =>
       </div>
 
       {/* Sağ taraf - İçerik */}
-      <Card className="flex-1 mb-12">
+      <Card className="flex-1 mb-12 hover:shadow-lg transition-shadow">
         <CardContent className="p-6">
           <h3 className="text-xl md:text-2xl font-semibold mb-2">{item.title}</h3>
           <p className="text-muted-foreground">{item.description}</p>
