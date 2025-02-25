@@ -3,21 +3,6 @@ import { Phone } from "lucide-react";
 import { motion } from "framer-motion";
 
 const WhatsAppSupport = () => {
-  const handleWhatsAppClick = () => {
-    const phoneNumber = "+905551112233"; // WhatsApp numaranızı buraya yazın
-    const message = encodeURIComponent(
-      "Merhaba 👋\n\n" +
-      "İlayda Bağ Güzellik Salonundan bilgi almak istiyorum.\n\n" +
-      "Hizmetleriniz ve fiyatlarınız hakkında bilgi alabilir miyim?"
-    );
-    
-    // WhatsApp API URL'ini oluştur
-    const whatsappUrl = `https://wa.me/${phoneNumber}?text=${message}`;
-    
-    // Yeni sekmede WhatsApp'ı aç
-    window.open(whatsappUrl, '_blank');
-  };
-
   return (
     <motion.div
       initial={{ x: -100 }}
@@ -25,7 +10,6 @@ const WhatsAppSupport = () => {
       className="fixed left-4 bottom-4 z-50 md:left-6 md:bottom-6"
     >
       <button
-        onClick={handleWhatsAppClick}
         className="bg-green-500 hover:bg-green-600 text-white p-3 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 group relative"
         aria-label="WhatsApp Destek"
       >
