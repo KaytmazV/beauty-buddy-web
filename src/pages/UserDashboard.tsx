@@ -258,8 +258,12 @@ const UserDashboard = () => {
 
   // Randevu oluşturma
   const handleCreateAppointment = (customer: Customer) => {
-    // Randevu sekmesine geç
-    document.querySelector('[value="appointments"]')?.click();
+    // Randevu sekmesine geç - type casting ile düzeltme
+    const appointmentTab = document.querySelector('[value="appointments"]') as HTMLElement;
+    if (appointmentTab) {
+      appointmentTab.click();
+    }
+    
     toast({
       title: "Randevu oluştur",
       description: `${customer.name} için randevu oluşturuluyor...`,
