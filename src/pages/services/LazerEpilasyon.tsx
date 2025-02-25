@@ -1,5 +1,5 @@
 
-import { WhatsAppSupport } from "@/components/WhatsAppSupport";
+import WhatsAppSupport from "@/components/WhatsAppSupport";
 import HeroSection from "@/components/services/lazer-epilasyon/HeroSection";
 import EskisehirSection from "@/components/services/lazer-epilasyon/EskisehirSection";
 import TechnologiesSection from "@/components/services/lazer-epilasyon/TechnologiesSection";
