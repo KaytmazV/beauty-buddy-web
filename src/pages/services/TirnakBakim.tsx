@@ -1,4 +1,3 @@
-
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -34,15 +33,12 @@ const TirnakBakim = () => {
       {/* Hero Section */}
       <div className="relative h-[90vh]">
         <div className="absolute inset-0 bg-black/40 z-10" />
-        <video
-          autoPlay
-          muted
-          loop
-          playsInline
+        <iframe
+          src="https://www.youtube.com/embed/y2g7FduOLiU?autoplay=1&mute=1&loop=1&playlist=y2g7FduOLiU&controls=0"
           className="absolute inset-0 w-full h-full object-cover"
-        >
-          <source src="https://player.vimeo.com/external/474636296.sd.mp4?s=9bc72fa46c53b63b0b06ddc4a008e2591334f2d0&profile_id=164&oauth2_token_id=57447761" type="video/mp4" />
-        </video>
+          allow="autoplay; encrypted-media"
+          allowFullScreen
+        />
         <div className="relative z-20 h-full flex items-center justify-center">
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
