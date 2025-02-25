@@ -2,6 +2,26 @@ import { useState } from "react";
 import { Calendar } from "@/components/ui/calendar";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/components/ui/use-toast";
+import { Button } from "@/components/ui/button";
+import { Plus } from "lucide-react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import WhatsAppSupport from "@/components/WhatsAppSupport";
+import WhatsAppScheduler from "@/components/WhatsAppScheduler";
+import { CustomerList } from "@/components/customers/CustomerList";
+import { CustomerForm } from "@/components/customers/CustomerForm";
+import { DeleteCustomerDialog } from "@/components/customers/DeleteCustomerDialog";
+import { Customer, CustomerFormData } from "@/types/customer";
+import { Textarea } from "@/components/ui/textarea";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { MoreVertical, FileEdit, Trash2, Calendar as CalendarIcon } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -22,22 +42,6 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { MoreVertical, Plus, FileEdit, Trash2, Calendar as CalendarIcon } from "lucide-react";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import WhatsAppSupport from "@/components/WhatsAppSupport";
-import WhatsAppScheduler from "@/components/WhatsAppScheduler";
-import { Textarea } from "@/components/ui/textarea";
 
 const UserDashboard = () => {
   const { toast } = useToast();
@@ -154,15 +158,6 @@ const UserDashboard = () => {
   };
 
   // Müşteri states
-  interface Customer {
-    id: number;
-    name: string;
-    phone: string;
-    lastVisit: string;
-    nextAppointment: string;
-    treatments: string[];
-  }
-
   const [customers, setCustomers] = useState<Customer[]>([
     {
       id: 1,
@@ -193,13 +188,13 @@ const UserDashboard = () => {
   const [isCustomerDialogOpen, setIsCustomerDialogOpen] = useState(false);
   const [editingCustomer, setEditingCustomer] = useState<Customer | null>(null);
   const [customerToDelete, setCustomerToDelete] = useState<Customer | null>(null);
-  const [newCustomer, setNewCustomer] = useState({
+  const [newCustomer, setNewCustomer] = useState<CustomerFormData>({
     name: "",
     phone: "",
     treatments: "",
   });
 
-  // Müşteri ekleme
+  // Müşteri işlemleri
   const handleAddCustomer = () => {
     const customer: Customer = {
       id: customers.length + 1,
@@ -219,7 +214,6 @@ const UserDashboard = () => {
     });
   };
 
-  // Müşteri düzenleme
   const handleEditCustomer = (customer: Customer) => {
     setEditingCustomer(customer);
     setNewCustomer({
@@ -230,7 +224,6 @@ const UserDashboard = () => {
     setIsCustomerDialogOpen(true);
   };
 
-  // Müşteri güncelleme
   const handleUpdateCustomer = () => {
     if (!editingCustomer) return;
 
@@ -255,7 +248,6 @@ const UserDashboard = () => {
     });
   };
 
-  // Müşteri silme
   const handleDeleteCustomer = (id: number) => {
     setCustomers(customers.filter(c => c.id !== id));
     toast({
@@ -264,7 +256,6 @@ const UserDashboard = () => {
     });
   };
 
-  // Randevu oluşturma
   const handleCreateAppointment = (customer: Customer) => {
     const appointmentTab = document.querySelector('[value="appointments"]') as HTMLElement;
     if (appointmentTab) {
