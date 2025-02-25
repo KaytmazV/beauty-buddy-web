@@ -1,3 +1,4 @@
+
 import { motion } from "framer-motion";
 import { Calendar, MapPin, Phone, Scissors, Star, Users, Heart, Instagram, MessageSquare } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -43,8 +44,8 @@ const Index = () => {
     <div className="min-h-screen bg-secondary">
       <WhatsAppSupport />
       {/* Hero Section */}
-      <section className="relative h-[90vh] md:h-screen flex items-center justify-center overflow-hidden">
-        <div className="absolute inset-0">
+      <section className="relative h-[90vh] md:h-screen w-full overflow-hidden">
+        <div className="absolute inset-0 w-full h-full">
           <img 
             src="https://images.unsplash.com/photo-1560066984-138dadb4c035?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80"
             alt="Beauty Salon Background"
@@ -53,7 +54,7 @@ const Index = () => {
           <div className="absolute inset-0 bg-black/40 backdrop-blur-sm"></div>
         </div>
         
-        <div className="relative container mx-auto px-4 md:px-6 text-center text-white z-10">
+        <div className="relative container mx-auto px-4 md:px-6 h-full flex flex-col items-center justify-center text-center text-white z-10">
           <motion.h1 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -66,7 +67,7 @@ const Index = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
-            className="text-lg md:text-xl lg:text-2xl mb-6 md:mb-8 max-w-2xl mx-auto px-4 md:px-0"
+            className="text-lg md:text-xl lg:text-2xl mb-6 md:mb-8 max-w-2xl mx-auto"
           >
             Size özel profesyonel bakım hizmetleriyle doğal güzelliğinizi ortaya çıkarıyoruz
           </motion.p>
@@ -74,9 +75,9 @@ const Index = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.4 }}
-            className="space-y-4 md:space-y-0 md:space-x-4"
+            className="flex flex-col md:flex-row gap-4 w-full md:w-auto justify-center"
           >
-            <Button size="lg" className="w-full md:w-auto bg-accent hover:bg-accent/90 text-white mb-4 md:mb-0">
+            <Button size="lg" className="w-full md:w-auto bg-accent hover:bg-accent/90 text-white">
               Randevu Al
             </Button>
             <Button size="lg" variant="outline" className="w-full md:w-auto bg-white/10 hover:bg-white/20 text-white border-white">
