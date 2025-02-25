@@ -270,6 +270,9 @@ const UserDashboard = () => {
     });
   };
 
+  // Silme dialog state'i
+  const [customerToDelete, setCustomerToDelete] = useState<Customer | null>(null);
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-primary/5 via-secondary/10 to-accent/5 pt-24">
       <WhatsAppSupport />
@@ -443,38 +446,13 @@ const UserDashboard = () => {
                               Randevu Oluştur
                             </DropdownMenuItem>
                             <DropdownMenuSeparator />
-                            <AlertDialog>
-                              <AlertDialogTrigger asChild>
-                                <DropdownMenuItem
-                                  className="text-destructive"
-                                  onClick={(e) => {
-                                    e.preventDefault();
-                                    e.stopPropagation();
-                                  }}
-                                >
-                                  <Trash2 className="mr-2 h-4 w-4" />
-                                  Sil
-                                </DropdownMenuItem>
-                              </AlertDialogTrigger>
-                              <AlertDialogContent>
-                                <AlertDialogHeader>
-                                  <AlertDialogTitle>Müşteriyi sil</AlertDialogTitle>
-                                  <AlertDialogDescription>
-                                    {customer.name} isimli müşteriyi silmek istediğinize emin misiniz?
-                                    Bu işlem geri alınamaz.
-                                  </AlertDialogDescription>
-                                </AlertDialogHeader>
-                                <AlertDialogFooter>
-                                  <AlertDialogCancel>İptal</AlertDialogCancel>
-                                  <AlertDialogAction
-                                    onClick={() => handleDeleteCustomer(customer.id)}
-                                    className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
-                                  >
-                                    Sil
-                                  </AlertDialogAction>
-                                </AlertDialogFooter>
-                              </AlertDialogContent>
-                            </AlertDialog>
+                            <DropdownMenuItem 
+                              className="text-destructive"
+                              onClick={() => setCustomerToDelete(customer)}
+                            >
+                              <Trash2 className="mr-2 h-4 w-4" />
+                              Sil
+                            </DropdownMenuItem>
                           </DropdownMenuContent>
                         </DropdownMenu>
                       </div>
@@ -632,6 +610,33 @@ const UserDashboard = () => {
         <div className="mt-6">
           <WhatsAppScheduler />
         </div>
+
+        {/* Müşteri Silme Dialog */}
+        <AlertDialog open={!!customerToDelete} onOpenChange={(open) => !open && setCustomerToDelete(null)}>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Müşteriyi sil</AlertDialogTitle>
+              <AlertDialogDescription>
+                {customerToDelete?.name} isimli müşteriyi silmek istediğinize emin misiniz?
+                Bu işlem geri alınamaz.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel onClick={() => setCustomerToDelete(null)}>İptal</AlertDialogCancel>
+              <AlertDialogAction
+                onClick={() => {
+                  if (customerToDelete) {
+                    handleDeleteCustomer(customerToDelete.id);
+                    setCustomerToDelete(null);
+                  }
+                }}
+                className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+              >
+                Sil
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
       </div>
     </div>
   );
