@@ -44,7 +44,12 @@ const Index = () => {
       <WhatsAppSupport />
       {/* Hero Section */}
       <section className="relative h-[90vh] md:h-screen flex items-center justify-center overflow-hidden">
-        <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1560066984-138dadb4c035?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80')] bg-cover bg-center">
+        <div className="absolute inset-0">
+          <img 
+            src="https://images.unsplash.com/photo-1560066984-138dadb4c035?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80"
+            alt="Beauty Salon Background"
+            className="w-full h-full object-cover"
+          />
           <div className="absolute inset-0 bg-black/40 backdrop-blur-sm"></div>
         </div>
         
@@ -99,13 +104,15 @@ const Index = () => {
                 initial={{ opacity: 0, scale: 0.8 }}
                 whileInView={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.5 }}
-                className="w-full h-full rounded-full overflow-hidden border-4 border-accent/20"
+                className="w-full h-full rounded-full overflow-hidden"
               >
-                <img 
-                  src="/lovable-uploads/db42afb7-b175-4b3d-a2cf-713523bc80ea.png"
-                  alt="Beauty Center" 
-                  className="w-full h-full object-cover"
-                />
+                <div className="w-full h-full border-4 border-accent/20 rounded-full overflow-hidden">
+                  <img 
+                    src="/lovable-uploads/db42afb7-b175-4b3d-a2cf-713523bc80ea.png"
+                    alt="Beauty Center" 
+                    className="w-full h-full object-cover"
+                  />
+                </div>
               </motion.div>
             </div>
 
@@ -307,7 +314,7 @@ const Index = () => {
                 transition={{ duration: 0.5, delay: index * 0.2 }}
                 className="group relative overflow-hidden rounded-xl"
               >
-                <div className="relative h-[350px] md:h-[400px] overflow-hidden rounded-xl">
+                <div className="aspect-[3/4] overflow-hidden rounded-xl">
                   <img 
                     src={member.image} 
                     alt={member.name}
@@ -481,7 +488,7 @@ const Index = () => {
                 initial={{ opacity: 0, x: -20 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.5 }}
-                className="relative h-[300px] md:h-[400px] rounded-xl overflow-hidden"
+                className="relative aspect-video rounded-xl overflow-hidden"
               >
                 <img 
                   src="/lovable-uploads/64a521e6-1a33-4880-aa73-c55de1019236.png"
