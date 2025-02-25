@@ -146,7 +146,7 @@ const UserDashboard = () => {
     });
   };
 
-  // Müşteri states ve interface
+  // Müşteri states
   interface Customer {
     id: number;
     name: string;
@@ -185,6 +185,7 @@ const UserDashboard = () => {
 
   const [isCustomerDialogOpen, setIsCustomerDialogOpen] = useState(false);
   const [editingCustomer, setEditingCustomer] = useState<Customer | null>(null);
+  const [customerToDelete, setCustomerToDelete] = useState<Customer | null>(null);
   const [newCustomer, setNewCustomer] = useState({
     name: "",
     phone: "",
@@ -271,7 +272,6 @@ const UserDashboard = () => {
   };
 
   // Silme dialog state'i
-  const [customerToDelete, setCustomerToDelete] = useState<Customer | null>(null);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-primary/5 via-secondary/10 to-accent/5 pt-24">
@@ -437,18 +437,18 @@ const UserDashboard = () => {
                             </Button>
                           </DropdownMenuTrigger>
                           <DropdownMenuContent align="end" className="w-48">
-                            <DropdownMenuItem onClick={() => handleEditCustomer(customer)}>
+                            <DropdownMenuItem onSelect={() => handleEditCustomer(customer)}>
                               <FileEdit className="mr-2 h-4 w-4" />
                               Düzenle
                             </DropdownMenuItem>
-                            <DropdownMenuItem onClick={() => handleCreateAppointment(customer)}>
+                            <DropdownMenuItem onSelect={() => handleCreateAppointment(customer)}>
                               <CalendarIcon className="mr-2 h-4 w-4" />
                               Randevu Oluştur
                             </DropdownMenuItem>
                             <DropdownMenuSeparator />
                             <DropdownMenuItem 
                               className="text-destructive"
-                              onClick={() => setCustomerToDelete(customer)}
+                              onSelect={() => setCustomerToDelete(customer)}
                             >
                               <Trash2 className="mr-2 h-4 w-4" />
                               Sil
@@ -562,6 +562,9 @@ const UserDashboard = () => {
               <AlertDialogTitle>
                 {editingCustomer ? "Müşteriyi Düzenle" : "Yeni Müşteri"}
               </AlertDialogTitle>
+              <AlertDialogDescription>
+                Müşteri bilgilerini düzenleyin
+              </AlertDialogDescription>
             </AlertDialogHeader>
             <div className="grid gap-4 py-4">
               <div className="grid gap-2">
