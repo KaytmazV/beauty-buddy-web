@@ -11,6 +11,7 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
+  AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import {
   Dialog,
@@ -19,6 +20,7 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
+  DialogTrigger,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -35,6 +37,7 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import WhatsAppSupport from "@/components/WhatsAppSupport";
 import WhatsAppScheduler from "@/components/WhatsAppScheduler";
+import { Textarea } from "@/components/ui/textarea";
 
 const UserDashboard = () => {
   const { toast } = useToast();
@@ -384,13 +387,69 @@ const UserDashboard = () => {
           <TabsContent value="customers">
             <div className="flex justify-between items-center mb-6">
               <h2 className="text-2xl font-semibold">Müşteri Listesi</h2>
-              <Button onClick={() => {
-                setEditingCustomer(null);
-                setIsCustomerDialogOpen(true);
-              }}>
-                <Plus className="mr-2 h-4 w-4" />
-                Yeni Müşteri
-              </Button>
+              <Dialog>
+                <DialogTrigger asChild>
+                  <Button>
+                    <Plus className="mr-2 h-4 w-4" />
+                    Yeni Müşteri
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className="sm:max-w-[500px]">
+                  <DialogHeader>
+                    <DialogTitle>
+                      Yeni Müşteri
+                    </DialogTitle>
+                    <DialogDescription>
+                      Yeni müşteri bilgilerini girin
+                    </DialogDescription>
+                  </DialogHeader>
+                  <div className="grid gap-4 py-4">
+                    <div className="grid gap-2">
+                      <Label htmlFor="customerName">Ad Soyad</Label>
+                      <Input
+                        id="customerName"
+                        value={newCustomer.name}
+                        onChange={(e) =>
+                          setNewCustomer({ ...newCustomer, name: e.target.value })
+                        }
+                      />
+                    </div>
+                    <div className="grid gap-2">
+                      <Label htmlFor="customerPhone">Telefon</Label>
+                      <Input
+                        id="customerPhone"
+                        value={newCustomer.phone}
+                        placeholder="+90 5XX XXX XX XX"
+                        onChange={(e) =>
+                          setNewCustomer({ ...newCustomer, phone: e.target.value })
+                        }
+                      />
+                    </div>
+                    <div className="grid gap-2">
+                      <Label htmlFor="customerTreatments">Aldığı Hizmetler</Label>
+                      <Input
+                        id="customerTreatments"
+                        value={newCustomer.treatments}
+                        placeholder="Hizmetleri virgülle ayırarak yazın"
+                        onChange={(e) =>
+                          setNewCustomer({ ...newCustomer, treatments: e.target.value })
+                        }
+                      />
+                    </div>
+                  </div>
+                  <DialogFooter>
+                    <Button variant="outline" onClick={() => {
+                      setIsCustomerDialogOpen(false);
+                      setNewCustomer({ name: "", phone: "", treatments: "" });
+                    }}>
+                      İptal
+                    </Button>
+                    <Button onClick={handleAddCustomer}>
+                      Ekle
+                    </Button>
+                  </DialogFooter>
+                </DialogContent>
+              </Dialog>
             </div>
 
             <div className="grid gap-6">
