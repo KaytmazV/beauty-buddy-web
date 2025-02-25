@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Calendar } from "@/components/ui/calendar";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -49,7 +50,7 @@ const UserDashboard = () => {
     phone: "",
     treatments: "",
   });
-
+  
   const handleAddCustomer = () => {
     const customer: Customer = {
       id: customers.length + 1,
@@ -112,6 +113,7 @@ const UserDashboard = () => {
   };
 
   const handleCreateAppointment = (customer: Customer) => {
+    // Randevu sekmesine geçiş yapalım
     const appointmentTab = document.querySelector('[value="appointments"]') as HTMLElement;
     if (appointmentTab) {
       appointmentTab.click();
@@ -144,6 +146,7 @@ const UserDashboard = () => {
             <TabsTrigger value="customers">Müşteriler</TabsTrigger>
             <TabsTrigger value="appointments">Randevular</TabsTrigger>
             <TabsTrigger value="services">Hizmetler</TabsTrigger>
+            <TabsTrigger value="blog">Blog</TabsTrigger>
           </TabsList>
 
           <TabsContent value="customers">
@@ -151,6 +154,7 @@ const UserDashboard = () => {
               <h2 className="text-2xl font-semibold">Müşteri Listesi</h2>
               <Button onClick={() => {
                 setEditingCustomer(null);
+                setNewCustomer({ name: "", phone: "", treatments: "" });
                 setIsCustomerDialogOpen(true);
               }}>
                 <Plus className="mr-2 h-4 w-4" />
@@ -187,21 +191,34 @@ const UserDashboard = () => {
               </CardContent>
             </Card>
           </TabsContent>
+
+          <TabsContent value="blog">
+            <Card>
+              <CardHeader>
+                <CardTitle>Blog Yazıları</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p>Blog yönetimi yakında eklenecek...</p>
+              </CardContent>
+            </Card>
+          </TabsContent>
         </Tabs>
 
-        <CustomerForm
-          open={isCustomerDialogOpen}
-          onOpenChange={setIsCustomerDialogOpen}
-          formData={newCustomer}
-          onFormDataChange={setNewCustomer}
-          onSubmit={editingCustomer ? handleUpdateCustomer : handleAddCustomer}
-          onCancel={() => {
-            setIsCustomerDialogOpen(false);
-            setEditingCustomer(null);
-            setNewCustomer({ name: "", phone: "", treatments: "" });
-          }}
-          isEditing={!!editingCustomer}
-        />
+        {isCustomerDialogOpen && (
+          <CustomerForm
+            open={isCustomerDialogOpen}
+            onOpenChange={setIsCustomerDialogOpen}
+            formData={newCustomer}
+            onFormDataChange={setNewCustomer}
+            onSubmit={editingCustomer ? handleUpdateCustomer : handleAddCustomer}
+            onCancel={() => {
+              setIsCustomerDialogOpen(false);
+              setEditingCustomer(null);
+              setNewCustomer({ name: "", phone: "", treatments: "" });
+            }}
+            isEditing={!!editingCustomer}
+          />
+        )}
 
         <DeleteCustomerDialog
           customer={customerToDelete}
