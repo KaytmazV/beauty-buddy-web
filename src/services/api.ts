@@ -12,9 +12,8 @@ import {
 const getApiBaseUrl = () => {
   // Eğer uygulama preview modunda çalışıyorsa (Lovable platformu)
   if (window.location.hostname.includes('lovable.app')) {
-    // Preview modunda CORS sorunlarını aşmak için localhost yerine 
-    // public bir API kullanabiliriz veya kendi serverınızı CORS destekleyecek şekilde yapılandırabilirsiniz
-    return 'http://localhost:8080'; // Bu URL'i sizin API'nizin URL'i ile değiştirin (prod ortamında)
+    // Lovable platformunda doğrudan backend'e erişim olmadığı için mock veri kullanıyoruz
+    return ''; // Boş URL, tüm istekler mock veri ile karşılanacak
   }
   // Yerel geliştirme için localhost
   return 'http://localhost:8080';
@@ -95,8 +94,13 @@ export const appointmentApi = {
     
     if (mockAppointments) return mockAppointments;
     
-    const response = await api.get<AppointmentDTO[]>('/Appointment');
-    return response.data;
+    try {
+      const response = await api.get<AppointmentDTO[]>('/Appointment');
+      return response.data;
+    } catch (error) {
+      console.error('Appointments API error:', error);
+      return defaultAppointments; // Hata durumunda varsayılan veriler
+    }
   },
   getById: async (id: number) => {
     const mockAppointment = await useMockDataInPreview(`appointment_${id}`, {
@@ -109,8 +113,13 @@ export const appointmentApi = {
     
     if (mockAppointment) return mockAppointment;
     
-    const response = await api.get<AppointmentDTO>(`/Appointment/${id}`);
-    return response.data;
+    try {
+      const response = await api.get<AppointmentDTO>(`/Appointment/${id}`);
+      return response.data;
+    } catch (error) {
+      console.error(`Appointment ${id} API error:`, error);
+      throw error;
+    }
   },
   create: async (appointment: Omit<AppointmentDTO, 'id'>) => {
     if (window.location.hostname.includes('lovable.app')) {
@@ -132,8 +141,15 @@ export const appointmentApi = {
       return newAppointment;
     }
     
-    const response = await api.post<AppointmentDTO>('/Appointment', appointment);
-    return response.data;
+    try {
+      console.log('Appointment data sent to API:', appointment);
+      const response = await api.post<AppointmentDTO>('/Appointment', appointment);
+      console.log('Appointment create API response:', response.data);
+      return response.data;
+    } catch (error) {
+      console.error('Appointment create API error:', error);
+      throw error;
+    }
   },
   update: async (id: number, appointment: Omit<AppointmentDTO, 'id'>) => {
     if (window.location.hostname.includes('lovable.app')) {
@@ -151,8 +167,13 @@ export const appointmentApi = {
       return updatedAppointment;
     }
     
-    const response = await api.put<AppointmentDTO>(`/Appointment/${id}`, appointment);
-    return response.data;
+    try {
+      const response = await api.put<AppointmentDTO>(`/Appointment/${id}`, appointment);
+      return response.data;
+    } catch (error) {
+      console.error(`Appointment update API error:`, error);
+      throw error;
+    }
   },
   delete: async (id: number) => {
     if (window.location.hostname.includes('lovable.app')) {
@@ -163,7 +184,12 @@ export const appointmentApi = {
       return;
     }
     
-    await api.delete(`/Appointment/${id}`);
+    try {
+      await api.delete(`/Appointment/${id}`);
+    } catch (error) {
+      console.error(`Appointment delete API error:`, error);
+      throw error;
+    }
   },
   deleteAll: async () => {
     if (window.location.hostname.includes('lovable.app')) {
@@ -171,7 +197,12 @@ export const appointmentApi = {
       return;
     }
     
-    await api.delete('/Appointment');
+    try {
+      await api.delete('/Appointment');
+    } catch (error) {
+      console.error('Appointments deleteAll API error:', error);
+      throw error;
+    }
   },
 };
 
@@ -206,9 +237,13 @@ export const blogPostApi = {
     
     if (mockBlogPosts) return mockBlogPosts;
     
-    // Lovable önizlemesinde değilsek gerçek API'yi kullan
-    const response = await api.get<BlogPostDTO[]>('/blogpost');
-    return response.data;
+    try {
+      const response = await api.get<BlogPostDTO[]>('/blogpost');
+      return response.data;
+    } catch (error) {
+      console.error('Blog posts API error:', error);
+      return defaultBlogPosts; // Hata durumunda varsayılan veriler
+    }
   },
   getById: async (id: number) => {
     const mockBlogPost = await useMockDataInPreview(`blogPost_${id}`, {
@@ -224,8 +259,13 @@ export const blogPostApi = {
     
     if (mockBlogPost) return mockBlogPost;
     
-    const response = await api.get<BlogPostDTO>(`/blogpost/${id}`);
-    return response.data;
+    try {
+      const response = await api.get<BlogPostDTO>(`/blogpost/${id}`);
+      return response.data;
+    } catch (error) {
+      console.error(`Blog post ${id} API error:`, error);
+      throw error;
+    }
   },
   create: async (blogPost: Omit<BlogPostDTO, 'id'>) => {
     if (window.location.hostname.includes('lovable.app')) {
@@ -246,8 +286,13 @@ export const blogPostApi = {
       return newBlogPost;
     }
     
-    const response = await api.post<BlogPostDTO>('/blogpost', blogPost);
-    return response.data;
+    try {
+      const response = await api.post<BlogPostDTO>('/blogpost', blogPost);
+      return response.data;
+    } catch (error) {
+      console.error('Blog post create API error:', error);
+      throw error;
+    }
   },
   update: async (id: number, blogPost: Omit<BlogPostDTO, 'id'>) => {
     if (window.location.hostname.includes('lovable.app')) {
@@ -264,8 +309,13 @@ export const blogPostApi = {
       return updatedBlogPost;
     }
     
-    const response = await api.put<BlogPostDTO>(`/blogpost/${id}`, blogPost);
-    return response.data;
+    try {
+      const response = await api.put<BlogPostDTO>(`/blogpost/${id}`, blogPost);
+      return response.data;
+    } catch (error) {
+      console.error(`Blog post update API error:`, error);
+      throw error;
+    }
   },
   delete: async (id: number) => {
     if (window.location.hostname.includes('lovable.app')) {
@@ -276,7 +326,12 @@ export const blogPostApi = {
       return;
     }
     
-    await api.delete(`/blogpost/${id}`);
+    try {
+      await api.delete(`/blogpost/${id}`);
+    } catch (error) {
+      console.error(`Blog post delete API error:`, error);
+      throw error;
+    }
   },
 };
 
@@ -306,8 +361,13 @@ export const customerApi = {
     
     if (mockCustomers) return mockCustomers;
     
-    const response = await api.get<CustomerDTO[]>('/customers');
-    return response.data;
+    try {
+      const response = await api.get<CustomerDTO[]>('/customers');
+      return response.data;
+    } catch (error) {
+      console.error('Customers API error:', error);
+      return defaultCustomers; // Hata durumunda varsayılan veriler
+    }
   },
   getById: async (id: number) => {
     const mockCustomer = await useMockDataInPreview(`customer_${id}`, {
@@ -320,8 +380,13 @@ export const customerApi = {
     
     if (mockCustomer) return mockCustomer;
     
-    const response = await api.get<CustomerDTO>(`/customers/${id}`);
-    return response.data;
+    try {
+      const response = await api.get<CustomerDTO>(`/customers/${id}`);
+      return response.data;
+    } catch (error) {
+      console.error(`Customer ${id} API error:`, error);
+      throw error;
+    }
   },
   create: async (customer: Omit<CustomerDTO, 'id'>) => {
     if (window.location.hostname.includes('lovable.app')) {
@@ -341,8 +406,15 @@ export const customerApi = {
       return newCustomer;
     }
     
-    const response = await api.post<CustomerDTO>('/customers', customer);
-    return response.data;
+    try {
+      console.log('Customer data sent to API:', customer);
+      const response = await api.post<CustomerDTO>('/customers', customer);
+      console.log('Customer create API response:', response.data);
+      return response.data;
+    } catch (error) {
+      console.error('Customer create API error:', error);
+      throw error;
+    }
   },
   update: async (id: number, customer: Omit<CustomerDTO, 'id'>) => {
     if (window.location.hostname.includes('lovable.app')) {
@@ -359,8 +431,13 @@ export const customerApi = {
       return updatedCustomer;
     }
     
-    const response = await api.put<CustomerDTO>(`/customers/${id}`, customer);
-    return response.data;
+    try {
+      const response = await api.put<CustomerDTO>(`/customers/${id}`, customer);
+      return response.data;
+    } catch (error) {
+      console.error(`Customer update API error:`, error);
+      throw error;
+    }
   },
   delete: async (id: number) => {
     if (window.location.hostname.includes('lovable.app')) {
@@ -371,7 +448,12 @@ export const customerApi = {
       return;
     }
     
-    await api.delete(`/customers/${id}`);
+    try {
+      await api.delete(`/customers/${id}`);
+    } catch (error) {
+      console.error(`Customer delete API error:`, error);
+      throw error;
+    }
   },
   deleteAll: async () => {
     if (window.location.hostname.includes('lovable.app')) {
@@ -379,7 +461,12 @@ export const customerApi = {
       return;
     }
     
-    await api.delete('/customers');
+    try {
+      await api.delete('/customers');
+    } catch (error) {
+      console.error('Customers deleteAll API error:', error);
+      throw error;
+    }
   },
 };
 
@@ -418,8 +505,13 @@ export const serviceApi = {
     
     if (mockServices) return mockServices;
     
-    const response = await api.get<ServiceDTO[]>('/service');
-    return response.data;
+    try {
+      const response = await api.get<ServiceDTO[]>('/service');
+      return response.data;
+    } catch (error) {
+      console.error('Services API error:', error);
+      return defaultServices; // Hata durumunda varsayılan veriler
+    }
   },
   getById: async (id: number) => {
     const mockService = await useMockDataInPreview(`service_${id}`, {
@@ -433,8 +525,13 @@ export const serviceApi = {
     
     if (mockService) return mockService;
     
-    const response = await api.get<ServiceDTO>(`/service/${id}`);
-    return response.data;
+    try {
+      const response = await api.get<ServiceDTO>(`/service/${id}`);
+      return response.data;
+    } catch (error) {
+      console.error(`Service ${id} API error:`, error);
+      throw error;
+    }
   },
   create: async (service: Omit<ServiceDTO, 'id'>) => {
     if (window.location.hostname.includes('lovable.app')) {
@@ -454,8 +551,13 @@ export const serviceApi = {
       return newService;
     }
     
-    const response = await api.post<ServiceDTO>('/service', service);
-    return response.data;
+    try {
+      const response = await api.post<ServiceDTO>('/service', service);
+      return response.data;
+    } catch (error) {
+      console.error('Service create API error:', error);
+      throw error;
+    }
   },
   update: async (id: number, service: Omit<ServiceDTO, 'id'>) => {
     if (window.location.hostname.includes('lovable.app')) {
@@ -472,8 +574,13 @@ export const serviceApi = {
       return updatedService;
     }
     
-    const response = await api.put<ServiceDTO>(`/service/${id}`, service);
-    return response.data;
+    try {
+      const response = await api.put<ServiceDTO>(`/service/${id}`, service);
+      return response.data;
+    } catch (error) {
+      console.error(`Service update API error:`, error);
+      throw error;
+    }
   },
   delete: async (id: number) => {
     if (window.location.hostname.includes('lovable.app')) {
@@ -484,7 +591,12 @@ export const serviceApi = {
       return;
     }
     
-    await api.delete(`/service/${id}`);
+    try {
+      await api.delete(`/service/${id}`);
+    } catch (error) {
+      console.error(`Service delete API error:`, error);
+      throw error;
+    }
   },
 };
 

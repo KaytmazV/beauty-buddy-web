@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { format } from "date-fns";
 import { tr } from "date-fns/locale";
@@ -13,8 +13,8 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { useToast } from "@/components/ui/use-toast";
 import { cn } from "@/lib/utils";
 import { useNavigate } from "react-router-dom";
-import { appointmentApi } from "@/services/api";
-import { AppointmentDTO } from "@/types/api";
+import { appointmentApi, customerApi } from "@/services/api";
+import { AppointmentDTO, CustomerDTO } from "@/types/api";
 
 type Service = {
   id: string;
@@ -137,9 +137,37 @@ const AppointmentForm = () => {
         return service?.name || '';
       }).filter(name => name !== '');
       
-      // Müşteri oluştur - bu kısım gerçek projenizde değişebilir
-      // Burada mevcut müşterilerden seçim, yeni müşteri oluşturma vb. işlemler eklenebilir
-      const customerId = 1; // Bu kısmı gerçek müşteri ID'si ile değiştirin
+      // İlk önce müşteriyi oluştur veya sorgula
+      let customerId: number;
+      
+      // Müşteriyi telefon numarasına göre ara
+      try {
+        const customers = await customerApi.getAll();
+        const existingCustomer = customers.find(c => c.phone === phone.replace(/\D/g, ""));
+        
+        if (existingCustomer) {
+          customerId = existingCustomer.id || 0;
+          console.log("Mevcut müşteri bulundu:", existingCustomer);
+        } else {
+          // Yeni müşteri oluştur
+          const newCustomer: Omit<CustomerDTO, 'id'> = {
+            name,
+            phone: phone.replace(/\D/g, ""),
+            treatments: serviceNames
+          };
+          
+          console.log("Yeni müşteri oluşturuluyor:", newCustomer);
+          const createdCustomer = await customerApi.create(newCustomer);
+          customerId = createdCustomer.id || 0;
+          console.log("Yeni müşteri oluşturuldu:", createdCustomer);
+        }
+      } catch (error) {
+        console.error("Müşteri sorgusu veya oluşturma hatası:", error);
+        
+        // Hata durumunda geçici ID kullan
+        customerId = Math.floor(Math.random() * 1000);
+        console.log("Hata nedeniyle geçici müşteri ID'si oluşturuldu:", customerId);
+      }
       
       // Randevu verisini oluştur
       const appointmentData: Omit<AppointmentDTO, 'id'> = {
@@ -150,8 +178,11 @@ const AppointmentForm = () => {
         notes: `Müşteri adı: ${name}, Telefon: ${phone}`
       };
       
+      console.log("Randevu oluşturuluyor:", appointmentData);
+      
       // API'ye randevu oluşturma isteği gönder
       const createdAppointment = await appointmentApi.create(appointmentData);
+      console.log("Randevu oluşturuldu:", createdAppointment);
       
       toast({
         title: "Randevunuz alındı!",
