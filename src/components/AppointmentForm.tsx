@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { format } from "date-fns";
@@ -12,6 +13,8 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { useToast } from "@/components/ui/use-toast";
 import { cn } from "@/lib/utils";
 import { useNavigate } from "react-router-dom";
+import { appointmentApi } from "@/services/api";
+import { AppointmentDTO } from "@/types/api";
 
 type Service = {
   id: string;
@@ -63,6 +66,7 @@ const AppointmentForm = () => {
   const [date, setDate] = useState<Date | undefined>(new Date());
   const [selectedTimes, setSelectedTimes] = useState<string[]>([]);
   const [selectedServices, setSelectedServices] = useState<string[]>([]);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleTimeClick = (time: string) => {
     if (selectedTimes.includes(time)) {
@@ -97,7 +101,7 @@ const AppointmentForm = () => {
     }, 0);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     if (!name || !phone || !date || selectedTimes.length === 0 || selectedServices.length === 0) {
@@ -119,16 +123,55 @@ const AppointmentForm = () => {
       return;
     }
 
-    // Navigate to dashboard after successful appointment creation
-    toast({
-      title: "Randevunuz alındı!",
-      description: "En kısa sürede size dönüş yapacağız.",
-    });
+    setIsSubmitting(true);
     
-    // Redirect to dashboard after a short delay
-    setTimeout(() => {
-      navigate("/dashboard");
-    }, 1500);
+    try {
+      // Randevu tarihi ve saatini birleştir
+      const appointmentDateTime = new Date(date!);
+      const [hours, minutes] = selectedTimes[0].split(':').map(Number);
+      appointmentDateTime.setHours(hours, minutes, 0, 0);
+      
+      // Seçilen hizmet isimlerini al
+      const serviceNames = selectedServices.map(serviceId => {
+        const service = services.flatMap(cat => cat.items).find(s => s.id === serviceId);
+        return service?.name || '';
+      }).filter(name => name !== '');
+      
+      // Müşteri oluştur - bu kısım gerçek projenizde değişebilir
+      // Burada mevcut müşterilerden seçim, yeni müşteri oluşturma vb. işlemler eklenebilir
+      const customerId = 1; // Bu kısmı gerçek müşteri ID'si ile değiştirin
+      
+      // Randevu verisini oluştur
+      const appointmentData: Omit<AppointmentDTO, 'id'> = {
+        customerId,
+        appointmentDate: appointmentDateTime.toISOString(),
+        services: serviceNames,
+        status: 'SCHEDULED',
+        notes: `Müşteri adı: ${name}, Telefon: ${phone}`
+      };
+      
+      // API'ye randevu oluşturma isteği gönder
+      const createdAppointment = await appointmentApi.create(appointmentData);
+      
+      toast({
+        title: "Randevunuz alındı!",
+        description: "En kısa sürede size dönüş yapacağız.",
+      });
+      
+      // Redirect to dashboard after a short delay
+      setTimeout(() => {
+        navigate("/dashboard");
+      }, 1500);
+    } catch (error) {
+      console.error("Randevu oluşturma hatası:", error);
+      toast({
+        title: "Hata oluştu",
+        description: "Randevu oluşturulurken bir sorun oluştu. Lütfen tekrar deneyin.",
+        variant: "destructive"
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -243,8 +286,12 @@ const AppointmentForm = () => {
           </div>
 
           {/* Randevu Butonu */}
-          <Button type="submit" className="w-full bg-accent hover:bg-accent/90">
-            Randevu Oluştur
+          <Button 
+            type="submit" 
+            className="w-full bg-accent hover:bg-accent/90"
+            disabled={isSubmitting}
+          >
+            {isSubmitting ? "İşleniyor..." : "Randevu Oluştur"}
           </Button>
         </CardContent>
       </Card>

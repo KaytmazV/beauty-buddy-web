@@ -12,9 +12,9 @@ import {
 const getApiBaseUrl = () => {
   // Eğer uygulama preview modunda çalışıyorsa (Lovable platformu)
   if (window.location.hostname.includes('lovable.app')) {
-    // Mock API veri kaynağı veya CORS destekleyen public API kullanabiliriz
-    // NOT: Gerçek projede bu değer bir .env dosyasından gelmeli
-    return 'https://jsonplaceholder.typicode.com';
+    // Preview modunda CORS sorunlarını aşmak için localhost yerine 
+    // public bir API kullanabiliriz veya kendi serverınızı CORS destekleyecek şekilde yapılandırabilirsiniz
+    return 'http://localhost:8080'; // Bu URL'i sizin API'nizin URL'i ile değiştirin (prod ortamında)
   }
   // Yerel geliştirme için localhost
   return 'http://localhost:8080';
@@ -73,7 +73,7 @@ const saveMockDataToStorage = <T>(storageKey: string, data: T): void => {
 export const appointmentApi = {
   getAll: async () => {
     // Önizlemede kullanılacak mock randevu verileri
-    const defaultAppointments = [
+    const defaultAppointments: AppointmentDTO[] = [
       {
         id: 1,
         customerId: 1,
@@ -179,7 +179,7 @@ export const appointmentApi = {
 export const blogPostApi = {
   getAll: async () => {
     // Önizlemede kullanılacak mock blog verileri
-    const defaultBlogPosts = [
+    const defaultBlogPosts: BlogPostDTO[] = [
       {
         id: 1,
         title: "Yaz Aylarında Saç Bakımı",
@@ -284,7 +284,7 @@ export const blogPostApi = {
 export const customerApi = {
   getAll: async () => {
     // Önizlemede kullanılacak mock müşteri verileri
-    const defaultCustomers = [
+    const defaultCustomers: CustomerDTO[] = [
       {
         id: 1,
         name: "Ayşe Yılmaz",
@@ -387,7 +387,7 @@ export const customerApi = {
 export const serviceApi = {
   getAll: async () => {
     // Önizlemede kullanılacak mock hizmet verileri
-    const defaultServices = [
+    const defaultServices: ServiceDTO[] = [
       {
         id: 1,
         name: "Saç Kesimi",
