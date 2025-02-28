@@ -1,4 +1,5 @@
-import { useState } from "react";
+
+import { useState, useEffect } from "react";
 import { Calendar } from "@/components/ui/calendar";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/components/ui/use-toast";
@@ -6,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Plus, Trash2 } from "lucide-react";
+import { Plus, Trash2, RefreshCw } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import WhatsAppSupport from "@/components/WhatsAppSupport";
 import WhatsAppScheduler from "@/components/WhatsAppScheduler";
@@ -15,6 +16,8 @@ import { CustomerForm } from "@/components/customers/CustomerForm";
 import { DeleteCustomerDialog } from "@/components/customers/DeleteCustomerDialog";
 import { Customer, CustomerFormData } from "@/types/customer";
 import { useBlogStore, type BlogPost } from "@/store/blogStore";
+import { customerApi, appointmentApi, serviceApi } from "@/services/api";
+import { CustomerDTO, ServiceDTO, AppointmentDTO } from "@/types/api";
 
 const UserDashboard = () => {
   const { toast } = useToast();
@@ -29,33 +32,13 @@ const UserDashboard = () => {
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string>("");
 
-  const { posts, addPost, deletePost } = useBlogStore();
-  const [customers, setCustomers] = useState<Customer[]>([
-    {
-      id: 1,
-      name: "Elif Yılmaz",
-      phone: "+90 532 111 2233",
-      lastVisit: "10 Mart 2024",
-      nextAppointment: "25 Mart 2024",
-      treatments: ["Lazer Epilasyon", "Cilt Bakımı"]
-    },
-    {
-      id: 2,
-      name: "Ayşe Kara",
-      phone: "+90 535 444 5566",
-      lastVisit: "15 Mart 2024",
-      nextAppointment: "1 Nisan 2024",
-      treatments: ["Saç Boyama"]
-    },
-    {
-      id: 3,
-      name: "Fatma Demir",
-      phone: "+90 542 777 8899",
-      lastVisit: "18 Mart 2024",
-      nextAppointment: "28 Mart 2024",
-      treatments: ["Tırnak Bakımı", "El Bakımı"]
-    }
-  ]);
+  const { posts, fetchPosts, addPost, deletePost, isLoading, error } = useBlogStore();
+  const [customers, setCustomers] = useState<Customer[]>([]);
+  const [isLoadingCustomers, setIsLoadingCustomers] = useState(false);
+  const [services, setServices] = useState<ServiceDTO[]>([]);
+  const [isLoadingServices, setIsLoadingServices] = useState(false);
+  const [appointments, setAppointments] = useState<AppointmentDTO[]>([]);
+  const [isLoadingAppointments, setIsLoadingAppointments] = useState(false);
 
   const [isCustomerDialogOpen, setIsCustomerDialogOpen] = useState(false);
   const [editingCustomer, setEditingCustomer] = useState<Customer | null>(null);
@@ -65,6 +48,87 @@ const UserDashboard = () => {
     phone: "",
     treatments: "",
   });
+
+  // API verilerini yükleyen fonksiyonlar
+  const loadBlogPosts = async () => {
+    try {
+      await fetchPosts();
+    } catch (error) {
+      console.error("Blog posts loading error:", error);
+      toast({
+        title: "Hata",
+        description: "Blog yazıları yüklenirken bir hata oluştu.",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const loadCustomers = async () => {
+    setIsLoadingCustomers(true);
+    try {
+      const apiCustomers = await customerApi.getAll();
+      const mappedCustomers: Customer[] = apiCustomers.map(c => ({
+        id: c.id || 0,
+        name: c.name,
+        phone: c.phone,
+        lastVisit: c.lastVisit ? new Date(c.lastVisit).toLocaleDateString('tr-TR', { day: 'numeric', month: 'long', year: 'numeric' }) : '-',
+        nextAppointment: c.nextAppointment ? new Date(c.nextAppointment).toLocaleDateString('tr-TR', { day: 'numeric', month: 'long', year: 'numeric' }) : '-',
+        treatments: c.treatments || []
+      }));
+      setCustomers(mappedCustomers);
+    } catch (error) {
+      console.error("Customers loading error:", error);
+      toast({
+        title: "Hata",
+        description: "Müşteriler yüklenirken bir hata oluştu.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoadingCustomers(false);
+    }
+  };
+
+  const loadServices = async () => {
+    setIsLoadingServices(true);
+    try {
+      const apiServices = await serviceApi.getAll();
+      setServices(apiServices);
+    } catch (error) {
+      console.error("Services loading error:", error);
+      toast({
+        title: "Hata",
+        description: "Hizmetler yüklenirken bir hata oluştu.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoadingServices(false);
+    }
+  };
+
+  const loadAppointments = async () => {
+    setIsLoadingAppointments(true);
+    try {
+      const apiAppointments = await appointmentApi.getAll();
+      setAppointments(apiAppointments);
+    } catch (error) {
+      console.error("Appointments loading error:", error);
+      toast({
+        title: "Hata",
+        description: "Randevular yüklenirken bir hata oluştu.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoadingAppointments(false);
+    }
+  };
+
+  // Sayfa yüklendiğinde tüm verileri yükle
+  useEffect(() => {
+    loadBlogPosts();
+    loadCustomers();
+    loadServices();
+    loadAppointments();
+  }, []);
 
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -85,7 +149,7 @@ const UserDashboard = () => {
     }
   };
 
-  const handleAddPost = () => {
+  const handleAddPost = async () => {
     if (!newPost.title || !newPost.description || !newPost.category) {
       toast({
         title: "Hata",
@@ -95,49 +159,76 @@ const UserDashboard = () => {
       return;
     }
 
-    addPost({
-      title: newPost.title,
-      description: newPost.description,
-      image: previewUrl || "https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7",
-      category: newPost.category,
-      author: "İlayda Bağ",
-      tags: newPost.tags || [],
-    });
+    try {
+      await addPost({
+        title: newPost.title,
+        description: newPost.description,
+        image: previewUrl || "https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7",
+        category: newPost.category,
+        author: "İlayda Bağ",
+        tags: newPost.tags || [],
+      });
 
-    setNewPost({
-      title: "",
-      description: "",
-      image: "",
-      category: "",
-      tags: [],
-    });
-    setSelectedImage(null);
-    setPreviewUrl("");
-    setIsAddingPost(false);
+      setNewPost({
+        title: "",
+        description: "",
+        image: "",
+        category: "",
+        tags: [],
+      });
+      setSelectedImage(null);
+      setPreviewUrl("");
+      setIsAddingPost(false);
 
-    toast({
-      title: "Başarılı",
-      description: "Blog yazısı başarıyla eklendi.",
-    });
+      toast({
+        title: "Başarılı",
+        description: "Blog yazısı başarıyla eklendi.",
+      });
+    } catch (error) {
+      console.error("Error adding post:", error);
+      toast({
+        title: "Hata",
+        description: "Blog yazısı eklenirken bir hata oluştu.",
+        variant: "destructive",
+      });
+    }
   };
 
-  const handleAddCustomer = () => {
-    const customer: Customer = {
-      id: customers.length + 1,
-      name: newCustomer.name,
-      phone: newCustomer.phone,
-      lastVisit: "-",
-      nextAppointment: "-",
-      treatments: newCustomer.treatments.split(",").map(t => t.trim()),
-    };
+  const handleAddCustomer = async () => {
+    try {
+      const apiCustomer: Omit<CustomerDTO, 'id'> = {
+        name: newCustomer.name,
+        phone: newCustomer.phone,
+        treatments: newCustomer.treatments.split(",").map(t => t.trim()),
+      };
 
-    setCustomers([...customers, customer]);
-    setNewCustomer({ name: "", phone: "", treatments: "" });
-    setIsCustomerDialogOpen(false);
-    toast({
-      title: "Müşteri eklendi",
-      description: "Yeni müşteri başarıyla eklendi.",
-    });
+      const createdCustomer = await customerApi.create(apiCustomer);
+      
+      const customer: Customer = {
+        id: createdCustomer.id || 0,
+        name: createdCustomer.name,
+        phone: createdCustomer.phone,
+        lastVisit: "-",
+        nextAppointment: "-",
+        treatments: createdCustomer.treatments,
+      };
+
+      setCustomers([...customers, customer]);
+      setNewCustomer({ name: "", phone: "", treatments: "" });
+      setIsCustomerDialogOpen(false);
+      
+      toast({
+        title: "Müşteri eklendi",
+        description: "Yeni müşteri başarıyla eklendi.",
+      });
+    } catch (error) {
+      console.error("Error adding customer:", error);
+      toast({
+        title: "Hata",
+        description: "Müşteri eklenirken bir hata oluştu.",
+        variant: "destructive",
+      });
+    }
   };
 
   const handleEditCustomer = (customer: Customer) => {
@@ -150,36 +241,66 @@ const UserDashboard = () => {
     setIsCustomerDialogOpen(true);
   };
 
-  const handleUpdateCustomer = () => {
+  const handleUpdateCustomer = async () => {
     if (!editingCustomer) return;
 
-    const updatedCustomer: Customer = {
-      ...editingCustomer,
-      name: newCustomer.name,
-      phone: newCustomer.phone,
-      treatments: newCustomer.treatments.split(",").map(t => t.trim()),
-    };
+    try {
+      const apiCustomer: Omit<CustomerDTO, 'id'> = {
+        name: newCustomer.name,
+        phone: newCustomer.phone,
+        treatments: newCustomer.treatments.split(",").map(t => t.trim()),
+      };
 
-    setCustomers(customers.map(c => 
-      c.id === editingCustomer.id ? updatedCustomer : c
-    ));
+      const updatedApiCustomer = await customerApi.update(editingCustomer.id, apiCustomer);
 
-    setIsCustomerDialogOpen(false);
-    setEditingCustomer(null);
-    setNewCustomer({ name: "", phone: "", treatments: "" });
+      const updatedCustomer: Customer = {
+        id: updatedApiCustomer.id || 0,
+        name: updatedApiCustomer.name,
+        phone: updatedApiCustomer.phone,
+        lastVisit: editingCustomer.lastVisit,
+        nextAppointment: editingCustomer.nextAppointment,
+        treatments: updatedApiCustomer.treatments,
+      };
 
-    toast({
-      title: "Müşteri güncellendi",
-      description: "Müşteri bilgileri başarıyla güncellendi.",
-    });
+      setCustomers(customers.map(c => 
+        c.id === editingCustomer.id ? updatedCustomer : c
+      ));
+
+      setIsCustomerDialogOpen(false);
+      setEditingCustomer(null);
+      setNewCustomer({ name: "", phone: "", treatments: "" });
+
+      toast({
+        title: "Müşteri güncellendi",
+        description: "Müşteri bilgileri başarıyla güncellendi.",
+      });
+    } catch (error) {
+      console.error("Error updating customer:", error);
+      toast({
+        title: "Hata",
+        description: "Müşteri güncellenirken bir hata oluştu.",
+        variant: "destructive",
+      });
+    }
   };
 
-  const handleDeleteCustomer = (id: number) => {
-    setCustomers(customers.filter(c => c.id !== id));
-    toast({
-      title: "Müşteri silindi",
-      description: "Müşteri başarıyla silindi.",
-    });
+  const handleDeleteCustomer = async (id: number) => {
+    try {
+      await customerApi.delete(id);
+      setCustomers(customers.filter(c => c.id !== id));
+      
+      toast({
+        title: "Müşteri silindi",
+        description: "Müşteri başarıyla silindi.",
+      });
+    } catch (error) {
+      console.error("Error deleting customer:", error);
+      toast({
+        title: "Hata",
+        description: "Müşteri silinirken bir hata oluştu.",
+        variant: "destructive",
+      });
+    }
   };
 
   const handleCreateAppointment = (customer: Customer) => {
@@ -199,6 +320,32 @@ const UserDashboard = () => {
       setIsCustomerDialogOpen(false);
       setEditingCustomer(null);
       setNewCustomer({ name: "", phone: "", treatments: "" });
+    }
+  };
+
+  const handleRefreshData = async (dataType: 'blogs' | 'customers' | 'appointments') => {
+    switch (dataType) {
+      case 'blogs':
+        await loadBlogPosts();
+        toast({
+          title: "Yenilendi",
+          description: "Blog yazıları yenilendi.",
+        });
+        break;
+      case 'customers':
+        await loadCustomers();
+        toast({
+          title: "Yenilendi",
+          description: "Müşteri listesi yenilendi.",
+        });
+        break;
+      case 'appointments':
+        await loadAppointments();
+        toast({
+          title: "Yenilendi",
+          description: "Randevular yenilendi.",
+        });
+        break;
     }
   };
 
@@ -227,7 +374,17 @@ const UserDashboard = () => {
 
           <TabsContent value="blog">
             <div className="flex justify-between items-center mb-6">
-              <h2 className="text-2xl font-semibold">Blog Yazıları</h2>
+              <div className="flex items-center gap-2">
+                <h2 className="text-2xl font-semibold">Blog Yazıları</h2>
+                <Button 
+                  variant="outline" 
+                  size="icon"
+                  onClick={() => handleRefreshData('blogs')}
+                  disabled={isLoading}
+                >
+                  <RefreshCw className={`h-4 w-4 ${isLoading ? 'animate-spin' : ''}`} />
+                </Button>
+              </div>
               <Button onClick={() => setIsAddingPost(true)}>
                 <Plus className="mr-2 h-4 w-4" />
                 Yeni Blog Yazısı
@@ -308,63 +465,99 @@ const UserDashboard = () => {
                     >
                       İptal
                     </Button>
-                    <Button onClick={handleAddPost}>
-                      Yazıyı Yayınla
+                    <Button onClick={handleAddPost} disabled={isLoading}>
+                      {isLoading ? "Yükleniyor..." : "Yazıyı Yayınla"}
                     </Button>
                   </div>
                 </CardContent>
               </Card>
             )}
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {posts.map((post) => (
-                <Card key={post.id} className="overflow-hidden">
-                  <div className="aspect-[16/9] relative">
-                    <img 
-                      src={post.image} 
-                      alt={post.title}
-                      className="absolute inset-0 w-full h-full object-cover"
-                    />
-                  </div>
-                  <CardHeader>
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm text-accent">{post.category}</span>
-                      <Button 
-                        variant="ghost" 
-                        size="sm"
-                        className="text-destructive"
-                        onClick={() => deletePost(post.id)}
-                      >
-                        <Trash2 className="h-4 w-4" />
-                      </Button>
+            {error && (
+              <div className="bg-destructive/10 text-destructive p-4 rounded-md mb-6">
+                <p>{error}</p>
+              </div>
+            )}
+
+            {isLoading && !isAddingPost ? (
+              <div className="flex justify-center items-center py-20">
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {posts.map((post) => (
+                  <Card key={post.id} className="overflow-hidden">
+                    <div className="aspect-[16/9] relative">
+                      <img 
+                        src={post.image} 
+                        alt={post.title}
+                        className="absolute inset-0 w-full h-full object-cover"
+                      />
                     </div>
-                    <CardTitle className="text-xl mt-2">{post.title}</CardTitle>
-                    <CardDescription>{post.description}</CardDescription>
-                    <div className="flex flex-wrap gap-2 mt-2">
-                      {post.tags?.map((tag, i) => (
-                        <span 
-                          key={i}
-                          className="text-xs bg-accent/10 text-accent px-2 py-1 rounded-full"
+                    <CardHeader>
+                      <div className="flex items-center justify-between">
+                        <span className="text-sm text-accent">{post.category}</span>
+                        <Button 
+                          variant="ghost" 
+                          size="sm"
+                          className="text-destructive"
+                          onClick={() => deletePost(post.id)}
+                          disabled={isLoading}
                         >
-                          {tag}
-                        </span>
-                      ))}
-                    </div>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="flex items-center justify-between text-sm text-muted-foreground">
-                      <span>{post.author}</span>
-                      <span>{post.date}</span>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                      </div>
+                      <CardTitle className="text-xl mt-2">{post.title}</CardTitle>
+                      <CardDescription>{post.description}</CardDescription>
+                      <div className="flex flex-wrap gap-2 mt-2">
+                        {post.tags?.map((tag, i) => (
+                          <span 
+                            key={i}
+                            className="text-xs bg-accent/10 text-accent px-2 py-1 rounded-full"
+                          >
+                            {tag}
+                          </span>
+                        ))}
+                      </div>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="flex items-center justify-between text-sm text-muted-foreground">
+                        <span>{post.author}</span>
+                        <span>{post.date}</span>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            )}
+
+            {!isLoading && posts.length === 0 && (
+              <div className="text-center py-20">
+                <p className="text-muted-foreground">Henüz blog yazısı bulunmuyor.</p>
+                <Button 
+                  onClick={() => setIsAddingPost(true)}
+                  variant="outline" 
+                  className="mt-4"
+                >
+                  İlk Blog Yazısını Ekle
+                </Button>
+              </div>
+            )}
           </TabsContent>
 
           <TabsContent value="customers">
             <div className="flex justify-between items-center mb-6">
-              <h2 className="text-2xl font-semibold">Müşteri Listesi</h2>
+              <div className="flex items-center gap-2">
+                <h2 className="text-2xl font-semibold">Müşteri Listesi</h2>
+                <Button 
+                  variant="outline" 
+                  size="icon"
+                  onClick={() => handleRefreshData('customers')}
+                  disabled={isLoadingCustomers}
+                >
+                  <RefreshCw className={`h-4 w-4 ${isLoadingCustomers ? 'animate-spin' : ''}`} />
+                </Button>
+              </div>
               <Button onClick={() => {
                 setEditingCustomer(null);
                 setNewCustomer({ name: "", phone: "", treatments: "" });
@@ -375,23 +568,112 @@ const UserDashboard = () => {
               </Button>
             </div>
 
-            <CustomerList
-              customers={customers}
-              onEdit={handleEditCustomer}
-              onDelete={setCustomerToDelete}
-              onCreateAppointment={handleCreateAppointment}
-            />
+            {isLoadingCustomers ? (
+              <div className="flex justify-center items-center py-20">
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+              </div>
+            ) : (
+              <CustomerList
+                customers={customers}
+                onEdit={handleEditCustomer}
+                onDelete={setCustomerToDelete}
+                onCreateAppointment={handleCreateAppointment}
+              />
+            )}
+
+            {!isLoadingCustomers && customers.length === 0 && (
+              <div className="text-center py-20">
+                <p className="text-muted-foreground">Henüz müşteri bulunmuyor.</p>
+                <Button 
+                  onClick={() => {
+                    setEditingCustomer(null);
+                    setNewCustomer({ name: "", phone: "", treatments: "" });
+                    setIsCustomerDialogOpen(true);
+                  }}
+                  variant="outline" 
+                  className="mt-4"
+                >
+                  İlk Müşteriyi Ekle
+                </Button>
+              </div>
+            )}
           </TabsContent>
 
           <TabsContent value="appointments">
-            <Card>
-              <CardHeader>
-                <CardTitle>Randevular</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <Calendar />
-              </CardContent>
-            </Card>
+            <div className="flex justify-between items-center mb-6">
+              <div className="flex items-center gap-2">
+                <h2 className="text-2xl font-semibold">Randevular</h2>
+                <Button 
+                  variant="outline" 
+                  size="icon"
+                  onClick={() => handleRefreshData('appointments')}
+                  disabled={isLoadingAppointments}
+                >
+                  <RefreshCw className={`h-4 w-4 ${isLoadingAppointments ? 'animate-spin' : ''}`} />
+                </Button>
+              </div>
+            </div>
+
+            {isLoadingAppointments ? (
+              <div className="flex justify-center items-center py-20">
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+              </div>
+            ) : (
+              <Card>
+                <CardHeader>
+                  <CardTitle>Randevu Takvimi</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <Calendar />
+                  
+                  {appointments.length > 0 ? (
+                    <div className="mt-6 space-y-4">
+                      <h3 className="font-medium">Yaklaşan Randevular</h3>
+                      {appointments.map(appointment => {
+                        const customer = customers.find(c => c.id === appointment.customerId);
+                        return (
+                          <Card key={appointment.id} className="p-4">
+                            <div className="flex justify-between items-start">
+                              <div>
+                                <p className="font-medium">{customer?.name || "Müşteri bulunamadı"}</p>
+                                <p className="text-sm text-muted-foreground">
+                                  {new Date(appointment.appointmentDate).toLocaleDateString('tr-TR', {
+                                    day: 'numeric',
+                                    month: 'long',
+                                    year: 'numeric',
+                                    hour: '2-digit',
+                                    minute: '2-digit'
+                                  })}
+                                </p>
+                                <div className="flex flex-wrap gap-1 mt-2">
+                                  {appointment.services.map((service, idx) => (
+                                    <span key={idx} className="text-xs bg-primary/10 text-primary px-2 py-1 rounded-full">
+                                      {service}
+                                    </span>
+                                  ))}
+                                </div>
+                              </div>
+                              <span className={`px-2 py-1 rounded text-xs ${
+                                appointment.status === 'COMPLETED' ? 'bg-green-100 text-green-800' : 
+                                appointment.status === 'CANCELLED' ? 'bg-red-100 text-red-800' : 
+                                'bg-blue-100 text-blue-800'
+                              }`}>
+                                {appointment.status === 'SCHEDULED' ? 'Planlandı' : 
+                                 appointment.status === 'COMPLETED' ? 'Tamamlandı' : 'İptal Edildi'}
+                              </span>
+                            </div>
+                          </Card>
+                        );
+                      })}
+                    </div>
+                  ) : (
+                    <div className="text-center py-10">
+                      <p className="text-muted-foreground">Henüz randevu bulunmuyor.</p>
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+            )}
           </TabsContent>
         </Tabs>
 
