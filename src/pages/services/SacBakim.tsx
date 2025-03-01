@@ -58,18 +58,12 @@ const SacBakim = () => {
         </div>
       </div>
       
-      <div className="text-center space-y-4">
+      <div className="text-center">
         <Link to="/appointment">
           <Button className="bg-accent hover:bg-accent/90 text-white px-8 py-2 rounded-md">
             Randevu Al
           </Button>
         </Link>
-        
-        <div className="mt-6">
-          <Link to="/services/sac-bakim/dashboard" className="text-accent hover:underline">
-            Saç Bakım Yönetim Paneline Git
-          </Link>
-        </div>
       </div>
     </div>
   );
