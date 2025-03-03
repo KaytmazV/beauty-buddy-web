@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 const HeroSection = () => {
   return (
     <section className="relative h-[90vh] md:h-screen flex items-center justify-center overflow-hidden">
-      <div className="absolute inset-0 bg-[url('/lovable-uploads/c638d8dc-d960-4d7d-9421-0d5d278941f0.png')] bg-cover bg-center">
+      <div className="absolute inset-0 bg-[url('/lovable-uploads/4df17329-c687-4107-a6eb-71492d6cb117.png')] bg-cover bg-center">
         <div className="absolute inset-0 bg-black/40 backdrop-blur-sm"></div>
       </div>
       
