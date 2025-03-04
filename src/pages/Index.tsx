@@ -1,3 +1,4 @@
+
 import { motion } from "framer-motion";
 import { Calendar, MapPin, Phone, Scissors, Star, Users, Heart, Instagram, MessageSquare } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -44,8 +45,12 @@ const Index = () => {
       <WhatsAppSupport />
       {/* Hero Section */}
       <section className="relative h-[90vh] md:h-screen flex items-center justify-center overflow-hidden">
-        <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1560066984-138dadb4c035?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80')] bg-cover bg-center">
-          <div className="absolute inset-0 bg-black/40 backdrop-blur-sm"></div>
+        <div className="absolute inset-0" style={{ 
+          backgroundImage: "url('/lovable-uploads/185bc1d5-d499-4473-8644-e4ca051c71f5.png')", 
+          backgroundSize: "cover", 
+          backgroundPosition: "center" 
+        }}>
+          <div className="absolute inset-0 bg-black/60 backdrop-blur-sm"></div>
         </div>
         
         <div className="relative container mx-auto px-4 md:px-6 text-center text-white z-10">
