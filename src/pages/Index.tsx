@@ -45,7 +45,7 @@ const Index = () => {
       {/* Hero Section */}
       <section className="relative h-[90vh] md:h-screen flex items-center justify-center overflow-hidden">
         <img 
-          src="/lovable-uploads/026922c0-4203-4d91-9ed3-d056910645d6.png" 
+          src="/lovable-uploads/f1f91e57-0a33-4cf7-a97a-f00595f2bde6.png" 
           alt="Beauty Salon Background"
           className="absolute inset-0 w-full h-full object-cover"
         />
