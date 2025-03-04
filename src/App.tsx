@@ -12,6 +12,7 @@ import LazerEpilasyon from "@/pages/services/LazerEpilasyon";
 import SacBakim from "@/pages/services/SacBakim";
 import TirnakBakim from "@/pages/services/TirnakBakim";
 import SacBoyama from "@/pages/services/SacBoyama";
+import SacBakimDashboard from "@/pages/services/SacBakimDashboard";
 import NotFound from "@/pages/NotFound";
 import UserDashboard from "@/pages/UserDashboard";
 import Navbar from "@/components/ui/navbar";
@@ -33,6 +34,7 @@ const App = () => (
           <Route path="/appointment" element={<AppointmentForm />} />
           <Route path="/services/lazer-epilasyon" element={<LazerEpilasyon />} />
           <Route path="/services/sac-bakim" element={<SacBakim />} />
+          <Route path="/services/sac-bakim/dashboard" element={<SacBakimDashboard />} />
           <Route path="/services/tirnak-bakim" element={<TirnakBakim />} />
           <Route path="/services/sac-boyama" element={<SacBoyama />} />
           <Route path="/team" element={<Team />} />
