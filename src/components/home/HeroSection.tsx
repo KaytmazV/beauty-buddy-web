@@ -7,7 +7,7 @@ const HeroSection = () => {
     <section className="relative h-[90vh] md:h-screen flex items-center justify-center overflow-hidden">
       <div 
         className="absolute inset-0 bg-center bg-cover"
-        style={{ backgroundImage: "url('/lovable-uploads/4df17329-c687-4107-a6eb-71492d6cb117.png')" }}
+        style={{ backgroundImage: "url('/lovable-uploads/fb95eca7-5cda-4c97-99df-6250a95910fc.png')" }}
       >
         <div className="absolute inset-0 bg-black/40 backdrop-blur-sm"></div>
       </div>
