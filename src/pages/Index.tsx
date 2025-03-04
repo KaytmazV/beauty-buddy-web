@@ -1,3 +1,4 @@
+
 import { motion } from "framer-motion";
 import { Calendar, MapPin, Phone, Scissors, Star, Users, Heart, Instagram, MessageSquare } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -284,8 +285,8 @@ const Index = () => {
               className="relative h-[300px] md:h-[600px] rounded-2xl overflow-hidden mt-8 md:mt-0"
             >
               <img
-                src="https://images.unsplash.com/photo-1560066984-138dadb4c035?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80"
-                alt="Beauty Salon Interior"
+                src="/lovable-uploads/d9294f84-ceff-48b7-ad69-42551368a2ee.png"
+                alt="Beauty Salon Interior with Yellow Walls"
                 className="w-full h-full object-cover"
               />
             </motion.div>
