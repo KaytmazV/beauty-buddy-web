@@ -1,5 +1,5 @@
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { format } from "date-fns";
 import { tr } from "date-fns/locale";
@@ -127,7 +127,11 @@ const AppointmentForm = () => {
     
     try {
       // Randevu tarihi ve saatini birleştir
-      const appointmentDateTime = new Date(date!);
+      if (!date) {
+        throw new Error("Tarih seçilmedi");
+      }
+      
+      const appointmentDateTime = new Date(date);
       const [hours, minutes] = selectedTimes[0].split(':').map(Number);
       appointmentDateTime.setHours(hours, minutes, 0, 0);
       
@@ -153,7 +157,8 @@ const AppointmentForm = () => {
           const newCustomer: Omit<CustomerDTO, 'id'> = {
             name,
             phone: phone.replace(/\D/g, ""),
-            treatments: serviceNames
+            treatments: serviceNames,
+            nextAppointment: appointmentDateTime.toISOString()
           };
           
           console.log("Yeni müşteri oluşturuluyor:", newCustomer);

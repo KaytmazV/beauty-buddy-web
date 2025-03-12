@@ -12,10 +12,10 @@ public class Appointment {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "customer_id")
+    @JoinColumn(name = "customer_id", nullable = false)
     private Customer customer;
     
-    @Column(name = "appointment_date")
+    @Column(name = "appointment_date", nullable = false)
     private LocalDateTime appointmentDate;
     
     @ElementCollection
@@ -24,6 +24,7 @@ public class Appointment {
     @Column(name = "service")
     private List<String> services;
     
+    @Column(nullable = false)
     private String status; // SCHEDULED, COMPLETED, CANCELLED
     
     private String notes;

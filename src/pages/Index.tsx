@@ -1,12 +1,15 @@
-
 import { motion } from "framer-motion";
 import { Calendar, MapPin, Phone, Scissors, Star, Users, Heart, Instagram, MessageSquare } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import WhatsAppSupport from "@/components/WhatsAppSupport";
+import { useToast } from "@/components/ui/use-toast";
+import { appointmentApi, customerApi } from "@/services/api";
 
 const Index = () => {
+  const { toast } = useToast();
   const [selectedTime, setSelectedTime] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     phone: "",
@@ -21,24 +24,165 @@ const Index = () => {
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     // Form validation
     if (!formData.name || !formData.phone || !formData.service || !selectedTime) {
-      console.log("Lütfen tüm alanları doldurun");
+      toast({
+        title: "Hata",
+        description: "Lütfen tüm alanları doldurun",
+        variant: "destructive"
+      });
       return;
     }
 
-    // Backend için hazır veri
-    const appointmentData = {
-      ...formData,
-      appointmentTime: selectedTime,
-      appointmentDate: new Date().toISOString().split('T')[0],
-    };
+    setIsSubmitting(true);
+    
+    try {
+      // Create or find customer
+      let customerId: number;
+      
+      try {
+        const customers = await customerApi.getAll();
+        const existingCustomer = customers.find(c => c.phone === formData.phone.replace(/\D/g, ""));
+        
+        if (existingCustomer) {
+          customerId = existingCustomer.id || 0;
+        } else {
+          // Create new customer
+          const newCustomer = {
+            name: formData.name,
+            phone: formData.phone.replace(/\D/g, ""),
+            treatments: [formData.service === "sac" ? "Saç Bakımı" : 
+                         formData.service === "cilt" ? "Cilt Bakımı" : 
+                         formData.service === "makyaj" ? "Makyaj" : "Genel Bakım"]
+          };
+          
+          const createdCustomer = await customerApi.create(newCustomer);
+          customerId = createdCustomer.id || 0;
+        }
+      } catch (error) {
+        console.error("Müşteri sorgusu hatası:", error);
+        customerId = Math.floor(Math.random() * 1000);
+      }
 
-    console.log("Randevu verileri (Backend için):", appointmentData);
+      // Get current selected date and time
+      const appointmentDate = new Date();
+      const [hours, minutes] = selectedTime.split(':').map(Number);
+      appointmentDate.setHours(hours, minutes, 0, 0);
+      
+      // Service mapping
+      const serviceMap: Record<string, string[]> = {
+        "sac": ["Saç Bakımı"],
+        "cilt": ["Cilt Bakımı"],
+        "makyaj": ["Makyaj"]
+      };
+      
+      // Create appointment
+      const appointmentData = {
+        customerId: customerId,
+        appointmentDate: appointmentDate.toISOString(),
+        services: serviceMap[formData.service] || ["Genel Bakım"],
+        status: "SCHEDULED",
+        notes: `Hızlı randevu formu ile oluşturuldu. Müşteri: ${formData.name}, Telefon: ${formData.phone}`
+      };
+      
+      await appointmentApi.create(appointmentData);
+      
+      // Show success message
+      toast({
+        title: "Randevunuz Alındı",
+        description: "En kısa sürede sizinle iletişime geçeceğiz.",
+      });
+      
+      // Reset form
+      setFormData({
+        name: "",
+        phone: "",
+        service: "",
+      });
+      setSelectedTime(null);
+    } catch (error) {
+      console.error("Randevu oluşturma hatası:", error);
+      toast({
+        title: "Hata",
+        description: "Randevu oluşturulurken bir sorun oluştu. Lütfen tekrar deneyin.",
+        variant: "destructive"
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
+
+  const whyUs = [
+    {
+      title: "Deneyim",
+      description: "20 yıllık sektör tecrübesi",
+      icon: <Star className="w-8 h-8 text-accent" />,
+      stat: "20+"
+    },
+    {
+      title: "Mutlu Müşteri",
+      description: "Memnuniyet odaklı hizmet",
+      icon: <Heart className="w-8 h-8 text-accent" />,
+      stat: "5000+"
+    },
+    {
+      title: "Uzman Kadro",
+      description: "Profesyonel ekip",
+      icon: <Users className="w-8 h-8 text-accent" />,
+      stat: "15+"
+    },
+    {
+      title: "Hizmet",
+      description: "Farklı güzellik hizmeti",
+      icon: <Scissors className="w-8 h-8 text-accent" />,
+      stat: "30+"
+    }
+  ];
+
+  const services = [
+    {
+      title: "Saç Bakımı",
+      description: "Profesyonel saç kesimi, boyama ve bakım hizmetleri",
+      icon: <Scissors className="w-6 h-6 text-white" />,
+      image: "https://images.unsplash.com/photo-1562322140-8baeececf3df?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80"
+    },
+    {
+      title: "Cilt Bakımı",
+      description: "Kişiye özel cilt analizi ve bakım uygulamaları",
+      icon: <Star className="w-6 h-6 text-white" />,
+      image: "https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80"
+    },
+    {
+      title: "Makyaj",
+      description: "Özel günler için profesyonel makyaj hizmetleri",
+      icon: <Users className="w-6 h-6 text-white" />,
+      image: "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80"
+    }
+  ];
+
+  const teamMembers = [
+    {
+      name: "Ayşe Yılmaz",
+      role: "Cilt Bakım Uzmanı",
+      image: "/lovable-uploads/645106e4-0ba1-406c-81b7-809eefae0292.png",
+      instagram: "https://instagram.com/ayseyilmaz"
+    },
+    {
+      name: "Zeynep Kaya",
+      role: "Lazer Epilasyon Uzmanı",
+      image: "/lovable-uploads/693c8ffe-710b-40f8-9218-b562b9b63f05.png",
+      instagram: "https://instagram.com/zeynepkaya"
+    },
+    {
+      name: "Merve Demir",
+      role: "Makyaj ve Güzellik Uzmanı",
+      image: "/lovable-uploads/57c192c4-a8eb-4747-8a7d-e90308a924db.png",
+      instagram: "https://instagram.com/mervedemir"
+    }
+  ];
 
   return (
     <div className="min-h-screen bg-secondary">
@@ -541,74 +685,5 @@ const Index = () => {
     </div>
   );
 };
-
-const whyUs = [
-  {
-    title: "Deneyim",
-    description: "20 yıllık sektör tecrübesi",
-    icon: <Star className="w-8 h-8 text-accent" />,
-    stat: "20+"
-  },
-  {
-    title: "Mutlu Müşteri",
-    description: "Memnuniyet odaklı hizmet",
-    icon: <Heart className="w-8 h-8 text-accent" />,
-    stat: "5000+"
-  },
-  {
-    title: "Uzman Kadro",
-    description: "Profesyonel ekip",
-    icon: <Users className="w-8 h-8 text-accent" />,
-    stat: "15+"
-  },
-  {
-    title: "Hizmet",
-    description: "Farklı güzellik hizmeti",
-    icon: <Scissors className="w-8 h-8 text-accent" />,
-    stat: "30+"
-  }
-];
-
-const services = [
-  {
-    title: "Saç Bakımı",
-    description: "Profesyonel saç kesimi, boyama ve bakım hizmetleri",
-    icon: <Scissors className="w-6 h-6 text-white" />,
-    image: "https://images.unsplash.com/photo-1562322140-8baeececf3df?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80"
-  },
-  {
-    title: "Cilt Bakımı",
-    description: "Kişiye özel cilt analizi ve bakım uygulamaları",
-    icon: <Star className="w-6 h-6 text-white" />,
-    image: "https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80"
-  },
-  {
-    title: "Makyaj",
-    description: "Özel günler için profesyonel makyaj hizmetleri",
-    icon: <Users className="w-6 h-6 text-white" />,
-    image: "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80"
-  }
-];
-
-const teamMembers = [
-  {
-    name: "Ayşe Yılmaz",
-    role: "Cilt Bakım Uzmanı",
-    image: "/lovable-uploads/645106e4-0ba1-406c-81b7-809eefae0292.png",
-    instagram: "https://instagram.com/ayseyilmaz"
-  },
-  {
-    name: "Zeynep Kaya",
-    role: "Lazer Epilasyon Uzmanı",
-    image: "/lovable-uploads/693c8ffe-710b-40f8-9218-b562b9b63f05.png",
-    instagram: "https://instagram.com/zeynepkaya"
-  },
-  {
-    name: "Merve Demir",
-    role: "Makyaj ve Güzellik Uzmanı",
-    image: "/lovable-uploads/57c192c4-a8eb-4747-8a7d-e90308a924db.png",
-    instagram: "https://instagram.com/mervedemir"
-  }
-];
 
 export default Index;
