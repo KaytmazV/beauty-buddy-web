@@ -1,3 +1,4 @@
+
 import { motion } from "framer-motion";
 import { Calendar, MapPin, Phone, Scissors, Star, Users, Heart, Instagram, MessageSquare } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -5,6 +6,7 @@ import { useState } from "react";
 import WhatsAppSupport from "@/components/WhatsAppSupport";
 import { useToast } from "@/components/ui/use-toast";
 import { appointmentApi, customerApi } from "@/services/api";
+import { AppointmentDTO } from "@/types/api";
 
 const Index = () => {
   const { toast } = useToast();
@@ -80,11 +82,11 @@ const Index = () => {
       };
       
       // Create appointment
-      const appointmentData = {
+      const appointmentData: Omit<AppointmentDTO, 'id'> = {
         customerId: customerId,
         appointmentDate: appointmentDate.toISOString(),
         services: serviceMap[formData.service] || ["Genel Bakım"],
-        status: "SCHEDULED",
+        status: "SCHEDULED", // Fix: Using the literal "SCHEDULED" instead of a generic string
         notes: `Hızlı randevu formu ile oluşturuldu. Müşteri: ${formData.name}, Telefon: ${formData.phone}`
       };
       
